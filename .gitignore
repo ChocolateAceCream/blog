@@ -1,0 +1,4 @@
+backend/sql/init.sql
+server/config.yaml
+server/gin-bin
+server/log/server.log
