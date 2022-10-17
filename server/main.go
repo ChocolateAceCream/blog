@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 
+	"github.com/ChocolateAceCream/blog/db"
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/library"
 	"github.com/ChocolateAceCream/blog/utils"
@@ -13,6 +14,9 @@ func Init() *gin.Engine {
 	global.VIPER = utils.ViperInit("config.yaml")
 	// must first load config
 	global.LOGGER = library.LoggerInit()
+	global.DB = utils.GormInit()
+	global.LOGGER.Info("Successful connected to DB")
+	db.RegisterTables(global.DB)
 
 	r := gin.Default()
 	return r
@@ -20,10 +24,17 @@ func Init() *gin.Engine {
 
 func main() {
 	r := Init()
-
 	if err := r.Run(); err != nil {
 		fmt.Printf("startup service failed, err:%v\n", err)
 		global.LOGGER.Error(fmt.Sprintf("startup service failed, err:%v\n", err))
+	}
+
+	if global.DB != nil {
+		// successful connected to DB
+		db.RegisterTables(global.DB)
+		global.LOGGER.Info("Successful Register Tables")
+		_db, _ := global.DB.DB()
+		defer _db.Close()
 	}
 
 	// TODO: add graceful shutdown, and close db using s.Close()
