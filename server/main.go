@@ -4,8 +4,10 @@ import (
 	"fmt"
 
 	"github.com/ChocolateAceCream/blog/db"
+	_ "github.com/ChocolateAceCream/blog/docs"
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/library"
+	"github.com/ChocolateAceCream/blog/router"
 	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
 )
@@ -19,9 +21,21 @@ func Init() *gin.Engine {
 	db.RegisterTables(global.DB)
 
 	r := gin.Default()
+	router.RouterInit(r)
 	return r
 }
 
+// @title Gin swagger
+// @version 1.0
+// @description Gin swagger
+
+// @contact.name Flynn Sun
+
+// @license.name Apache 2.0
+// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
+
+// @host localhost:3000
+// schemes http
 func main() {
 	r := Init()
 	if err := r.Run(); err != nil {

@@ -1,0 +1,36 @@
+definitions:
+  response.Paging:
+    properties:
+      list: {}
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      total:
+        type: integer
+    type: object
+host: localhost:3000
+info:
+  contact:
+    name: Flynn Sun
+  description: Gin swagger
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Gin swagger
+  version: "1.0"
+paths:
+  /v1/user/userList:
+    get:
+      consumes:
+      - application/json
+      description: 向你说Hello
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+      summary: 测试SayHello
+      tags:
+      - 测试
+swagger: "2.0"
