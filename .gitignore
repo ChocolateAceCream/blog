@@ -4,3 +4,6 @@ server/gin-bin
 server/log/server.log
 server/sql/init.sql
 server/router/__debug_bin
+server/docs/swagger.json
+server/docs/swagger.yaml
+server/docs/docs.go

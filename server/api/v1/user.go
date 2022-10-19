@@ -9,12 +9,11 @@ import (
 
 type UserApi struct{}
 
-// @Summary 测试SayHello
-// @Description 向你说Hello
-// @Tags 测试
+// @Summary get user list
+// @Description get user list
+// @Tags Test
 // @Accept json
-// @Success 200 {object} response.Paging"
-// @Failure 200 {string} response.Response"
+// @Success 200 {object} response.Response{data=response.Paging{data=[]model.User},msg=string} "paged user list, includes page size, page number, total counts"
 // @Router /v1/user/userList [get]
 func (b *UserApi) GetUserList(c *gin.Context) {
 	if list, total, err := userService.GetUserInfoList(); err != nil {
