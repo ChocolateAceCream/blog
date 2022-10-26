@@ -31,7 +31,8 @@ func RouteLoader(r *gin.Engine) {
 		userApi := apiV1.ApiGroupInstance.UserApi
 		{
 			user.GET("/userList", userApi.GetUserList)
-			// user.POST("/new", AddUser)
+			user.POST("/register", userApi.Register)
+			user.PUT("/edit", userApi.EditUser)
 			// user.PUT("/edit", EditUser)
 			// user.DELETE("/delete", DeleteUser)
 		}

@@ -3,8 +3,8 @@ package db
 import (
 	"os"
 
-	"github.com/ChocolateAceCream/blog/db/model"
 	"github.com/ChocolateAceCream/blog/global"
+	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -13,8 +13,8 @@ import (
 // Author SliverHorn
 func RegisterTables(db *gorm.DB) {
 	err := db.AutoMigrate(
-		// 系统模块表
-		model.User{},
+		// user model
+		dbTable.User{},
 	)
 	if err != nil {
 		global.LOGGER.Error("register table failed", zap.Error(err))

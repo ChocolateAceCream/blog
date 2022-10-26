@@ -20,6 +20,8 @@ func Init() *gin.Engine {
 	global.LOGGER.Info("Successful connected to DB")
 	db.RegisterTables(global.DB)
 
+	utils.InitValidator()
+
 	r := gin.Default()
 	router.RouterInit(r)
 	return r
@@ -38,17 +40,16 @@ func Init() *gin.Engine {
 // schemes http
 func main() {
 	r := Init()
-	if err := r.Run(); err != nil {
-		fmt.Printf("startup service failed, err:%v\n", err)
-		global.LOGGER.Error(fmt.Sprintf("startup service failed, err:%v\n", err))
-	}
-
 	if global.DB != nil {
 		// successful connected to DB
 		db.RegisterTables(global.DB)
 		global.LOGGER.Info("Successful Register Tables")
 		_db, _ := global.DB.DB()
 		defer _db.Close()
+	}
+	if err := r.Run(); err != nil {
+		fmt.Printf("startup service failed, err:%v\n", err)
+		global.LOGGER.Error(fmt.Sprintf("startup service failed, err:%v\n", err))
 	}
 
 	// TODO: add graceful shutdown, and close db using s.Close()
