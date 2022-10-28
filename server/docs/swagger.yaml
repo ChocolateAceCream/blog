@@ -1,4 +1,90 @@
 definitions:
+  dbTable.Role:
+    properties:
+      createdAt:
+        description: 创建时间
+        type: string
+      deletedAt:
+        type: string
+      roleId:
+        type: integer
+      roleName:
+        type: string
+      updatedAt:
+        description: 更新时间
+        type: string
+    type: object
+  dbTable.User:
+    properties:
+      active:
+        description: UserRole  Role      `json:"role" gorm:"foreignKey:RoleId;references:RoleId;comment:user's
+          role"`
+        type: integer
+      createdAt:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      updatedAt:
+        type: string
+      userRoles:
+        items:
+          $ref: '#/definitions/dbTable.Role'
+        type: array
+      username:
+        type: string
+      uuid:
+        type: string
+    type: object
+  model.DeleteUserReq:
+    properties:
+      uuid:
+        description: uuid
+        type: string
+    required:
+    - uuid
+    type: object
+  model.EditUser:
+    properties:
+      active:
+        type: integer
+      email:
+        type: string
+      role:
+        type: integer
+      username:
+        type: string
+      uuid:
+        description: uuid
+        type: string
+    required:
+    - uuid
+    type: object
+  model.Register:
+    properties:
+      active:
+        type: integer
+      email:
+        description: HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
+        type: string
+      password:
+        type: string
+      role:
+        type: integer
+      roles:
+        items:
+          type: integer
+        type: array
+      username:
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
   response.Paging:
     properties:
       list: {}
@@ -8,6 +94,14 @@ definitions:
         type: integer
       total:
         type: integer
+    type: object
+  response.Response:
+    properties:
+      code:
+        type: integer
+      data: {}
+      msg:
+        type: string
     type: object
 host: localhost:3000
 info:
@@ -20,17 +114,111 @@ info:
   title: Gin swagger
   version: "1.0"
 paths:
+  /v1/user/delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: user uuid
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.DeleteUserReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: user deleted
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: delete user
+      tags:
+      - User
+  /v1/user/edit:
+    put:
+      description: update user info
+      parameters:
+      - description: username, email, role ID,active, uuid
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.EditUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: edit user, return updated user info
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.User'
+                msg:
+                  type: string
+              type: object
+      summary: Edit user info
+      tags:
+      - User
+  /v1/user/register:
+    post:
+      description: register user
+      parameters:
+      - description: username, password, email, role ID
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/model.Register'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: register user, return user info
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.User'
+                msg:
+                  type: string
+              type: object
+      summary: Register user
+      tags:
+      - User
   /v1/user/userList:
     get:
       consumes:
       - application/json
-      description: 向你说Hello
+      description: get user list
       responses:
         "200":
-          description: OK
+          description: paged user list, includes page size, page number, total counts
           schema:
-            type: string
-      summary: 测试SayHello
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.Paging'
+                  - properties:
+                      data:
+                        items:
+                          $ref: '#/definitions/dbTable.User'
+                        type: array
+                    type: object
+                msg:
+                  type: string
+              type: object
+      summary: get user list
       tags:
-      - 测试
+      - User
 swagger: "2.0"

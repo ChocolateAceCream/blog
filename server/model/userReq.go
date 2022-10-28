@@ -21,3 +21,6 @@ type EditUser struct {
 	Active   int       `json:"active"`
 	// Authorities []model.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
+type DeleteUserReq struct {
+	UUID uuid.UUID `json:"uuid" gorm:"primarykey" binding:"required"` // uuid
+}

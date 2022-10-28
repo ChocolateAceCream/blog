@@ -33,8 +33,7 @@ func RouteLoader(r *gin.Engine) {
 			user.GET("/userList", userApi.GetUserList)
 			user.POST("/register", userApi.Register)
 			user.PUT("/edit", userApi.EditUser)
-			// user.PUT("/edit", EditUser)
-			// user.DELETE("/delete", DeleteUser)
+			user.DELETE("/delete", userApi.DeleteUser)
 		}
 	}
 

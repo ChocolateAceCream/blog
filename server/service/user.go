@@ -43,3 +43,7 @@ func (userService *UserService) RegisterUser(u dbTable.User) (registeredUser dbT
 func (userService *UserService) EditUser(u dbTable.User) error {
 	return global.DB.Model(&dbTable.User{}).Where("UUID = ? ", u.UUID).Updates(&u).Error
 }
+
+func (userService *UserService) DeleteUser(uuid uuid.UUID) error {
+	return global.DB.Model(&dbTable.User{}).Where("uuid = ?", uuid).Delete(&dbTable.User{}).Error
+}

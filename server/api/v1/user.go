@@ -99,3 +99,28 @@ func (b *UserApi) EditUser(c *gin.Context) {
 		response.OkWithMessage("Edit user success", c)
 	}
 }
+
+// @Tags User
+// @Summary delete user
+// @accept application/json
+// @Produce application/json
+// @Param data body model.DeleteUserReq true "user uuid"
+// @Success 200 {object} response.Response{msg=string} "user deleted"
+// @Router /v1/user/delete [delete]
+func (b *UserApi) DeleteUser(c *gin.Context) {
+	var user model.DeleteUserReq
+	_ = c.ShouldBindJSON(&user)
+
+	// TODO: validate if target user is current user
+	// jwtId := utils.GetUserID(c)
+	// if jwtId == uint(reqId.ID) {
+	// 	response.FailWithMessage("cannot delete yourself", c)
+	// 	return
+	// }
+	if err := userService.DeleteUser(user.UUID); err != nil {
+		global.LOGGER.Error("Fail to delete user!", zap.Error(err))
+		response.FailWithMessage("Fail to delete user", c)
+	} else {
+		response.OkWithMessage("delete user success", c)
+	}
+}
