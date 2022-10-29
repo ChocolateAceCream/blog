@@ -21,6 +21,7 @@ func Init() *gin.Engine {
 	db.RegisterTables(global.DB)
 
 	utils.InitValidator()
+	utils.InitRedis()
 
 	r := gin.Default()
 	router.RouterInit(r)
