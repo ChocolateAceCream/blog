@@ -8,6 +8,7 @@ package router
 
 import (
 	apiV1 "github.com/ChocolateAceCream/blog/api/v1"
+	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -26,6 +27,7 @@ func RouterInit(r *gin.Engine) {
 
 func RouteLoader(r *gin.Engine) {
 	v1 := r.Group("/v1")
+	v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
 	{
 		user := v1.Group("/user")
 		userApi := apiV1.ApiGroupInstance.UserApi
