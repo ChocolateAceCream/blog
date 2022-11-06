@@ -27,7 +27,8 @@ func RouterInit(r *gin.Engine) {
 
 func RouteLoader(r *gin.Engine) {
 	v1 := r.Group("/v1")
-	v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
+	v1.Use(middleware.SessionMiddleware())
+	// v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
 	{
 		user := v1.Group("/user")
 		userApi := apiV1.ApiGroupInstance.UserApi

@@ -29,8 +29,8 @@ type Session struct {
 	Cookie     string                 `json:"cookie"`
 	ExpireTime int64                  `json:"expireTime"`
 	Content    map[string]interface{} `json:"content"`
-	ID         string                 `json:"-"`
-	Lock       *sync.Mutex
+	UUID       string                 `json:"uuid"`
+	Lock       *sync.Mutex            `json:"lock"`
 }
 
 func SessionMiddleware() gin.HandlerFunc {
@@ -50,30 +50,34 @@ func SessionHandler(c *gin.Context) {
 		if rawSessionStr, err := global.REDIS.Get(context.TODO(), sessionID).Result(); err == nil {
 			var session Session
 			json.Unmarshal([]byte(rawSessionStr), &session)
+			// fmt.Println("Unmarshal sesion: ", session)
+			// session.UUID = sessionID
 			c.Set(sessionConfig.Key, session) //store session in current context
 			return
 		}
 	}
 	//create new cookie, so every request will have a cookie attached
-	sessionID := uuid.NewV4().String() // use session key to get info from redis
+	UUID := uuid.NewV4().String() // use session key to get info from redis
 	domain := c.Request.Host[:strings.Index(c.Request.Host, ":")]
 	path := "/"
-	c.SetCookie(sessionConfig.CookieName, sessionID, sessionConfig.ExpireTime, path, domain, sessionConfig.Secure, sessionConfig.HttpOnly)
+	c.SetCookie(sessionConfig.CookieName, UUID, sessionConfig.ExpireTime, path, domain, sessionConfig.Secure, sessionConfig.HttpOnly)
 	newSession := Session{
 		Cookie:     sessionConfig.CookieName,
 		ExpireTime: time.Now().Unix() + int64(sessionConfig.ExpireTime),
 		Content:    make(map[string]interface{}),
-		ID:         sessionID,
+		UUID:       UUID,
 		Lock:       &sync.Mutex{},
 	}
 	c.Set(sessionConfig.Key, newSession)
 	jsonStr, _ := json.Marshal(newSession)
+	// fmt.Println("--jsonStr----", jsonStr)
+	// fmt.Println("--newSession.ID----", newSession.UUID)
 	global.LOGGER.Info("jsonStr: ", zap.ByteString("raw", jsonStr))
-	global.REDIS.Set(c, sessionID, jsonStr, time.Duration(sessionConfig.ExpireTime)*time.Second)
+	global.REDIS.Set(c, UUID, jsonStr, time.Duration(sessionConfig.ExpireTime)*time.Second)
 }
 
 func (s *Session) Get(key string) (interface{}, error) {
-	sessionString, err := global.REDIS.Get(context.TODO(), s.ID).Result()
+	sessionString, err := global.REDIS.Get(context.TODO(), s.UUID).Result()
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +96,7 @@ func (s *Session) Get(key string) (interface{}, error) {
 func (s *Session) Set(key string, val any) error {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()
-	sessionString, err := global.REDIS.Get(context.TODO(), s.ID).Result()
+	sessionString, err := global.REDIS.Get(context.TODO(), s.UUID).Result()
 	if err != nil {
 		global.LOGGER.Error("unable to fetch session")
 		return err
@@ -114,7 +118,7 @@ func (s *Session) Set(key string, val any) error {
 		return err
 	}
 
-	global.REDIS.Set(context.TODO(), s.ID, updatedSession, time.Duration(duration)*time.Second)
+	global.REDIS.Set(context.TODO(), s.UUID, updatedSession, time.Duration(duration)*time.Second)
 	return nil
 
 }
@@ -122,7 +126,7 @@ func (s *Session) Set(key string, val any) error {
 func (s *Session) RemoveKey(key string) error {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()
-	sessionString, err := global.REDIS.Get(context.TODO(), s.ID).Result()
+	sessionString, err := global.REDIS.Get(context.TODO(), s.UUID).Result()
 	if err != nil {
 		return err
 	}
@@ -140,7 +144,7 @@ func (s *Session) RemoveKey(key string) error {
 	if err != nil {
 		return err
 	}
-	global.REDIS.Set(context.TODO(), s.ID, updatedSession, time.Duration(duration)*time.Second)
+	global.REDIS.Set(context.TODO(), s.UUID, updatedSession, time.Duration(duration)*time.Second)
 	return nil
 }
 
@@ -155,15 +159,12 @@ func GetSession(c *gin.Context) *Session {
 	session, ok := cookie.(Session)
 	if !ok {
 		// if cookie is not of type Session
+		global.LOGGER.Error("cookie is not of type Session")
 		return nil
 	}
-	sessionID, err := c.Cookie(session.Cookie)
-	if err != nil {
-		// if cookie is not of type Session
-		return nil
-	}
-	session.ID = sessionID
-	session.Lock = &sync.Mutex{}
+	// fmt.Println("session: ", session)
+	// fmt.Println("session.Cookie: ", session.Cookie)
+	// fmt.Println("session.LOCK: ", session.Lock)
 	return &session
 }
 
