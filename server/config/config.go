@@ -5,4 +5,5 @@ type Server struct {
 	Mysql   Mysql   `mapstructure:"mysql" json:"mysql" yaml:"mysql"`
 	Redis   Redis   `mapstructure:"redis" json:"redis" yaml:"redis"`
 	Session Session `mapstructure:"session" json:"session" yaml:"session"`
+	Lock    Lock    `mapstructure:"lock" json:"lock" yaml:"lock"`
 }
