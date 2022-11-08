@@ -5,16 +5,17 @@ import (
 
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/fsnotify/fsnotify"
+	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 )
 
 // TODO:
 // 优先级: 命令行 > 环境变量 > 默认值
 
-func ViperInit(filename string) *viper.Viper {
-
+func ViperInit(path string) *viper.Viper {
 	v := viper.New()
-	v.SetConfigName(filename) // name of config file (without extension)
+	v.AddConfigPath(path)
+	v.SetConfigName("config") // name of config file (without extension)
 	v.AddConfigPath(".")      // path to look for the config file in
 	v.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
 	err := v.ReadInConfig()
@@ -27,7 +28,7 @@ func ViperInit(filename string) *viper.Viper {
 	v.OnConfigChange(func(e fsnotify.Event) {
 		global.LOGGER.Info(fmt.Sprintf("config file changed: %s", e.Name))
 	})
-	if err = v.Unmarshal(&global.CONFIG); err != nil {
+	if err = v.UnmarshalKey(gin.Mode(), &global.CONFIG); err != nil {
 		fmt.Println(err)
 	}
 

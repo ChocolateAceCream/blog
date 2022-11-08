@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/ChocolateAceCream/blog/db"
 	_ "github.com/ChocolateAceCream/blog/docs"
@@ -13,7 +14,8 @@ import (
 )
 
 func Init() *gin.Engine {
-	global.VIPER = utils.ViperInit("config.yaml")
+	dir, _ := os.Getwd()
+	global.VIPER = utils.ViperInit(dir)
 	// must first load config
 	global.LOGGER = library.LoggerInit()
 	global.DB = utils.GormInit()

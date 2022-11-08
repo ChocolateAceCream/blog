@@ -12,6 +12,7 @@ import (
 	"fmt"
 	"net/http/httptest"
 	"os"
+	"path"
 	"sync"
 	"testing"
 	"time"
@@ -25,7 +26,9 @@ import (
 
 func setup() {
 	gin.SetMode(gin.TestMode)
-	global.VIPER = utils.ViperInit("testConfig.yaml")
+	dir, _ := os.Getwd()
+	parentDir, _ := path.Split(dir)
+	global.VIPER = utils.ViperInit(parentDir)
 	// must first load config
 	global.LOGGER = library.LoggerInit()
 	global.DB = utils.GormInit()
