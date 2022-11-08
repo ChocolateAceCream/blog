@@ -11,10 +11,10 @@ import (
 // TODO:
 // 优先级: 命令行 > 环境变量 > 默认值
 
-func ViperInit(path ...string) *viper.Viper {
+func ViperInit(filename string) *viper.Viper {
 
 	v := viper.New()
-	v.SetConfigName("config") // name of config file (without extension)
+	v.SetConfigName(filename) // name of config file (without extension)
 	v.AddConfigPath(".")      // path to look for the config file in
 	v.SetConfigType("yaml")   // REQUIRED if the config file does not have the extension in the name
 	err := v.ReadInConfig()
