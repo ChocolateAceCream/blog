@@ -7,3 +7,5 @@ server/router/__debug_bin
 server/docs/swagger.json
 server/docs/swagger.yaml
 server/docs/docs.go
+server/tests/testConfig.yaml
+server/tests/log/server.log
