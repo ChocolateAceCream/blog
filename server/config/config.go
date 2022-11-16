@@ -6,4 +6,5 @@ type Server struct {
 	Redis   Redis   `mapstructure:"redis" json:"redis" yaml:"redis"`
 	Session Session `mapstructure:"session" json:"session" yaml:"session"`
 	Lock    Lock    `mapstructure:"lock" json:"lock" yaml:"lock"`
+	Limiter Limiter `mapstructure:"limiter" json:"limiter" yaml:"limiter"`
 }

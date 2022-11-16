@@ -31,6 +31,7 @@ func RouteLoader(r *gin.Engine) {
 	// v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
 	{
 		user := v1.Group("/user")
+		// user.Use(middleware.DefaultLimiter())
 		userApi := apiV1.ApiGroupInstance.UserApi
 		{
 			user.GET("/userList", userApi.GetUserList)
