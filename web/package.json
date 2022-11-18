@@ -1,0 +1,23 @@
+{
+  "name": "web",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "ant-design-vue": "^3.2.15",
+    "antd": "^4.24.2",
+    "vue": "^3.2.41"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.1.139",
+    "@vitejs/plugin-vue": "^3.2.0",
+    "unplugin-icons": "^0.14.13",
+    "unplugin-vue-components": "^0.22.9",
+    "vite": "^3.2.3"
+  }
+}

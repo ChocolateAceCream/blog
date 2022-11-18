@@ -9,3 +9,32 @@ server/docs/swagger.yaml
 server/docs/docs.go
 server/tests/testConfig.yaml
 server/tests/log/server.log
+
+
+# Logs
+web/logs
+web/*.log
+web/npm-debug.log*
+web/yarn-debug.log*
+web/yarn-error.log*
+web/pnpm-debug.log*
+web/lerna-debug.log*
+
+web/node_modules
+web/dist
+web/dist-ssr
+web/*.local
+
+# Editor directories and files
+web/.vscode/*
+web/!.vscode/extensions.json
+web/.idea
+web/.DS_Store
+web/*.suo
+web/*.ntvs*
+web/*.njsproj
+web/*.sln
+web/*.sw?
+web/.env
+web/.env.development
+server/service/gin-bin
