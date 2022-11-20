@@ -39,7 +39,7 @@ definitions:
       uuid:
         type: string
     type: object
-  model.DeleteUserReq:
+  request.DeleteUser:
     properties:
       uuid:
         description: uuid
@@ -47,7 +47,7 @@ definitions:
     required:
     - uuid
     type: object
-  model.EditUser:
+  request.EditUser:
     properties:
       active:
         type: integer
@@ -63,10 +63,12 @@ definitions:
     required:
     - uuid
     type: object
-  model.Register:
+  request.RegisterUser:
     properties:
       active:
         type: integer
+      captcha:
+        type: string
       email:
         description: HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
         type: string
@@ -81,9 +83,15 @@ definitions:
       username:
         type: string
     required:
+    - captcha
     - email
     - password
     - username
+    type: object
+  response.CaptchaResponse:
+    properties:
+      captcha:
+        type: string
     type: object
   response.Paging:
     properties:
@@ -114,7 +122,30 @@ info:
   title: Gin swagger
   version: "1.0"
 paths:
-  /v1/user/delete:
+  /api/v1/auth/captcha:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return base64 captcha image
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                ' msg':
+                  type: string
+                data:
+                  $ref: '#/definitions/response.CaptchaResponse'
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Generate captcha image
+      tags:
+      - Auth
+  /api/v1/user/delete:
     delete:
       consumes:
       - application/json
@@ -124,7 +155,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.DeleteUserReq'
+          $ref: '#/definitions/request.DeleteUser'
       produces:
       - application/json
       responses:
@@ -140,7 +171,7 @@ paths:
       summary: delete user
       tags:
       - User
-  /v1/user/edit:
+  /api/v1/user/edit:
     put:
       description: update user info
       parameters:
@@ -149,7 +180,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.EditUser'
+          $ref: '#/definitions/request.EditUser'
       produces:
       - application/json
       responses:
@@ -167,16 +198,16 @@ paths:
       summary: Edit user info
       tags:
       - User
-  /v1/user/register:
+  /api/v1/user/register:
     post:
       description: register user
       parameters:
-      - description: username, password, email, role ID
+      - description: username, password, email,captcha, role ID
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/model.Register'
+          $ref: '#/definitions/request.RegisterUser'
       produces:
       - application/json
       responses:
@@ -194,7 +225,7 @@ paths:
       summary: Register user
       tags:
       - User
-  /v1/user/userList:
+  /api/v1/user/userList:
     get:
       consumes:
       - application/json

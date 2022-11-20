@@ -22,7 +22,49 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/v1/user/delete": {
+        "/api/v1/auth/captcha": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Generate captcha image",
+                "responses": {
+                    "200": {
+                        "description": "return base64 captcha image",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        " msg": {
+                                            "type": "string"
+                                        },
+                                        "data": {
+                                            "$ref": "#/definitions/response.CaptchaResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/delete": {
             "delete": {
                 "consumes": [
                     "application/json"
@@ -41,7 +83,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.DeleteUserReq"
+                            "$ref": "#/definitions/request.DeleteUser"
                         }
                     }
                 ],
@@ -67,7 +109,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/user/edit": {
+        "/api/v1/user/edit": {
             "put": {
                 "description": "update user info",
                 "produces": [
@@ -84,7 +126,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.EditUser"
+                            "$ref": "#/definitions/request.EditUser"
                         }
                     }
                 ],
@@ -113,7 +155,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/user/register": {
+        "/api/v1/user/register": {
             "post": {
                 "description": "register user",
                 "produces": [
@@ -125,12 +167,12 @@ const docTemplate = `{
                 "summary": "Register user",
                 "parameters": [
                     {
-                        "description": "username, password, email, role ID",
+                        "description": "username, password, email,captcha, role ID",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/model.Register"
+                            "$ref": "#/definitions/request.RegisterUser"
                         }
                     }
                 ],
@@ -159,7 +201,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/v1/user/userList": {
+        "/api/v1/user/userList": {
             "get": {
                 "description": "get user list",
                 "consumes": [
@@ -269,7 +311,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.DeleteUserReq": {
+        "request.DeleteUser": {
             "type": "object",
             "required": [
                 "uuid"
@@ -281,7 +323,7 @@ const docTemplate = `{
                 }
             }
         },
-        "model.EditUser": {
+        "request.EditUser": {
             "type": "object",
             "required": [
                 "uuid"
@@ -305,9 +347,10 @@ const docTemplate = `{
                 }
             }
         },
-        "model.Register": {
+        "request.RegisterUser": {
             "type": "object",
             "required": [
+                "captcha",
                 "email",
                 "password",
                 "username"
@@ -315,6 +358,9 @@ const docTemplate = `{
             "properties": {
                 "active": {
                     "type": "integer"
+                },
+                "captcha": {
+                    "type": "string"
                 },
                 "email": {
                     "description": "HeaderImg    string ` + "`" + `json:\"headerImg\" gorm:\"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'\"` + "`" + `",
@@ -333,6 +379,14 @@ const docTemplate = `{
                     }
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CaptchaResponse": {
+            "type": "object",
+            "properties": {
+                "captcha": {
                     "type": "string"
                 }
             }

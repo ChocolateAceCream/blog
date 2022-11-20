@@ -1,13 +1,14 @@
-package model
+package request
 
 import uuid "github.com/satori/go.uuid"
 
 // User register structure
-type Register struct {
+type RegisterUser struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required"`
 	// HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
-	Email   string `json:"email" binding:"required,email"`
+	Email   string `json:"email" binding:"required"`
+	Captcha string `json:"captcha" binding:"required"`
 	RoleId  uint   `json:"role" gorm:"default:888"`
 	Active  int    `json:"active"`
 	RoleIds []uint `json:"roles"`
@@ -21,6 +22,6 @@ type EditUser struct {
 	Active   int       `json:"active"`
 	// Authorities []model.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
-type DeleteUserReq struct {
+type DeleteUser struct {
 	UUID uuid.UUID `json:"uuid" gorm:"primarykey" binding:"required"` // uuid
 }

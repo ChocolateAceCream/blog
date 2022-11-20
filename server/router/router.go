@@ -39,6 +39,12 @@ func RouteLoader(r *gin.Engine) {
 			user.PUT("/edit", userApi.EditUser)
 			user.DELETE("/delete", userApi.DeleteUser)
 		}
+
+		auth := v1.Group("/auth")
+		authApi := apiV1.ApiGroupInstance.AuthApi
+		{
+			auth.POST("/captcha", authApi.GetCaptcha)
+		}
 	}
 
 }

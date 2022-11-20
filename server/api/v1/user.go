@@ -2,8 +2,8 @@ package apiV1
 
 import (
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/model"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
+	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
@@ -16,7 +16,7 @@ type UserApi struct{}
 // @Tags User
 // @Accept json
 // @Success 200 {object} response.Response{data=response.Paging{data=[]dbTable.User},msg=string} "paged user list, includes page size, page number, total counts"
-// @Router /v1/user/userList [get]
+// @Router /api/v1/user/userList [get]
 func (b *UserApi) GetUserList(c *gin.Context) {
 	// session := middleware.GetSession(c)
 	// session.Set("asdf", 123)
@@ -41,11 +41,11 @@ func (b *UserApi) GetUserList(c *gin.Context) {
 // @Summary Register user
 // @Description register user
 // @Produce  application/json
-// @Param data body model.Register true "username, password, email, role ID"
+// @Param data body request.RegisterUser true "username, password, email,captcha, role ID"
 // @Success 200 {object} response.Response{data=dbTable.User,msg=string} "register user, return user info"
-// @Router /v1/user/register [post]
+// @Router /api/v1/user/register [post]
 func (b *UserApi) Register(c *gin.Context) {
-	var r model.Register
+	var r request.RegisterUser
 	if err := c.ShouldBindJSON(&r); err != nil {
 		global.LOGGER.Error("register user validation error", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
@@ -57,6 +57,12 @@ func (b *UserApi) Register(c *gin.Context) {
 	// 		AuthorityId: v,
 	// 	})
 	// }
+
+	if !store.Verify("foo", r.Captcha, true) {
+		response.FailWithMessage("captcha not match, please try again", c)
+		return
+	}
+
 	payload := &dbTable.User{
 		Username: r.Username,
 		Password: r.Password,
@@ -75,11 +81,11 @@ func (b *UserApi) Register(c *gin.Context) {
 // @Summary Edit user info
 // @Description update user info
 // @Produce  application/json
-// @Param data body model.EditUser true "username, email, role ID,active, uuid"
+// @Param data body request.EditUser true "username, email, role ID,active, uuid"
 // @Success 200 {object} response.Response{data=dbTable.User,msg=string} "edit user, return updated user info"
-// @Router /v1/user/edit [put]
+// @Router /api/v1/user/edit [put]
 func (b *UserApi) EditUser(c *gin.Context) {
-	var r model.EditUser
+	var r request.EditUser
 	if err := c.ShouldBindJSON(&r); err != nil {
 		global.LOGGER.Error("edit user param validation error", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
@@ -112,11 +118,11 @@ func (b *UserApi) EditUser(c *gin.Context) {
 // @Summary delete user
 // @accept application/json
 // @Produce application/json
-// @Param data body model.DeleteUserReq true "user uuid"
+// @Param data body request.DeleteUser true "user uuid"
 // @Success 200 {object} response.Response{msg=string} "user deleted"
-// @Router /v1/user/delete [delete]
+// @Router /api/v1/user/delete [delete]
 func (b *UserApi) DeleteUser(c *gin.Context) {
-	var user model.DeleteUserReq
+	var user request.DeleteUser
 	_ = c.ShouldBindJSON(&user)
 
 	// TODO: validate if target user is current user

@@ -7,4 +7,5 @@ type Server struct {
 	Session Session `mapstructure:"session" json:"session" yaml:"session"`
 	Lock    Lock    `mapstructure:"lock" json:"lock" yaml:"lock"`
 	Limiter Limiter `mapstructure:"limiter" json:"limiter" yaml:"limiter"`
+	Captcha Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 }
