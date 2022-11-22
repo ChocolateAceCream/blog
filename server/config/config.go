@@ -8,4 +8,5 @@ type Server struct {
 	Lock    Lock    `mapstructure:"lock" json:"lock" yaml:"lock"`
 	Limiter Limiter `mapstructure:"limiter" json:"limiter" yaml:"limiter"`
 	Captcha Captcha `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
+	Email   Email   `mapstructure:"email" json:"email" yaml:"email"`
 }
