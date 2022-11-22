@@ -64,6 +64,91 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/auth/sendEmailCode": {
+            "post": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send verification code email",
+                "responses": {
+                    "200": {
+                        "description": "return send email result",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/active": {
+            "post": {
+                "description": "Active user with verification code from email",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Active user",
+                "parameters": [
+                    {
+                        "description": "code",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ActiveUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return activated user info",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbTable.User"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/delete": {
             "delete": {
                 "consumes": [
@@ -311,6 +396,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.ActiveUser": {
+            "type": "object",
+            "required": [
+                "code"
+            ],
+            "properties": {
+                "code": {
+                    "type": "integer"
+                }
+            }
+        },
         "request.DeleteUser": {
             "type": "object",
             "required": [
@@ -350,7 +446,6 @@ const docTemplate = `{
         "request.RegisterUser": {
             "type": "object",
             "required": [
-                "captcha",
                 "email",
                 "password",
                 "username"
@@ -358,9 +453,6 @@ const docTemplate = `{
             "properties": {
                 "active": {
                     "type": "integer"
-                },
-                "captcha": {
-                    "type": "string"
                 },
                 "email": {
                     "description": "HeaderImg    string ` + "`" + `json:\"headerImg\" gorm:\"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'\"` + "`" + `",
@@ -370,6 +462,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
+                    "description": "Captcha string ` + "`" + `json:\"captcha\" binding:\"required\"` + "`" + `  // use email verification instead",
                     "type": "integer"
                 },
                 "roles": {

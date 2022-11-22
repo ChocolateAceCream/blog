@@ -39,6 +39,13 @@ definitions:
       uuid:
         type: string
     type: object
+  request.ActiveUser:
+    properties:
+      code:
+        type: integer
+    required:
+    - code
+    type: object
   request.DeleteUser:
     properties:
       uuid:
@@ -67,14 +74,14 @@ definitions:
     properties:
       active:
         type: integer
-      captcha:
-        type: string
       email:
         description: HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
         type: string
       password:
         type: string
       role:
+        description: Captcha string `json:"captcha" binding:"required"`  // use email
+          verification instead
         type: integer
       roles:
         items:
@@ -83,7 +90,6 @@ definitions:
       username:
         type: string
     required:
-    - captcha
     - email
     - password
     - username
@@ -145,6 +151,54 @@ paths:
       summary: Generate captcha image
       tags:
       - Auth
+  /api/v1/auth/sendEmailCode:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return send email result
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Send verification code email
+      tags:
+      - Auth
+  /api/v1/user/active:
+    post:
+      description: Active user with verification code from email
+      parameters:
+      - description: code
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.ActiveUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return activated user info
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.User'
+                msg:
+                  type: string
+              type: object
+      summary: Active user
+      tags:
+      - User
   /api/v1/user/delete:
     delete:
       consumes:

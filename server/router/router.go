@@ -35,15 +35,18 @@ func RouteLoader(r *gin.Engine) {
 		userApi := apiV1.ApiGroupInstance.UserApi
 		{
 			user.GET("/userList", userApi.GetUserList)
-			user.POST("/register", userApi.Register)
+			user.POST("/register", userApi.RegisterUser)
+			user.POST("/active", userApi.ActiveUser)
 			user.PUT("/edit", userApi.EditUser)
 			user.DELETE("/delete", userApi.DeleteUser)
 		}
 
 		auth := v1.Group("/auth")
+		auth.Use(middleware.DefaultLimiter())
 		authApi := apiV1.ApiGroupInstance.AuthApi
 		{
 			auth.POST("/captcha", authApi.GetCaptcha)
+			auth.POST("/sendEmailCode", authApi.SendEmailCode)
 		}
 	}
 

@@ -2,6 +2,7 @@ package apiV1
 
 import (
 	"github.com/ChocolateAceCream/blog/global"
+	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
@@ -44,7 +45,7 @@ func (b *UserApi) GetUserList(c *gin.Context) {
 // @Param data body request.RegisterUser true "username, password, email,captcha, role ID"
 // @Success 200 {object} response.Response{data=dbTable.User,msg=string} "register user, return user info"
 // @Router /api/v1/user/register [post]
-func (b *UserApi) Register(c *gin.Context) {
+func (b *UserApi) RegisterUser(c *gin.Context) {
 	var r request.RegisterUser
 	if err := c.ShouldBindJSON(&r); err != nil {
 		global.LOGGER.Error("register user validation error", zap.Error(err))
@@ -58,22 +59,60 @@ func (b *UserApi) Register(c *gin.Context) {
 	// 	})
 	// }
 
-	if !store.Verify("foo", r.Captcha, true) {
-		response.FailWithMessage("captcha not match, please try again", c)
-		return
-	}
+	/*
+		not using captcha, using email instead
+		if !store.Verify("foo", r.Captcha, true) {
+			response.FailWithMessage("captcha not match, please try again", c)
+			return
+		}
+	*/
 
 	payload := &dbTable.User{
 		Username: r.Username,
 		Password: r.Password,
 		Email:    r.Email,
+		Active:   2, // inactive
 	}
-	result, err := userService.RegisterUser(*payload)
+	u, err := userService.RegisterUser(*payload)
 	if err != nil {
 		global.LOGGER.Error("Failed to Register!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
 	} else {
-		response.OkWithFullDetails(result, "User Register success", c)
+		response.OkWithFullDetails(u, "User Register success", c)
+		session := middleware.GetSession(c)
+		session.Set("currentUser", u)
+	}
+}
+
+// @Tags User
+// @Summary Active user
+// @Description Active user with verification code from email
+// @Produce  application/json
+// @Param data body request.ActiveUser true "code"
+// @Success 200 {object} response.Response{data=dbTable.User,msg=string} "return activated user info"
+// @Router /api/v1/user/active [post]
+func (b *UserApi) ActiveUser(c *gin.Context) {
+	var r request.ActiveUser
+	if err := c.ShouldBindJSON(&r); err != nil {
+		global.LOGGER.Error("active user validation error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	currentUser, err := middleware.GetValueFromSession[dbTable.User](c, "currentUser")
+	if err != nil {
+		global.LOGGER.Error("active user validation error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	err = userService.ActiveUser(currentUser, r.Code)
+	if err != nil {
+		global.LOGGER.Error("Failed to active user!", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+	} else {
+		currentUser.Active = 1
+		response.OkWithFullDetails(currentUser, "User activated", c)
 	}
 }
 

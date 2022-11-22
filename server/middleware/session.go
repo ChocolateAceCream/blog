@@ -168,6 +168,20 @@ func GetSession(c *gin.Context) *Session {
 	return &session
 }
 
+func GetValueFromSession[T any](c *gin.Context, key string) (result T, err error) {
+	currentSession := GetSession(c)
+	if currentSession == nil {
+		return result, errors.New("session has expired")
+	}
+	r, err := currentSession.Get(key)
+	if err != nil {
+		return result, err
+	}
+	temp, _ := json.Marshal(r)
+	err = json.Unmarshal(temp, &result)
+	return result, err
+}
+
 func GetSessionRemainingDuration(s *Session) (int64, error) {
 	duration := s.ExpireTime - time.Now().Unix()
 	if duration < 0 {
