@@ -10,7 +10,6 @@ module.exports = {
   extends: [
     'plugin:vue/vue3-recommended',
     './.eslintrc-auto-import.json',
-    'vue-global-api',
     // 'plugin:prettier/recommended',
     // 'eslint:recommended',
     // '@vue/eslint-config-prettier',
