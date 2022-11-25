@@ -11,7 +11,7 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
 
 import AutoImport from 'unplugin-auto-import/vite'
-import { visualizer } from "rollup-plugin-visualizer"
+import { visualizer } from 'rollup-plugin-visualizer'
 function pathResolve() {
   return resolve(__dirname, '.', ...arguments)
 }
@@ -94,12 +94,52 @@ export default defineConfig((params) => {
         '@images': pathResolve('src/assets/images'),
       },
     },
+    server: {
+      port: ENV.VITE_APP_PORT,
+      host: ENV.VITE_APP_HOST,
+      proxy: {
+        '/blog': {
+          target: ENV.VITE_APP_DEV_PROXY,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/blog/, '')
+        }
+      },
+    },
+    build: {
+      target: 'es2015',
+      manifest: false,
+      sourcemap: false,
+      outDir: 'dist', // 产出目录
+      build: {
+        rollupOptions: {
+          output: {
+            manualChunks: {
+              moment: ['moment'],
+              'lodash-es': ['lodash-es'],
+              'ant-design-vue': ['ant-design-vue'],
+            }
+          }
+        }
+      }
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          // additionalData: `$injectedColor: orange;`
+          additionalData: `
+            @import "@/assets/styles/globalInjectedData.scss";
+          `,
+        }
+      }
+    },
     plugins: [
+      // analyze pkg size
       visualizer({
         open: true,
         gzipSize: true,
         brotliSize: true,
       }),
+
       AutoImport({
         // targets to transform
         include: [

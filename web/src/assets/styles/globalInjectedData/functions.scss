@@ -1,0 +1,34 @@
+@mixin when-inside($context) {
+  #{$context} & {
+    @content;
+  }
+}
+//// 使用
+//.foo {
+//  @include when-inside('#app') {
+//    animation: fadeIn 0.3s 1s forwards;
+//  }
+//}
+//// 产出
+//#app .foo {
+//  animation: fadeIn 0.3s 1s forwards;
+//}
+
+
+
+@function makelongshadow($color) {
+  $val: 0px 0px $color;
+  @for $i from 1 through 200 {
+    $val: #{$val}, #{$i}px #{$i}px #{$color};
+  }
+  @return $val;
+}
+
+@mixin longshadow($color) {
+  text-shadow: makelongshadow($color);
+}
+
+// usage: 
+// h1 {
+//   @include longshadow(darken($color, 5% ));
+// }

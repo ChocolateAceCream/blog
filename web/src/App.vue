@@ -6,15 +6,24 @@ import HelloWorld from './components/HelloWorld.vue'
 
 <template>
   <div>
-      <i-svg-vue style="font-size: 50px; fill: red;" />
-      <i-icon-vue style="font-size: 50px; fill: red;" />
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="@images/hero3.png" class="logo" alt="Vite logo" />
+    <i-svg-vue style="font-size: 50px; fill: red;" />
+    <i-icon-vue style="font-size: 50px; fill: red;" />
+    <a
+      href="https://vitejs.dev"
+      target="_blank"
+    >
+      <img
+        src="@images/hero3.png"
+        class="logo"
+        alt="Vite logo"
+      >
     </a>
-            <i-svg-vue />
-            <a-button>Default Button</a-button>
-    <a href="https://vuejs.org/" target="_blank">
-    </a>
+    <i-svg-vue />
+    <a-button>Default Button</a-button>
+    <a
+      href="https://vuejs.org/"
+      target="_blank"
+    />
   </div>
   <HelloWorld msg="Vite + Vue" />
 </template>
