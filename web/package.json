@@ -12,7 +12,11 @@
     "@rushstack/eslint-patch": "^1.2.0",
     "ant-design-vue": "^3.2.15",
     "antd": "^4.24.2",
+    "axios": "^1.2.0",
+    "js-md5": "^0.7.3",
+    "nprogress": "^0.2.0",
     "pinia": "^2.0.25",
+    "qs": "^6.11.0",
     "vue": "^3.2.41"
   },
   "devDependencies": {

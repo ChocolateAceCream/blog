@@ -1,10 +1,25 @@
 <script setup>
+import { getUserList } from '@/api/auth'
 
 defineProps({
   msg: String,
 })
 
 const count = ref(0)
+
+const userList = async() => {
+  const { data: res } = await getUserList({
+    params: { page: 1 }
+  })
+  console.log('------userlist----', res)
+  // if (res.errorCode === '0') {
+  //   console.log('------userlist----', res)
+  // }
+}
+
+onMounted(() => {
+  userList()
+})
 
 </script>
 

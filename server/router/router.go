@@ -8,6 +8,7 @@ package router
 
 import (
 	apiV1 "github.com/ChocolateAceCream/blog/api/v1"
+	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
@@ -28,6 +29,11 @@ func RouterInit(r *gin.Engine) {
 func RouteLoader(r *gin.Engine) {
 	v1 := r.Group("/api/v1")
 	v1.Use(middleware.SessionMiddleware())
+
+	// turn on sign verification
+	if global.CONFIG.Signature.TurnOn {
+		v1.Use(middleware.SignVerifier())
+	}
 	// v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
 	{
 		user := v1.Group("/user")
