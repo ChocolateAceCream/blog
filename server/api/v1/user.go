@@ -16,6 +16,7 @@ type UserApi struct{}
 // @Description get user list
 // @Tags User
 // @Accept json
+// @Param data query request.UserSearchQuery true "get paged user list by search query"
 // @Success 200 {object} response.Response{data=response.Paging{data=[]dbTable.User},msg=string} "paged user list, includes page size, page number, total counts"
 // @Router /api/v1/user/userList [get]
 func (b *UserApi) GetUserList(c *gin.Context) {
@@ -27,7 +28,14 @@ func (b *UserApi) GetUserList(c *gin.Context) {
 	// a, _ = session.Get("asdf")
 	// fmt.Println("after remove key from session, a is : ", a)
 
-	if list, total, err := userService.GetUserInfoList(); err != nil {
+	var query request.UserSearchQuery
+	// when using ShouldBindQuery, remember to comment form:"pageNumber" in data struct
+	err := c.ShouldBindQuery(&query)
+	if err != nil {
+		response.FailWithMessage("Failed to parse query", c)
+	}
+
+	if list, total, err := userService.GetUserInfoList(query); err != nil {
 		global.LOGGER.Error("获取失败!", zap.Error(err))
 		response.FailWithMessage("获取失败", c)
 	} else {

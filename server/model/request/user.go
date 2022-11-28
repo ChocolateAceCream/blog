@@ -14,6 +14,14 @@ type RegisterUser struct {
 	RoleIds []uint `json:"roles"`
 }
 
+type UserSearchQuery struct {
+	Pagination
+	Desc     bool   `json:"desc" form:"desc"` // order by desc (by default)
+	Username string `json:"username" form:"username"`
+	Active   int    `json:"active" form:"username"`
+	OrderBy  string `json:"orderBy" form:"orderBy"`
+}
+
 type ActiveUser struct {
 	Code string `json:"code" binding:"required"`
 }

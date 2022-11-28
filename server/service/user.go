@@ -3,9 +3,11 @@ package service
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
+	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/utils"
 	uuid "github.com/satori/go.uuid"
 	"gorm.io/gorm"
@@ -13,15 +15,46 @@ import (
 
 type UserService struct{}
 
-func (userService *UserService) GetUserInfoList() (list interface{}, total int64, err error) {
+func (userService *UserService) GetUserInfoList(query request.UserSearchQuery) (userList []dbTable.User, total int64, err error) {
 	db := global.DB.Model(&dbTable.User{})
-	var userList []dbTable.User
+	limit := query.PageSize
+	offset := query.PageSize * (query.PageNumber - 1)
+
+	if query.Active != 0 {
+		db = db.Where("active =?", query.Active)
+	}
+	if query.Username != "" {
+		db = db.Where("username LIKE ?", "%"+query.Username+"%")
+	}
+
 	err = db.Count(&total).Error
 	if err != nil {
 		return
 	}
-	// err = db.Limit(limit).Offset(offset).Preload("Authorities").Preload("Authority").Find(&userList).Error
-	err = db.Preload("UserRoles").Find(&userList).Error
+
+	db = db.Limit(limit).Offset(offset)
+	if query.OrderBy != "" {
+		var orderStr string
+		// sql injection protection
+		orderMap := make(map[string]bool, 3)
+		orderMap["username"] = true
+		orderMap["email"] = true
+		orderMap["id"] = true
+		if orderMap[query.OrderBy] {
+			if query.Desc {
+				orderStr = query.OrderBy + " desc"
+			} else {
+				orderStr = query.OrderBy
+			}
+		} else { // didn't matched any order key in `orderMap`
+			err = fmt.Errorf("invalid orderby key: %v", query.OrderBy)
+			return
+		}
+		// Offset(-1).Limit(-1) is used to cancel offset and limit effect.
+		err = db.Order(orderStr).Find(&userList).Offset(-1).Limit(-1).Error
+	} else {
+		err = db.Order("id").Find(&userList).Offset(-1).Limit(-1).Error
+	}
 	return userList, total, err
 }
 

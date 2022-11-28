@@ -1,5 +1,5 @@
 /*
-* @fileName response.go
+* @fileName shared.go
 * @author Di Sheng
 * @date 2022/10/18 08:49:42
 * @description: wrap out http response

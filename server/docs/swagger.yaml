@@ -284,6 +284,26 @@ paths:
       consumes:
       - application/json
       description: get user list
+      parameters:
+      - in: query
+        name: active
+        type: integer
+      - description: order by desc (by default)
+        in: query
+        name: desc
+        type: boolean
+      - in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: pageNumber
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: username
+        type: string
       responses:
         "200":
           description: paged user list, includes page size, page number, total counts
