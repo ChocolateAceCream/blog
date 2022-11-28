@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/response"
 	"github.com/ChocolateAceCream/blog/utils"
@@ -47,7 +46,7 @@ func (a *AuthApi) GetCaptcha(c *gin.Context) {
 // @Success 200 {object} response.Response{msg=string} "return send email result"
 // @Router /api/v1/auth/sendEmailCode [post]
 func (a *AuthApi) SendEmailCode(c *gin.Context) {
-	currentUser, err := middleware.GetValueFromSession[dbTable.User](c, "currentUser")
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {
 		response.FailWithMessage(err.Error(), c)
 	}

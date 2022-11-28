@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/gin-gonic/gin"
 	"github.com/mojocn/base64Captcha"
 	"go.uber.org/zap"
@@ -15,7 +14,7 @@ type RedisStore struct {
 	Expiration time.Duration
 	Key        string
 	Context    context.Context
-	Session    *middleware.Session
+	Session    *Session
 }
 
 func NewRedisStore() *RedisStore {
@@ -27,7 +26,7 @@ func NewRedisStore() *RedisStore {
 // Set sets the digits for the captcha id.
 func (rs *RedisStore) AttachContext(ctx *gin.Context) base64Captcha.Store {
 	rs.Context = ctx
-	rs.Session = middleware.GetSession(ctx)
+	rs.Session = GetSession(ctx)
 	// fmt.Println("-----rs.Session.UUID-------", rs.Session.UUID)
 	rs.Key = global.CONFIG.Captcha.Prefix + rs.Session.UUID
 	return rs

@@ -2,10 +2,10 @@ package apiV1
 
 import (
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/middleware"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
+	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 )
@@ -79,7 +79,7 @@ func (b *UserApi) RegisterUser(c *gin.Context) {
 		response.FailWithMessage(err.Error(), c)
 	} else {
 		response.OkWithFullDetails(u, "User Register success", c)
-		session := middleware.GetSession(c)
+		session := utils.GetSession(c)
 		session.Set("currentUser", u)
 	}
 }
@@ -99,7 +99,7 @@ func (b *UserApi) ActiveUser(c *gin.Context) {
 		return
 	}
 
-	currentUser, err := middleware.GetValueFromSession[dbTable.User](c, "currentUser")
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {
 		global.LOGGER.Error("active user validation error", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)

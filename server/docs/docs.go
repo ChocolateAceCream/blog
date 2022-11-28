@@ -403,7 +403,7 @@ const docTemplate = `{
             ],
             "properties": {
                 "code": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },

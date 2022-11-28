@@ -15,7 +15,7 @@ type RegisterUser struct {
 }
 
 type ActiveUser struct {
-	Code int `json:"code" binding:"required"`
+	Code string `json:"code" binding:"required"`
 }
 
 type EditUser struct {

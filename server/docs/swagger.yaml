@@ -42,7 +42,7 @@ definitions:
   request.ActiveUser:
     properties:
       code:
-        type: integer
+        type: string
     required:
     - code
     type: object

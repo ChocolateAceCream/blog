@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 	"errors"
-	"strconv"
 
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
@@ -26,13 +25,13 @@ func (userService *UserService) GetUserInfoList() (list interface{}, total int64
 	return userList, total, err
 }
 
-func (userService *UserService) ActiveUser(u dbTable.User, code int) error {
+func (userService *UserService) ActiveUser(u dbTable.User, code string) error {
 	key := global.CONFIG.Email.Prefix + u.UUID.String()
 	r, err := global.REDIS.Get(context.TODO(), key).Result()
 	if err != nil {
 		return err
 	}
-	if strconv.Itoa(code) != r {
+	if code != r {
 		return errors.New("code not match, try again")
 	}
 	err = global.DB.Model(&dbTable.User{}).Where("UUID = ? ", u.UUID).Update("active", 1).Error
