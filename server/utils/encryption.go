@@ -1,6 +1,10 @@
 package utils
 
 import (
+	"crypto/md5"
+	"encoding/hex"
+	"strings"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -14,4 +18,12 @@ func BcryptHash(password string) string {
 func BcryptCheck(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+// MD-5 encoding
+func MD5Encryption(str string) string {
+	s := md5.New()
+	s.Write([]byte(str))
+	r := hex.EncodeToString(s.Sum(nil))
+	return strings.ToUpper(r)
 }

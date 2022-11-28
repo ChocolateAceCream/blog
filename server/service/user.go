@@ -17,8 +17,6 @@ type UserService struct{}
 
 func (userService *UserService) GetUserInfoList(query request.UserSearchQuery) (userList []dbTable.User, total int64, err error) {
 	db := global.DB.Model(&dbTable.User{})
-	limit := query.PageSize
-	offset := query.PageSize * (query.PageNumber - 1)
 
 	if query.Active != 0 {
 		db = db.Where("active =?", query.Active)
@@ -32,6 +30,8 @@ func (userService *UserService) GetUserInfoList(query request.UserSearchQuery) (
 		return
 	}
 
+	limit := query.PageSize
+	offset := query.PageSize * (query.PageNumber - 1)
 	db = db.Limit(limit).Offset(offset)
 	if query.OrderBy != "" {
 		var orderStr string

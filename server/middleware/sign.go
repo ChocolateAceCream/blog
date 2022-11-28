@@ -1,15 +1,13 @@
 package middleware
 
 import (
-	"crypto/md5"
-	"encoding/hex"
 	"regexp"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/response"
+	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
 )
 
@@ -34,7 +32,7 @@ func SignVerifier() gin.HandlerFunc {
 			c.Abort()
 		}
 
-		encode := MD5Encryption(origin)
+		encode := utils.MD5Encryption(origin)
 		sign := c.Request.Header.Get("sign")
 		if encode != sign {
 			response.FailWithMessage("Signature verification failed", c)
@@ -42,12 +40,4 @@ func SignVerifier() gin.HandlerFunc {
 		}
 		c.Next()
 	}
-}
-
-// MD-5 encoding
-func MD5Encryption(str string) string {
-	s := md5.New()
-	s.Write([]byte(str))
-	r := hex.EncodeToString(s.Sum(nil))
-	return strings.ToUpper(r)
 }
