@@ -13,7 +13,7 @@ import (
 
 func SignVerifier() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		exclude := regexp.MustCompile("/api/v1/public/*")
+		exclude := regexp.MustCompile("/api/public/*")
 		path := c.Request.RequestURI
 		if exclude != nil && exclude.MatchString(path) {
 			c.Next()

@@ -27,6 +27,13 @@ func RouterInit(r *gin.Engine) {
 }
 
 func RouteLoader(r *gin.Engine) {
+	PublicGroup := r.Group("/api/public")
+	{
+		// health check
+		PublicGroup.GET("/health", func(c *gin.Context) {
+			c.JSON(200, "ok")
+		})
+	}
 	v1 := r.Group("/api/v1")
 	v1.Use(middleware.SessionMiddleware())
 
