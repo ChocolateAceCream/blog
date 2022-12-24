@@ -27,6 +27,11 @@ func RouterInit(r *gin.Engine) {
 }
 
 func RouteLoader(r *gin.Engine) {
+	userApi := apiV1.ApiGroupInstance.UserApi
+	casbinApi := apiV1.ApiGroupInstance.CasbinApi
+	authApi := apiV1.ApiGroupInstance.AuthApi
+	roleApi := apiV1.ApiGroupInstance.RoleApi
+
 	PublicGroup := r.Group("/api/public")
 	{
 		// health check
@@ -34,32 +39,49 @@ func RouteLoader(r *gin.Engine) {
 			c.JSON(200, "ok")
 		})
 	}
-	v1 := r.Group("/api/v1")
-	v1.Use(middleware.SessionMiddleware())
+
+	auth := PublicGroup.Group("/auth")
+	auth.Use(middleware.DefaultLimiter()).Use(middleware.SessionMiddleware())
+	{
+		auth.POST("/captcha", authApi.GetCaptcha)
+		auth.POST("/sendEmailCode", authApi.SendEmailCode)
+		auth.POST("/register", userApi.RegisterUser)
+	}
+
+	PrivateGroup := r.Group("")
+
+	// turn on session
+	PrivateGroup.Use(middleware.SessionMiddleware())
 
 	// turn on sign verification
 	if global.CONFIG.Signature.TurnOn {
-		v1.Use(middleware.SignVerifier())
+		PrivateGroup.Use(middleware.SignVerifier())
 	}
-	// v1.Use(middleware.Timer()).Use(middleware.SessionMiddleware())
+
+	//turn on casbin
+	PrivateGroup.Use(middleware.CasbinHandler())
+
+	v1 := PrivateGroup.Group("/api/v1")
+	// v1.Use(middleware.Timer())
 	{
 		user := v1.Group("/user")
 		// user.Use(middleware.DefaultLimiter())
-		userApi := apiV1.ApiGroupInstance.UserApi
 		{
 			user.GET("/userList", userApi.GetUserList)
-			user.POST("/register", userApi.RegisterUser)
 			user.POST("/active", userApi.ActiveUser)
 			user.PUT("/edit", userApi.EditUser)
 			user.DELETE("/delete", userApi.DeleteUser)
 		}
 
-		auth := v1.Group("/auth")
-		auth.Use(middleware.DefaultLimiter())
-		authApi := apiV1.ApiGroupInstance.AuthApi
+		casbin := v1.Group("/casbin")
 		{
-			auth.POST("/captcha", authApi.GetCaptcha)
-			auth.POST("/sendEmailCode", authApi.SendEmailCode)
+			casbin.POST("/update", casbinApi.UpdateCasbin)
+			// casbin.POST("/getPolicyPathByRoleId", casbinApi.getPolicyPathByRoleId)
+		}
+
+		role := v1.Group("/role")
+		{
+			role.POST("/create", roleApi.CreateRole)
 		}
 	}
 

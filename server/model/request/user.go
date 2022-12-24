@@ -35,5 +35,5 @@ type EditUser struct {
 	// Authorities []model.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
 type DeleteUser struct {
-	UUID uuid.UUID `json:"uuid" gorm:"primarykey" binding:"required"` // uuid
+	UUID string `json:"uuid" gorm:"primarykey" binding:"required"` // uuid
 }

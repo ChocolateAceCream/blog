@@ -22,7 +22,7 @@ type AuthApi struct{}
 // @accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{data=response.CaptchaResponse, msg=string} "return base64 captcha image"
-// @Router /api/v1/auth/captcha [post]
+// @Router /api/public/auth/captcha [post]
 func (a *AuthApi) GetCaptcha(c *gin.Context) {
 	config := global.CONFIG.Captcha
 	driver := base64Captcha.NewDriverDigit(config.Height, config.Width, config.Length, config.MaxSkew, config.DotCount)
@@ -44,7 +44,7 @@ func (a *AuthApi) GetCaptcha(c *gin.Context) {
 // @accept application/json
 // @Produce application/json
 // @Success 200 {object} response.Response{msg=string} "return send email result"
-// @Router /api/v1/auth/sendEmailCode [post]
+// @Router /api/public/auth/sendEmailCode [post]
 func (a *AuthApi) SendEmailCode(c *gin.Context) {
 	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {

@@ -50,9 +50,9 @@ func (b *UserApi) GetUserList(c *gin.Context) {
 // @Summary Register user
 // @Description register user
 // @Produce  application/json
-// @Param data body request.RegisterUser true "username, password, email,captcha, role ID"
+// @Param data body request.RegisterUser true "username, password, email,captcha, role IDs"
 // @Success 200 {object} response.Response{data=dbTable.User,msg=string} "register user, return user info"
-// @Router /api/v1/user/register [post]
+// @Router /api/public/auth/register [post]
 func (b *UserApi) RegisterUser(c *gin.Context) {
 	var r request.RegisterUser
 	if err := c.ShouldBindJSON(&r); err != nil {
@@ -66,22 +66,14 @@ func (b *UserApi) RegisterUser(c *gin.Context) {
 	// 		AuthorityId: v,
 	// 	})
 	// }
-
-	/*
-		not using captcha, using email instead
-		if !store.Verify("foo", r.Captcha, true) {
-			response.FailWithMessage("captcha not match, please try again", c)
-			return
-		}
-	*/
-
-	payload := &dbTable.User{
+	payload := dbTable.User{
 		Username: r.Username,
 		Password: r.Password,
 		Email:    r.Email,
 		Active:   2, // inactive
 	}
-	u, err := userService.RegisterUser(*payload)
+
+	u, err := userService.RegisterUser(payload)
 	if err != nil {
 		global.LOGGER.Error("Failed to Register!", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)

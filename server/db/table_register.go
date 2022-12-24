@@ -13,8 +13,8 @@ import (
 // Author SliverHorn
 func RegisterTables(db *gorm.DB) {
 	err := db.AutoMigrate(
-		// user model
 		dbTable.User{},
+		dbTable.Role{},
 	)
 	if err != nil {
 		global.LOGGER.Error("register table failed", zap.Error(err))

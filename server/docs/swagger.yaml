@@ -1,18 +1,27 @@
 definitions:
   dbTable.Role:
     properties:
+      children:
+        items:
+          $ref: '#/definitions/dbTable.Role'
+        type: array
       createdAt:
         description: 创建时间
         type: string
       deletedAt:
         type: string
-      roleId:
+      id:
         type: integer
-      roleName:
+      name:
         type: string
+      parentId:
+        type: integer
       updatedAt:
         description: 更新时间
         type: string
+    required:
+    - name
+    - parentId
     type: object
   dbTable.User:
     properties:
@@ -70,6 +79,13 @@ definitions:
     required:
     - uuid
     type: object
+  request.Endpoint:
+    properties:
+      method:
+        type: string
+      path:
+        type: string
+    type: object
   request.RegisterUser:
     properties:
       active:
@@ -93,6 +109,17 @@ definitions:
     - email
     - password
     - username
+    type: object
+  request.UpdateCasbin:
+    properties:
+      endpoints:
+        items:
+          $ref: '#/definitions/request.Endpoint'
+        type: array
+      roleId:
+        type: integer
+    required:
+    - roleId
     type: object
   response.CaptchaResponse:
     properties:
@@ -128,7 +155,7 @@ info:
   title: Gin swagger
   version: "1.0"
 paths:
-  /api/v1/auth/captcha:
+  /api/public/auth/captcha:
     post:
       consumes:
       - application/json
@@ -151,7 +178,34 @@ paths:
       summary: Generate captcha image
       tags:
       - Auth
-  /api/v1/auth/sendEmailCode:
+  /api/public/auth/register:
+    post:
+      description: register user
+      parameters:
+      - description: username, password, email,captcha, role IDs
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.RegisterUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: register user, return user info
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.User'
+                msg:
+                  type: string
+              type: object
+      summary: Register user
+      tags:
+      - User
+  /api/public/auth/sendEmailCode:
     post:
       consumes:
       - application/json
@@ -172,6 +226,60 @@ paths:
       summary: Send verification code email
       tags:
       - Auth
+  /api/v1/casbin/update:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: update privilege based on role id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.UpdateCasbin'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: update privilege based on role id
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: Update role privilege
+      tags:
+      - Casbin
+  /api/v1/role/create:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: name, parentId
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Role'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Create role, return
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.Role'
+                msg:
+                  type: string
+              type: object
+      summary: Create Role
+      tags:
+      - Role
   /api/v1/user/active:
     post:
       description: Active user with verification code from email
@@ -250,33 +358,6 @@ paths:
                   type: string
               type: object
       summary: Edit user info
-      tags:
-      - User
-  /api/v1/user/register:
-    post:
-      description: register user
-      parameters:
-      - description: username, password, email,captcha, role ID
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.RegisterUser'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: register user, return user info
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  $ref: '#/definitions/dbTable.User'
-                msg:
-                  type: string
-              type: object
-      summary: Register user
       tags:
       - User
   /api/v1/user/userList:

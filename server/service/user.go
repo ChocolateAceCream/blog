@@ -84,6 +84,9 @@ func (userService *UserService) RegisterUser(u dbTable.User) (registeredUser dbT
 		return registeredUser, errors.New("email already taken, please try again")
 	}
 
+	u.UserRoles = []dbTable.Role{
+		{Name: "guest", RoleId: 2},
+	}
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.NewV4()
 	err = global.DB.Create(&u).Error
@@ -94,6 +97,6 @@ func (userService *UserService) EditUser(u dbTable.User) error {
 	return global.DB.Model(&dbTable.User{}).Where("UUID = ? ", u.UUID).Updates(&u).Error
 }
 
-func (userService *UserService) DeleteUser(uuid uuid.UUID) error {
-	return global.DB.Model(&dbTable.User{}).Where("uuid = ?", uuid).Delete(&dbTable.User{}).Error
+func (userService *UserService) DeleteUser(uuid string) error {
+	return global.DB.Where("uuid = ?", uuid).Delete(&dbTable.User{}).Error
 }

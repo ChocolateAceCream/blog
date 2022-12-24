@@ -22,7 +22,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/auth/captcha": {
+        "/api/public/auth/captcha": {
             "post": {
                 "security": [
                     {
@@ -64,7 +64,53 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/auth/sendEmailCode": {
+        "/api/public/auth/register": {
+            "post": {
+                "description": "register user",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register user",
+                "parameters": [
+                    {
+                        "description": "username, password, email,captcha, role IDs",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.RegisterUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "register user, return user info",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbTable.User"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/public/auth/sendEmailCode": {
             "post": {
                 "security": [
                     {
@@ -92,6 +138,99 @@ const docTemplate = `{
                                 {
                                     "type": "object",
                                     "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/casbin/update": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Update role privilege",
+                "parameters": [
+                    {
+                        "description": "update privilege based on role id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.UpdateCasbin"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "update privilege based on role id",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/create": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Create Role",
+                "parameters": [
+                    {
+                        "description": "name, parentId",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dbTable.Role"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Create role, return",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbTable.Role"
+                                        },
                                         "msg": {
                                             "type": "string"
                                         }
@@ -240,52 +379,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/register": {
-            "post": {
-                "description": "register user",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Register user",
-                "parameters": [
-                    {
-                        "description": "username, password, email,captcha, role ID",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.RegisterUser"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "register user, return user info",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/definitions/dbTable.User"
-                                        },
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/user/userList": {
             "get": {
                 "description": "get user list",
@@ -373,7 +466,17 @@ const docTemplate = `{
     "definitions": {
         "dbTable.Role": {
             "type": "object",
+            "required": [
+                "name",
+                "parentId"
+            ],
             "properties": {
+                "children": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbTable.Role"
+                    }
+                },
                 "createdAt": {
                     "description": "创建时间",
                     "type": "string"
@@ -381,11 +484,14 @@ const docTemplate = `{
                 "deletedAt": {
                     "type": "string"
                 },
-                "roleId": {
+                "id": {
                     "type": "integer"
                 },
-                "roleName": {
+                "name": {
                     "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
                 },
                 "updatedAt": {
                     "description": "更新时间",
@@ -476,6 +582,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.Endpoint": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
         "request.RegisterUser": {
             "type": "object",
             "required": [
@@ -506,6 +623,23 @@ const docTemplate = `{
                 },
                 "username": {
                     "type": "string"
+                }
+            }
+        },
+        "request.UpdateCasbin": {
+            "type": "object",
+            "required": [
+                "roleId"
+            ],
+            "properties": {
+                "endpoints": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/request.Endpoint"
+                    }
+                },
+                "roleId": {
+                    "type": "integer"
                 }
             }
         },
