@@ -10,11 +10,11 @@ definitions:
         type: string
       deletedAt:
         type: string
-      id:
-        type: integer
       name:
         type: string
       parentId:
+        type: integer
+      roleId:
         type: integer
       updatedAt:
         description: 更新时间
@@ -85,6 +85,19 @@ definitions:
         type: string
       path:
         type: string
+    type: object
+  request.Login:
+    properties:
+      code:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - code
+    - password
+    - username
     type: object
   request.RegisterUser:
     properties:
@@ -178,6 +191,32 @@ paths:
       summary: Generate captcha image
       tags:
       - Auth
+  /api/public/auth/login:
+    post:
+      parameters:
+      - description: username, password, captcha code
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.Login'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 返回包括用户信息,token,过期时间
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.User'
+                msg:
+                  type: string
+              type: object
+      summary: User login
+      tags:
+      - User
   /api/public/auth/register:
     post:
       description: register user

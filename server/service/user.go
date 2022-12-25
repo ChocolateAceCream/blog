@@ -74,6 +74,17 @@ func (userService *UserService) ActiveUser(u dbTable.User, code string) error {
 	return global.REDIS.Del(context.TODO(), key).Err()
 }
 
+func (userService *UserService) Login(u *dbTable.User) (*dbTable.User, error) {
+	var user dbTable.User
+	err := global.DB.Where("username = ?", u.Username).Preload("UserRoles").First(&user).Error
+	if err == nil {
+		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
+			return nil, errors.New("wrong password")
+		}
+	}
+	return &user, err
+}
+
 func (userService *UserService) RegisterUser(u dbTable.User) (registeredUser dbTable.User, err error) {
 	var user dbTable.User
 	if !errors.Is(global.DB.Where("username = ?", u.Username).First(&user).Error, gorm.ErrRecordNotFound) {

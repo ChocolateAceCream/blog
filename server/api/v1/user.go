@@ -177,3 +177,38 @@ func (b *UserApi) DeleteUser(c *gin.Context) {
 		response.OkWithMessage("delete user success", c)
 	}
 }
+
+// @Tags User
+// @Summary User login
+// @Produce  application/json
+// @Param data body request.Login true "username, password, captcha code"
+// @Success 200 {object} response.Response{data=response.Login,msg=string} "返回包括用户信息,token,过期时间"
+// @Router /api/public/auth/login [post]
+func (b *UserApi) Login(c *gin.Context) {
+	var l request.Login
+	if err := c.ShouldBindJSON(&l); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	captchaId := global.CONFIG.Captcha.Prefix + utils.GetSession(c).UUID
+	if store.Verify(captchaId, l.Code, true) {
+		u := &dbTable.User{Username: l.Username, Password: l.Password}
+		if user, err := userService.Login(u); err != nil {
+			global.LOGGER.Error("Fail to login", zap.Error(err))
+			response.FailWithMessage("Fail to login", c)
+		} else {
+			if user.Active != 1 {
+				global.LOGGER.Error("User is not activated")
+				response.FailWithMessage("User is not activated", c)
+				return
+			} else {
+				//	TODO: return user menu
+				// success login
+				response.OkWithFullDetails(response.Login{User: user}, "Login success", c)
+			}
+		}
+	} else {
+		response.FailWithMessage("captcha not match, please refresh captcha code", c)
+	}
+}

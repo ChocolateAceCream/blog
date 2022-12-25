@@ -96,7 +96,6 @@ func GetSession(c *gin.Context) *Session {
 	cookie, ok := c.Get(global.CONFIG.Session.Key)
 	if !ok {
 		global.LOGGER.Error("cannot retrieve cookie from current context")
-
 		return nil
 	}
 	session, ok := cookie.(Session)

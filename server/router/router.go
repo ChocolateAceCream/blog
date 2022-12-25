@@ -46,6 +46,7 @@ func RouteLoader(r *gin.Engine) {
 		auth.POST("/captcha", authApi.GetCaptcha)
 		auth.POST("/sendEmailCode", authApi.SendEmailCode)
 		auth.POST("/register", userApi.RegisterUser)
+		auth.POST("/login", userApi.Login)
 	}
 
 	PrivateGroup := r.Group("")
