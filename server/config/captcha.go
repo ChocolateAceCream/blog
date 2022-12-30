@@ -8,4 +8,5 @@ type Captcha struct {
 	DotCount   int     `mapstructure:"dot-count" json:"dot-count" yaml:"dot-count"`
 	Expiration int     `mapstructure:"expiration" json:"expiration" yaml:"expiration"`
 	Prefix     string  `mapstructure:"prefix" json:"prefix" yaml:"prefix"`
+	DigitsOnly bool    `mapstructure:"digits-only" json:"digits-only" yaml:"digits-only"`
 }

@@ -2,6 +2,7 @@ package apiV1
 
 import (
 	"fmt"
+	"image/color"
 	"time"
 
 	"github.com/ChocolateAceCream/blog/global"
@@ -25,7 +26,27 @@ type AuthApi struct{}
 // @Router /api/public/auth/captcha [post]
 func (a *AuthApi) GetCaptcha(c *gin.Context) {
 	config := global.CONFIG.Captcha
-	driver := base64Captcha.NewDriverDigit(config.Height, config.Width, config.Length, config.MaxSkew, config.DotCount)
+	var driver base64Captcha.Driver
+	if config.DigitsOnly == true {
+		driver = base64Captcha.NewDriverDigit(config.Height, config.Width, config.Length, config.MaxSkew, config.DotCount)
+	} else {
+		driverString := base64Captcha.DriverString{
+			Height:          config.Height,
+			Width:           config.Width,
+			NoiseCount:      0,
+			ShowLineOptions: 2,
+			Length:          config.Length,
+			Source:          "1234567890qwertyuioplkjhgfdsazxcvbnm",
+			BgColor: &color.RGBA{
+				R: 3,
+				G: 102,
+				B: 214,
+				A: 125,
+			},
+			Fonts: []string{"wqy-microhei.ttc"},
+		}
+		driver = driverString.ConvertFonts()
+	}
 	cp := base64Captcha.NewCaptcha(driver, store.AttachContext(c))
 	if _, b64s, err := cp.Generate(); err != nil {
 		global.LOGGER.Error("failed to fetch Captcha!", zap.Error(err))
