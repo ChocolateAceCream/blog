@@ -1,9 +1,11 @@
 package utils
 
 import (
+	"fmt"
 	"regexp"
 
 	"github.com/ChocolateAceCream/blog/global"
+	"github.com/dlclark/regexp2"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/validator/v10"
 )
@@ -20,8 +22,15 @@ var (
 )
 
 func InitValidator() {
+	validatorMapper := map[string]func(fl validator.FieldLevel) bool{
+		"idCheck":       idCheck,
+		"httpCheck":     httpCheck,
+		"phoneCheck":    phoneCheck,
+		"passwordCheck": passwordCheck,
+	}
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		for validatorName, validatorFunction := range validatorMapper {
+			fmt.Println("---validatorName---", validatorName)
 			err := v.RegisterValidation(validatorName, validatorFunction)
 			if err != nil {
 				global.LOGGER.Info("validator register success")
@@ -31,14 +40,21 @@ func InitValidator() {
 	}
 }
 
-func idcheck(fl validator.FieldLevel) bool {
+func idCheck(fl validator.FieldLevel) bool {
 	return RegIDcheck.MatchString(fl.Field().String())
 }
 
-func httpcheck(fl validator.FieldLevel) bool {
+func httpCheck(fl validator.FieldLevel) bool {
 	return RegHTTPCheck.MatchString(fl.Field().String())
 }
 
-func phonecheck(fl validator.FieldLevel) bool {
+func phoneCheck(fl validator.FieldLevel) bool {
 	return RegPhoneCheck.MatchString(fl.Field().String())
+}
+
+func passwordCheck(fl validator.FieldLevel) bool {
+	expr := `^(?![0-9a-zA-Z]+$)(?![a-zA-Z!@#$%^&*]+$)(?![0-9!@#$%^&*]+$)[0-9A-Za-z!@#$%^&*]{8,16}$`
+	reg, _ := regexp2.Compile(expr, 0)
+	m, _ := reg.FindStringMatch(fl.Field().String())
+	return m != nil
 }

@@ -5,7 +5,7 @@ import uuid "github.com/satori/go.uuid"
 // User register structure
 type RegisterUser struct {
 	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,passwordCheck" `
 	// HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
 	Email string `json:"email" binding:"required"`
 	// Captcha string `json:"captcha" binding:"required"`  // use email verification instead
@@ -40,6 +40,6 @@ type DeleteUser struct {
 
 type Login struct {
 	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
+	Password string `json:"password" binding:"required,passwordCheck"`
 	Code     string `json:"code" binding:"required"`
 }
