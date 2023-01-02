@@ -1,8 +1,7 @@
-// @tailwind utilities;
 
 @import "application/base";
 @import "application/utility";
-
+@import "application/element-override";
 .page {
   width: 100%;
 }

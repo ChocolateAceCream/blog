@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/model/dbTable"
+	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
 	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
@@ -64,17 +64,21 @@ func (a *AuthApi) GetCaptcha(c *gin.Context) {
 // @Security ApiKeyAuth
 // @accept application/json
 // @Produce application/json
+// @Param data body request.SendEmail true "email"
 // @Success 200 {object} response.Response{msg=string} "return send email result"
 // @Router /api/public/auth/sendEmailCode [post]
 func (a *AuthApi) SendEmailCode(c *gin.Context) {
-	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
-	if err != nil {
+	var req request.SendEmail
+	if err := c.ShouldBindJSON(&req); err != nil {
+		global.LOGGER.Error("SendEmailCode error: ", zap.Error(err))
 		response.FailWithMessage(err.Error(), c)
+		return
 	}
+	currentSession := utils.GetSession(c)
 	code := utils.RandomString(global.CONFIG.Captcha.Length)
-	global.REDIS.Set(c, global.CONFIG.Email.Prefix+currentUser.UUID.String(), code, time.Duration(global.CONFIG.Email.Expiration)*time.Second)
-	body := fmt.Sprintf("verification code is <b>%v</b>", code)
-	if err := utils.SendMail(currentUser.Email, "Verification Code", body); err != nil {
+	global.REDIS.Set(c, global.CONFIG.Email.Prefix+currentSession.UUID, code, time.Duration(global.CONFIG.Email.Expiration)*time.Second)
+	body := fmt.Sprintf("verification code is <b>%v</b>, expired in 2 minutes", code)
+	if err := utils.SendMail(req.Email, "Verification Code", body); err != nil {
 		response.FailWithMessage(err.Error(), c)
 		return
 	}

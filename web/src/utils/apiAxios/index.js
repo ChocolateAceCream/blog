@@ -1,7 +1,7 @@
 import axios from 'axios'
 import supportCancelToken from './cancelToken'
 import { addSignature } from './signature'
-import { notification } from 'ant-design-vue'
+import { ElMessage } from 'element-plus'
 import NProgress from 'nprogress'
 import qs from 'qs'
 
@@ -65,7 +65,11 @@ apiAxios.interceptors.response.use(res => {
     if (!Object.prototype.hasOwnProperty.call(res.data, 'errorCode') && !Object.prototype.hasOwnProperty.call(res.data, 'errorMsg')) {
       return Promise.resolve(res)
     }
-    notification.error({ message: res.data.errorMsg || res.data })
+    ElMessage({
+      message: res.data.errorMsg || res.data,
+      type: 'error',
+      duration: 5 * 1000
+    })
     return Promise.reject(res.data)
   }
   return Promise.resolve(res)

@@ -1,44 +1,41 @@
-<script setup>
-// This starter template is using Vue 3 <script setup> SFCs
-// Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
+<script>
+import { ElConfigProvider } from 'element-plus'
+import { defineComponent, reactive, toRefs } from 'vue'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
+import en from 'element-plus/lib/locale/lang/en'
+import { sessionStore } from '@/stores/sessionStore'
+export default defineComponent({
+  components: {
+    ElConfigProvider,
+  },
+  setup() {
+    const elementPlusLocaleMapper = {
+      'cn': zhCn,
+      'en': en
+    }
+    const store = sessionStore()
+    console.log('----store----', store)
+    store.$subscribe((_, s) => {
+      state.locale = elementPlusLocaleMapper[s.userInfo.locale]
+    })
+
+    const state = reactive({
+      locale: zhCn,
+    })
+    return {
+      ...toRefs(state)
+    }
+  }
+})
 </script>
 
 <template>
-  <div>
-    <i-svg-vue style="font-size: 50px; fill: red;" />
-    <i-icon-vue style="font-size: 50px; fill: red;" />
-    <a
-      href="https://vitejs.dev"
-      target="_blank"
-    >
-      <img
-        src="@images/hero3.png"
-        class="logo"
-        alt="Vite logo"
-      >
-    </a>
-    <i-svg-vue />
-    <a-button>Default Button</a-button>
-    <a
-      href="https://vuejs.org/"
-      target="_blank"
-    />
-  </div>
-  <HelloWorld msg="Vite + Vue" />
-</template>
+  <el-config-provider
+    :locale="locale"
+    :size="`default`"
+    :z-index="3000"
+  >
+    <router-view />
+  </el-config-provider>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  /* background: url("@/assets/images/bg-login.jpg") center; */
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
-}
-</style>
+</template>

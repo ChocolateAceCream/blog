@@ -70,7 +70,7 @@ func (b *UserApi) RegisterUser(c *gin.Context) {
 		Username: r.Username,
 		Password: r.Password,
 		Email:    r.Email,
-		Active:   2, // inactive
+		Active:   1, // inactive
 	}
 
 	u, err := userService.RegisterUser(payload)
@@ -205,10 +205,42 @@ func (b *UserApi) Login(c *gin.Context) {
 			} else {
 				//	TODO: return user menu
 				// success login
+				session := utils.GetSession(c)
+				session.Set("currentUser", user)
 				response.OkWithFullDetails(response.Login{User: user}, "Login success", c)
 			}
 		}
 	} else {
 		response.FailWithMessage("captcha not match, please refresh captcha code", c)
+	}
+}
+
+// @Tags User
+// @Summary Reset user password
+// @Produce  application/json
+// @Param data body request.ResetPassword true "New pw, email code"
+// @Success 200 {object} response.Response{msg=string} "Reset password"
+// @Router /api/v1/user/resetPassword [put]
+func (b *UserApi) ResetPassword(c *gin.Context) {
+	var req request.ResetPassword
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
+	if err != nil {
+		global.LOGGER.Error("User not logged in", zap.Error(err))
+		response.FailWithMessage("User not logged in", c)
+		return
+	}
+
+	currentSession := utils.GetSession(c)
+
+	if err := userService.ResetPassword(currentUser, req.NewPassword, req.Code, currentSession.UUID); err != nil {
+		global.LOGGER.Error("Failed to reset password!", zap.Error(err))
+		response.FailWithMessage("Failed to reset password!", c)
+	} else {
+		response.OkWithMessage("Password reset success", c)
 	}
 }

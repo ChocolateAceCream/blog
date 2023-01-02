@@ -109,5 +109,20 @@ func (userService *UserService) EditUser(u dbTable.User) error {
 }
 
 func (userService *UserService) DeleteUser(uuid string) error {
-	return global.DB.Where("uuid = ?", uuid).Delete(&dbTable.User{}).Error
+	return global.DB.Where("UUID = ?", uuid).Delete(&dbTable.User{}).Error
+}
+
+func (userService *UserService) ResetPassword(u dbTable.User, newPassword string, code string, uuid string) error {
+	key := global.CONFIG.Email.Prefix + uuid
+	r, err := global.REDIS.Get(context.TODO(), key).Result()
+	if err != nil {
+		return err
+	}
+	if code != r {
+		return errors.New("code not match, try again")
+	}
+	global.REDIS.Del(context.TODO(), key).Err()
+	newPassword = utils.BcryptHash(newPassword)
+
+	return global.DB.Model(&dbTable.User{}).Where("id = ? ", u.ID).Update("password", newPassword).Error
 }

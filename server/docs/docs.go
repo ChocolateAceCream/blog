@@ -96,7 +96,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/dbTable.User"
+                                            "$ref": "#/definitions/response.Login"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -172,6 +172,17 @@ const docTemplate = `{
                     "Auth"
                 ],
                 "summary": "Send verification code email",
+                "parameters": [
+                    {
+                        "description": "email",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.SendEmail"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "return send email result",
@@ -424,6 +435,48 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/user/resetPassword": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset user password",
+                "parameters": [
+                    {
+                        "description": "New pw, email code",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ResetPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset password",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/user/userList": {
             "get": {
                 "description": "get user list",
@@ -660,13 +713,15 @@ const docTemplate = `{
         "request.RegisterUser": {
             "type": "object",
             "required": [
+                "code",
                 "email",
                 "password",
                 "username"
             ],
             "properties": {
-                "active": {
-                    "type": "integer"
+                "code": {
+                    "description": "use email verification instead",
+                    "type": "string"
                 },
                 "email": {
                     "description": "HeaderImg    string ` + "`" + `json:\"headerImg\" gorm:\"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'\"` + "`" + `",
@@ -676,7 +731,6 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "role": {
-                    "description": "Captcha string ` + "`" + `json:\"captcha\" binding:\"required\"` + "`" + `  // use email verification instead",
                     "type": "integer"
                 },
                 "roles": {
@@ -686,6 +740,32 @@ const docTemplate = `{
                     }
                 },
                 "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.ResetPassword": {
+            "type": "object",
+            "required": [
+                "code",
+                "newPassword"
+            ],
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "newPassword": {
+                    "type": "string"
+                }
+            }
+        },
+        "request.SendEmail": {
+            "type": "object",
+            "required": [
+                "email"
+            ],
+            "properties": {
+                "email": {
                     "type": "string"
                 }
             }
@@ -715,6 +795,14 @@ const docTemplate = `{
                 }
             }
         },
+        "response.Login": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "$ref": "#/definitions/dbTable.User"
+                }
+            }
+        },
         "response.Paging": {
             "type": "object",
             "properties": {
@@ -733,10 +821,10 @@ const docTemplate = `{
         "response.Response": {
             "type": "object",
             "properties": {
-                "code": {
+                "data": {},
+                "errorCode": {
                     "type": "integer"
                 },
-                "data": {},
                 "msg": {
                     "type": "string"
                 }

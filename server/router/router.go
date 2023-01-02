@@ -60,7 +60,7 @@ func RouteLoader(r *gin.Engine) {
 	}
 
 	//turn on casbin
-	PrivateGroup.Use(middleware.CasbinHandler())
+	// PrivateGroup.Use(middleware.CasbinHandler())
 
 	v1 := PrivateGroup.Group("/api/v1")
 	// v1.Use(middleware.Timer())
@@ -70,6 +70,7 @@ func RouteLoader(r *gin.Engine) {
 		{
 			user.GET("/userList", userApi.GetUserList)
 			user.POST("/active", userApi.ActiveUser)
+			user.PUT("/resetPassword", userApi.ResetPassword)
 			user.PUT("/edit", userApi.EditUser)
 			user.DELETE("/delete", userApi.DeleteUser)
 		}

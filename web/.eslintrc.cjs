@@ -3,14 +3,8 @@ require('@rushstack/eslint-patch/modern-module-resolution')
 
 module.exports = {
   root: true,
-  globals: {
-    useVModel: true, // for vscode eslint cannot find './.eslintrc-auto-import.json' issue
-    defineStore: true,
-  },
   extends: [
     'plugin:vue/vue3-recommended',
-    './.eslintrc-auto-import.json',
-    // 'plugin:prettier/recommended',
     // 'eslint:recommended',
     // '@vue/eslint-config-prettier',
   ],
@@ -31,7 +25,7 @@ module.exports = {
     'vue/multi-word-component-names': 0,
     'vue/singleline-html-element-content-newline': 'off',
     'vue/multiline-html-element-content-newline': 'off',
-    'vue/name-property-casing': 'off',
+    'vue/name-property-casing': ['error', 'PascalCase'],
     'vue/no-v-html': 'off',
     'vue/no-mutating-props': 'off',
     'vue/custom-event-name-casing': 'off',

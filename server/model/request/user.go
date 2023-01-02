@@ -7,10 +7,9 @@ type RegisterUser struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required,passwordCheck" `
 	// HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
-	Email string `json:"email" binding:"required"`
-	// Captcha string `json:"captcha" binding:"required"`  // use email verification instead
+	Email   string `json:"email" binding:"required,email"`
+	Code    string `json:"code" binding:"required"` // use email verification instead
 	RoleId  uint   `json:"role" gorm:"default:888"`
-	Active  int    `json:"active"`
 	RoleIds []uint `json:"roles"`
 }
 
@@ -30,7 +29,7 @@ type EditUser struct {
 	UUID     uuid.UUID `json:"uuid" gorm:"primarykey" binding:"required"` // uuid
 	Username string    `json:"username"`
 	RoleId   uint      `json:"role" gorm:"default:888"`
-	Email    string    `json:"email"  `
+	Email    string    `json:"email" binding:"email" `
 	Active   int       `json:"active"`
 	// Authorities []model.SysAuthority `json:"-" gorm:"many2many:sys_user_authority;"`
 }
@@ -42,4 +41,9 @@ type Login struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required,passwordCheck"`
 	Code     string `json:"code" binding:"required"`
+}
+
+type ResetPassword struct {
+	NewPassword string `json:"newPassword" binding:"required,passwordCheck"`
+	Code        string `json:"code" binding:"required"`
 }
