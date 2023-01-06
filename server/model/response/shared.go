@@ -27,8 +27,9 @@ type Paging struct {
 }
 
 const (
-	ERROR   = 1
-	SUCCESS = 0
+	ERROR        = 1
+	SUCCESS      = 0
+	UNAUTHORIZED = 401
 )
 
 func ResponseGenerator(code int, data interface{}, msg string, c *gin.Context) {
@@ -53,4 +54,9 @@ func FailWithMessage(msg string, c *gin.Context) {
 
 func FailWithFullDetails(data interface{}, msg string, c *gin.Context) {
 	ResponseGenerator(ERROR, data, msg, c)
+}
+
+func FailWithUnauthorized(msg string, c *gin.Context) {
+	ResponseGenerator(UNAUTHORIZED, map[string]interface{}{}, msg, c)
+
 }

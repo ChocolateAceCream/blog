@@ -102,7 +102,7 @@ func (b *UserApi) ActiveUser(c *gin.Context) {
 	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {
 		global.LOGGER.Error("active user validation error", zap.Error(err))
-		response.FailWithMessage(err.Error(), c)
+		response.FailWithUnauthorized(err.Error(), c)
 		return
 	}
 
@@ -231,7 +231,7 @@ func (b *UserApi) ResetPassword(c *gin.Context) {
 	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {
 		global.LOGGER.Error("User not logged in", zap.Error(err))
-		response.FailWithMessage("User not logged in", c)
+		response.FailWithUnauthorized("User not logged in", c)
 		return
 	}
 

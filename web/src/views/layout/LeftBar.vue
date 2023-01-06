@@ -7,12 +7,14 @@
     <router-link :to="{ name: 'home' }">
       <el-menu-item index="home">
         <template #title>
-          <i-svg-home class="left-menu-icon" />
+          <i-svg-home
+            class="left-menu-icon"
+          />
           <span>首页</span>
         </template>
       </el-menu-item>
     </router-link>
-    <!-- <el-sub-menu index="device">
+    <el-sub-menu index="device">
       <template #title>
         <svg-icon
           class="left-menu-icon"
@@ -20,7 +22,7 @@
         />
         <span>设备管理</span>
       </template>
-      <router-link :to="{ name: 'importDevice' }">
+      <!-- <router-link :to="{ name: 'importDevice' }">
         <el-menu-item index="importDevice">AP设备入库</el-menu-item>
       </router-link>
       <router-link :to="{ name: 'manufacturers' }">
@@ -31,9 +33,9 @@
       </router-link>
       <router-link :to="{ name: 'groupList' }">
         <el-menu-item index="groupList">AP组列表</el-menu-item>
-      </router-link>
-    </el-sub-menu> -->
-    <!-- <el-sub-menu index="3">
+      </router-link> -->
+    </el-sub-menu>
+    <el-sub-menu index="3">
       <template #title>
         <svg-icon
           class="left-menu-icon"
@@ -41,7 +43,7 @@
         />
         <span>系统管理</span>
       </template>
-      <router-link :to="{ name: 'menu' }">
+      <!-- <router-link :to="{ name: 'menu' }">
         <el-menu-item index="menu">菜单管理</el-menu-item>
       </router-link>
       <router-link :to="{ name: 'role' }">
@@ -52,8 +54,8 @@
       </router-link>
       <router-link :to="{ name: 'logs' }">
         <el-menu-item index="logs">操作日志</el-menu-item>
-      </router-link>
-    </el-sub-menu> -->
+      </router-link> -->
+    </el-sub-menu>
     <el-menu-item
       index="4"
       disabled
@@ -91,19 +93,20 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .left-menu-icon {
-  font-size: 18px;
   margin-right: 8px;
-  width: 20px;
+  fill: $shadow-color;
+  cursor: pointer;
   height: 20px;
+  width: 20px;
 }
 .left-bar-menu {
   // color: $dark-brown;
-  background-color: #fff4f5;
+  background-color: $lite-background;
   height: 100%;
   padding: 5px;
 }
 .el-menu-item {
-  background-color: #fff4f5;
+  background-color: $lite-background;
 }
 .el-menu-item.is-active {
   background-color: $blue !important; //你要修改的颜色

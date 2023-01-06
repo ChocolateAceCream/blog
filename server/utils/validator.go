@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"fmt"
 	"regexp"
 
 	"github.com/ChocolateAceCream/blog/global"
@@ -30,7 +29,6 @@ func InitValidator() {
 	}
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 		for validatorName, validatorFunction := range validatorMapper {
-			fmt.Println("---validatorName---", validatorName)
 			err := v.RegisterValidation(validatorName, validatorFunction)
 			if err != nil {
 				global.LOGGER.Info("validator register success")

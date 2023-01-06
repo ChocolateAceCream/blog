@@ -6,7 +6,7 @@ import { ElMessage } from 'element-plus'
 import { sessionStore } from '@/stores/sessionStore'
 const routes = [
   {
-    path: '/', component: Layout, meta: { title: '主页', requireAuth: true },
+    path: '/', component: Layout, redirect: '/home', meta: { title: '主页', requireAuth: true },
     children: [
       // { path: '', name: 'home', component: () => import('@/views/home'), },
       { path: '/home', name: 'home', component: () => import('@/views/home'), meta: { title: '主页', requireAuth: true } },
