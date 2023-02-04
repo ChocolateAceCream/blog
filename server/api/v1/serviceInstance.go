@@ -7,8 +7,13 @@
 
 package apiV1
 
-import "github.com/ChocolateAceCream/blog/service"
+import (
+	"github.com/ChocolateAceCream/blog/initializer"
+	"github.com/ChocolateAceCream/blog/service"
+)
 
 var userService = new(service.UserService)
 var casbinService = new(service.CasbinService)
 var roleService = new(service.RoleService)
+var menuService = new(service.MenuService)
+var initService = new(initializer.InitService)

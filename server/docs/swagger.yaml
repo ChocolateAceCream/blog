@@ -1,4 +1,33 @@
 definitions:
+  dbTable.Menu:
+    properties:
+      component:
+        type: string
+      createdAt:
+        type: string
+      icon:
+        type: string
+      id:
+        type: integer
+      keepAlive:
+        type: integer
+      name:
+        type: string
+      path:
+        type: string
+      pid:
+        type: integer
+      roles:
+        items:
+          $ref: '#/definitions/dbTable.Role'
+        type: array
+      title:
+        type: string
+      type:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
   dbTable.Role:
     properties:
       children:
@@ -19,6 +48,10 @@ definitions:
       updatedAt:
         description: 更新时间
         type: string
+      users:
+        items:
+          $ref: '#/definitions/dbTable.User'
+        type: array
     required:
     - name
     - parentId
@@ -37,12 +70,12 @@ definitions:
         type: integer
       password:
         type: string
+      role:
+        $ref: '#/definitions/dbTable.Role'
+      roleId:
+        type: integer
       updatedAt:
         type: string
-      userRoles:
-        items:
-          $ref: '#/definitions/dbTable.Role'
-        type: array
       username:
         type: string
       uuid:
@@ -294,6 +327,25 @@ paths:
       summary: Send verification code email
       tags:
       - Auth
+  /api/public/initDB:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return init result msg
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: initialize data
+      tags:
+      - Init
   /api/v1/casbin/update:
     post:
       consumes:
@@ -320,6 +372,53 @@ paths:
       summary: Update role privilege
       tags:
       - Casbin
+  /api/v1/menu/add:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: route path, pid, route name, component
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Menu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 新增菜单
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: add menu
+      tags:
+      - Menu
+  /api/v1/menu/currentUserMenu:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Return current user's menu list
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Menu'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      summary: get current user's menus
+      tags:
+      - Menu
   /api/v1/role/create:
     post:
       consumes:

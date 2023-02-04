@@ -10,11 +10,11 @@ import (
 )
 
 // create table, used in initializer
-// Author SliverHorn
 func RegisterTables(db *gorm.DB) {
 	err := db.AutoMigrate(
 		dbTable.User{},
 		dbTable.Role{},
+		dbTable.Menu{},
 	)
 	if err != nil {
 		global.LOGGER.Error("register table failed", zap.Error(err))

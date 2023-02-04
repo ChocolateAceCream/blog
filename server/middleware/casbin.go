@@ -26,12 +26,10 @@ func CasbinHandler() gin.HandlerFunc {
 		// 获取请求方法
 		action := c.Request.Method
 		e := service.GetEnforcer()
-		for _, role := range currentUser.UserRoles {
-			id := strconv.Itoa(int(role.RoleId))
-			if success, _ := e.Enforce(id, path, action); success {
-				c.Next()
-				return
-			}
+		id := strconv.Itoa(int(currentUser.Role.ID))
+		if success, _ := e.Enforce(id, path, action); success {
+			c.Next()
+			return
 		}
 		response.FailWithFullDetails(http.StatusUnauthorized, "Access denied", c)
 		c.Abort()

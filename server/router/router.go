@@ -31,6 +31,8 @@ func RouteLoader(r *gin.Engine) {
 	casbinApi := apiV1.ApiGroupInstance.CasbinApi
 	authApi := apiV1.ApiGroupInstance.AuthApi
 	roleApi := apiV1.ApiGroupInstance.RoleApi
+	menuApi := apiV1.ApiGroupInstance.MenuApi
+	initApi := apiV1.ApiGroupInstance.InitApi
 
 	PublicGroup := r.Group("/api/public")
 	{
@@ -38,6 +40,7 @@ func RouteLoader(r *gin.Engine) {
 		PublicGroup.GET("/health", func(c *gin.Context) {
 			c.JSON(200, "ok")
 		})
+		PublicGroup.POST("/initDB", initApi.InitDB)
 	}
 
 	auth := PublicGroup.Group("/auth")
@@ -84,6 +87,10 @@ func RouteLoader(r *gin.Engine) {
 		role := v1.Group("/role")
 		{
 			role.POST("/create", roleApi.CreateRole)
+		}
+		menu := v1.Group("/menu")
+		{
+			menu.POST("/add", menuApi.AddMenu)
 		}
 	}
 

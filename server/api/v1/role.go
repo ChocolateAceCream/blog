@@ -29,7 +29,12 @@ func (a *RoleApi) CreateRole(c *gin.Context) {
 		global.LOGGER.Error("Fail to create role!", zap.Error(err))
 		response.FailWithMessage("Fail to create role! "+err.Error(), c)
 	} else {
-		_ = casbinService.Update(r.RoleId, request.DefaultCasbin())
+		if err := menuService.AssignRoleMenus(request.DefaultMenus(), r.ID); err != nil {
+			global.LOGGER.Error("Fail to assign role menus!", zap.Error(err))
+		}
+		if err := casbinService.Update(r.ID, request.DefaultCasbin()); err != nil {
+			global.LOGGER.Error("Fail to update role casbin!", zap.Error(err))
+		}
 		response.OkWithFullDetails(r, "create role success", c)
 	}
 }

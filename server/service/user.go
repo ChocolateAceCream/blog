@@ -95,9 +95,7 @@ func (userService *UserService) RegisterUser(u dbTable.User) (registeredUser dbT
 		return registeredUser, errors.New("email already taken, please try again")
 	}
 
-	u.UserRoles = []dbTable.Role{
-		{Name: "guest", RoleId: 2},
-	}
+	u.Role = dbTable.Role{Name: "guest", ID: 3}
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.NewV4()
 	err = global.DB.Create(&u).Error

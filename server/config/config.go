@@ -10,4 +10,5 @@ type Server struct {
 	Captcha   Captcha   `mapstructure:"captcha" json:"captcha" yaml:"captcha"`
 	Email     Email     `mapstructure:"email" json:"email" yaml:"email"`
 	Signature Signature `mapstructure:"signature" json:"signature" yaml:"signature"`
+	Init      Init      `mapstructure:"init" json:"init" yaml:"init"`
 }

@@ -5,6 +5,8 @@ type ApiGroup struct {
 	AuthApi   AuthApi
 	CasbinApi CasbinApi
 	RoleApi   RoleApi
+	MenuApi   MenuApi
+	InitApi   InitApi
 }
 
 var ApiGroupInstance = new(ApiGroup)
