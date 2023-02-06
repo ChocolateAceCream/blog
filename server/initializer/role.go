@@ -46,17 +46,14 @@ func (ri *roleInitilizer) Initialize(ctx context.Context) (next context.Context,
 	}
 	next = ctx
 	for _, e := range entities {
-		next = context.WithValue(next, ri.Name()+fmt.Sprint(e.ID), e)
+		next = context.WithValue(next, ri.Name()+e.Name, e)
 	}
 	return next, nil
 
 }
 
-func (ri *roleInitilizer) DataInitialized(ctx context.Context) bool {
+func (ri *roleInitilizer) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.Role
 	err := global.DB.Where("name = ? ", "superadmin").First(&record).Error
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return false
-	}
-	return record.ID == 0
+	return !errors.Is(err, gorm.ErrRecordNotFound)
 }

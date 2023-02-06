@@ -19,7 +19,7 @@ const (
 type Initializer interface {
 	Name() string
 	Initialize(ctx context.Context) (next context.Context, err error)
-	DataInitialized(ctx context.Context) bool
+	InitDataVerify(ctx context.Context) bool
 }
 
 type orderedInitializer struct {
@@ -68,7 +68,7 @@ func (initService *InitService) InitDB() (err error) {
 		c()
 	}(cancel)
 	for _, init := range initializers {
-		if init.DataInitialized(next) {
+		if init.InitDataVerify(next) {
 			// if init data already inserted, jump to next init
 			global.LOGGER.Info(fmt.Sprintf("%s has been initialized", init.Name()))
 			continue

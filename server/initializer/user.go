@@ -62,7 +62,7 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 	next = context.WithValue(ctx, ui.Name(), entities)
 	ri := roleInitilizer{}
 	for _, user := range entities {
-		role, ok := ctx.Value(ri.Name() + fmt.Sprint(user.RoleId)).(dbTable.Role)
+		role, ok := ctx.Value(ri.Name() + user.Username).(dbTable.Role)
 		if !ok {
 			return next, errors.New("fail to associate user with role")
 		}
@@ -73,7 +73,7 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 	return next, err
 }
 
-func (ui *userInitilizer) DataInitialized(ctx context.Context) bool {
+func (ui *userInitilizer) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.User
 	err := global.DB.Where("username = ? ", "superadmin").Preload("Role").First(&record).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
