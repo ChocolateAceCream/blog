@@ -26,7 +26,7 @@ func (ui *userInitilizer) Name() string {
 
 func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
 	config := global.CONFIG.Init
-	adminPassword := utils.BcryptHash(config.AdminEmail)
+	adminPassword := utils.BcryptHash(config.AdminPassword)
 	guestPassword := utils.BcryptHash(config.GuestPassword)
 	adminEmail, guestEmail := config.AdminEmail, config.GuestEmail
 	db := global.DB
