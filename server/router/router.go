@@ -90,7 +90,8 @@ func RouteLoader(r *gin.Engine) {
 		}
 		menu := v1.Group("/menu")
 		{
-			menu.POST("/add", menuApi.AddMenu)
+			menu.POST("/create", menuApi.AddMenu)
+			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
 		}
 	}
 

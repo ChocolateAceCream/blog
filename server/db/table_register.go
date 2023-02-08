@@ -5,6 +5,7 @@ import (
 
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
+	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"go.uber.org/zap"
 	"gorm.io/gorm"
 )
@@ -12,6 +13,7 @@ import (
 // create table, used in initializer
 func RegisterTables(db *gorm.DB) {
 	err := db.AutoMigrate(
+		gormadapter.CasbinRule{},
 		dbTable.User{},
 		dbTable.Role{},
 		dbTable.Menu{},

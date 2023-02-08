@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"sort"
-	"sync"
 
 	"github.com/ChocolateAceCream/blog/global"
 	"go.uber.org/zap"
@@ -32,18 +31,20 @@ type initializerGroup []*orderedInitializer //
 var (
 	initializers initializerGroup
 	cache        map[string]*orderedInitializer
-	once         sync.Once
 )
 
 type InitService struct{}
 
-func init() {
-	cache = map[string]*orderedInitializer{}
-	initializers = []*orderedInitializer{}
-}
-
 func Register(order int, i Initializer) {
 	name := i.Name()
+
+	if cache == nil {
+		cache = make(map[string]*orderedInitializer)
+	}
+	if initializers == nil {
+		initializers = []*orderedInitializer{}
+	}
+
 	if _, existed := cache[name]; existed {
 		global.LOGGER.Error("Fail to register initializer", zap.Error(fmt.Errorf("name conflict on %s", name)))
 		panic(fmt.Sprintf("Initializer name conflict on %s", name))

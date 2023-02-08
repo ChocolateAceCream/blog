@@ -17,7 +17,7 @@ type MenuApi struct{}
 // @Produce application/json
 // @Param data body dbTable.Menu true "route path, pid, route name, component"
 // @Success 200 {object} response.Response{msg=string} "新增菜单"
-// @Router /api/v1/menu/add [post]
+// @Router /api/v1/menu/create [post]
 func (a *MenuApi) AddMenu(c *gin.Context) {
 	var menu dbTable.Menu
 	if err := c.ShouldBindJSON(&menu); err != nil {
