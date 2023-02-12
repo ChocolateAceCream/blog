@@ -43,7 +43,7 @@ func (rim *initRoleMenu) Initialize(ctx context.Context) (next context.Context, 
 
 func (rim *initRoleMenu) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.Role
-	r := global.DB.Where("name = ? ", "superadmin").Preload("menus").First(&record)
+	r := global.DB.Where("name = ? ", "superadmin").Preload("Menus").First(&record)
 	if r != nil && r.Error == nil {
 		return len(record.Menus) > 0
 	}

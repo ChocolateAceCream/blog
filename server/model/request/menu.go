@@ -19,29 +19,5 @@ func DefaultMenus() []dbTable.Menu {
 				Title: "主页",
 			},
 		},
-		{
-			MODEL:     global.MODEL{ID: 2},
-			Pid:       1,
-			Name:      "homeChild1",
-			Component: "@/views/home/child1",
-			Path:      "/home/child1",
-			Type:      1, //menu item
-			Meta: dbTable.Meta{
-				Icon:  "home",
-				Title: "主页child1",
-			},
-		},
-		{
-			MODEL:     global.MODEL{ID: 2},
-			Pid:       1,
-			Name:      "homeChild2",
-			Component: "@/views/home/child2",
-			Path:      "/home/child2",
-			Type:      1, //menu item
-			Meta: dbTable.Meta{
-				Icon:  "home",
-				Title: "主页child2",
-			},
-		},
 	}
 }

@@ -33,6 +33,7 @@ func RouteLoader(r *gin.Engine) {
 	roleApi := apiV1.ApiGroupInstance.RoleApi
 	menuApi := apiV1.ApiGroupInstance.MenuApi
 	initApi := apiV1.ApiGroupInstance.InitApi
+	endpointApi := apiV1.ApiGroupInstance.EndpointApi
 
 	PublicGroup := r.Group("/api/public")
 	{
@@ -62,8 +63,8 @@ func RouteLoader(r *gin.Engine) {
 		PrivateGroup.Use(middleware.SignVerifier())
 	}
 
-	//turn on casbin
-	// PrivateGroup.Use(middleware.CasbinHandler())
+	// turn on casbin
+	PrivateGroup.Use(middleware.CasbinHandler())
 
 	v1 := PrivateGroup.Group("/api/v1")
 	// v1.Use(middleware.Timer())
@@ -93,6 +94,10 @@ func RouteLoader(r *gin.Engine) {
 			menu.POST("/create", menuApi.AddMenu)
 			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
 		}
-	}
 
+		endpoint := v1.Group("/endpoint")
+		{
+			endpoint.GET("/getAllEndpoints", endpointApi.GetAllEndpoints)
+		}
+	}
 }

@@ -22,5 +22,5 @@ func (i *InitApi) InitDB(c *gin.Context) {
 		response.FailWithMessage("Fail to init db data", c)
 		return
 	}
-	response.OkWithMessage("create role success", c)
+	response.OkWithMessage("data initialization success", c)
 }

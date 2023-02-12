@@ -42,13 +42,13 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 		{
 			MODEL:     global.MODEL{ID: 2},
 			Pid:       0,
-			Name:      "menu",
-			Component: "@/views/menu",
-			Path:      "/menu",
+			Name:      "role",
+			Component: "@/views/role",
+			Path:      "/role",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
-				Icon:  "menu",
-				Title: "菜单",
+				Icon:  "role",
+				Title: "角色管理",
 			},
 		},
 	}
@@ -57,13 +57,25 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 		{
 			MODEL:     global.MODEL{ID: 3},
 			Pid:       0,
-			Name:      "superadmin",
-			Component: "@/views/superadmin",
-			Path:      "/superadmin",
+			Name:      "menu",
+			Component: "@/views/menu",
+			Path:      "/menu",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
-				Icon:  "superadmin",
-				Title: "超管",
+				Icon:  "menu",
+				Title: "菜单管理",
+			},
+		},
+		{
+			MODEL:     global.MODEL{ID: 4},
+			Pid:       0,
+			Name:      "endpoint",
+			Component: "@/views/endpoint",
+			Path:      "/endpoint",
+			Type:      1, //menu item
+			Meta: dbTable.Meta{
+				Icon:  "endpoint",
+				Title: "api管理",
 			},
 		},
 	}

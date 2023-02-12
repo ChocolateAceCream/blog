@@ -32,11 +32,13 @@ func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Contex
 	}
 	adminRules := []gormadapter.CasbinRule{
 		{Ptype: "p", V1: "/api/v1/role/create", V2: "POST"},
-		{Ptype: "p", V1: "/api/v1/menu/create", V2: "POST"},
-		{Ptype: "p", V1: "/api/v1/menu/currentUserMenu", V2: "GET"},
 	}
 	adminRules = append(adminRules, guestRules...)
-	superadminRules := []gormadapter.CasbinRule{}
+	superadminRules := []gormadapter.CasbinRule{
+		{Ptype: "p", V1: "/api/v1/menu/create", V2: "POST"},
+		{Ptype: "p", V1: "/api/v1/menu/currentUserMenu", V2: "GET"},
+		{Ptype: "p", V1: "/api/v1/endpoint/getAllEndpoints", V2: "GET"},
+	}
 	superadminRules = append(superadminRules, adminRules...)
 	m := map[string][]gormadapter.CasbinRule{
 		"1": superadminRules,
@@ -60,6 +62,6 @@ func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Contex
 
 func (ci *casbinInitilizer) InitDataVerify(ctx context.Context) bool {
 	record := gormadapter.CasbinRule{}
-	err := global.DB.Where(gormadapter.CasbinRule{Ptype: "p", V0: "0", V1: "/superadmin", V2: "GET"}).First(&record).Error
+	err := global.DB.Where(gormadapter.CasbinRule{Ptype: "p", V0: "1", V1: "/api/v1/menu/create", V2: "GET"}).First(&record).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)
 }

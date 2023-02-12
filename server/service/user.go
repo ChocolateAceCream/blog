@@ -76,7 +76,7 @@ func (userService *UserService) ActiveUser(u dbTable.User, code string) error {
 
 func (userService *UserService) Login(u *dbTable.User) (*dbTable.User, error) {
 	var user dbTable.User
-	err := global.DB.Where("username = ?", u.Username).Preload("UserRoles").First(&user).Error
+	err := global.DB.Where("username = ?", u.Username).Preload("Role").First(&user).Error
 	if err == nil {
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("wrong password")

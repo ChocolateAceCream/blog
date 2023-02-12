@@ -17,6 +17,7 @@ func RegisterTables(db *gorm.DB) {
 		dbTable.User{},
 		dbTable.Role{},
 		dbTable.Menu{},
+		dbTable.Endpoint{},
 	)
 	if err != nil {
 		global.LOGGER.Error("register table failed", zap.Error(err))
