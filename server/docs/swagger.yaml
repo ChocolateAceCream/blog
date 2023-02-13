@@ -1,4 +1,31 @@
 definitions:
+  dbTable.Endpoint:
+    properties:
+      createdAt:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      method:
+        type: string
+      name:
+        type: string
+      path:
+        type: string
+      pid:
+        type: integer
+      type:
+        enum:
+        - 1
+        - 2
+        type: integer
+      updatedAt:
+        type: string
+    required:
+    - name
+    - pid
+    type: object
   dbTable.Menu:
     properties:
       component:
@@ -372,7 +399,52 @@ paths:
       summary: Update role privilege
       tags:
       - Casbin
-  /api/v1/menu/add:
+  /api/v1/endpoint/all:
+    get:
+      consumes:
+      - application/json
+      description: return all endpoints
+      responses:
+        "200":
+          description: return all endpoints
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Endpoint'
+                  type: array
+              type: object
+      summary: get all endpoints
+      tags:
+      - Endpoint
+  /api/v1/endpoint/new:
+    post:
+      consumes:
+      - application/json
+      description: create new endpoint
+      parameters:
+      - description: 'Type, Name, PID, Method, Description, Path '
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Endpoint'
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: new endpoint
+      tags:
+      - Endpoint
+  /api/v1/menu/create:
     post:
       consumes:
       - application/json

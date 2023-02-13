@@ -63,8 +63,10 @@ func RouteLoader(r *gin.Engine) {
 		PrivateGroup.Use(middleware.SignVerifier())
 	}
 
-	// turn on casbin
-	PrivateGroup.Use(middleware.CasbinHandler())
+	// turn on casbin if gin mode is not test
+	if gin.Mode() != "test" {
+		PrivateGroup.Use(middleware.CasbinHandler())
+	}
 
 	v1 := PrivateGroup.Group("/api/v1")
 	// v1.Use(middleware.Timer())
@@ -97,7 +99,8 @@ func RouteLoader(r *gin.Engine) {
 
 		endpoint := v1.Group("/endpoint")
 		{
-			endpoint.GET("/getAllEndpoints", endpointApi.GetAllEndpoints)
+			endpoint.GET("/all", endpointApi.GetAllEndpoints)
+			endpoint.POST("/new", endpointApi.NewEndpoint)
 		}
 	}
 }

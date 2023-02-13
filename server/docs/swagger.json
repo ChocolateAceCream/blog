@@ -276,7 +276,85 @@
                 }
             }
         },
-        "/api/v1/menu/add": {
+        "/api/v1/endpoint/all": {
+            "get": {
+                "description": "return all endpoints",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "get all endpoints",
+                "responses": {
+                    "200": {
+                        "description": "return all endpoints",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbTable.Endpoint"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/endpoint/new": {
+            "post": {
+                "description": "create new endpoint",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "new endpoint",
+                "parameters": [
+                    {
+                        "description": "Type, Name, PID, Method, Description, Path ",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dbTable.Endpoint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/create": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -670,6 +748,46 @@
         }
     },
     "definitions": {
+        "dbTable.Endpoint": {
+            "type": "object",
+            "required": [
+                "name",
+                "pid"
+            ],
+            "properties": {
+                "createdAt": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "integer"
+                },
+                "type": {
+                    "type": "integer",
+                    "enum": [
+                        1,
+                        2
+                    ]
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "dbTable.Menu": {
             "type": "object",
             "properties": {

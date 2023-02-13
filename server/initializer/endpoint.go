@@ -105,7 +105,7 @@ func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Cont
 		{
 			MODEL:       global.MODEL{ID: 31},
 			PID:         3,
-			Description: "Create Meu",
+			Description: "Create Menu",
 			Name:        "Create Menu",
 			Method:      "POST",
 			Path:        "/api/v1/menu/create",
