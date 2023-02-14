@@ -100,6 +100,7 @@ func RouteLoader(r *gin.Engine) {
 		endpoint := v1.Group("/endpoint")
 		{
 			endpoint.GET("/all", endpointApi.GetAllEndpoints)
+			endpoint.POST("/list", endpointApi.GetEndpointList)
 			endpoint.POST("/new", endpointApi.NewEndpoint)
 		}
 	}

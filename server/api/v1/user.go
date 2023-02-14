@@ -20,13 +20,17 @@ type UserApi struct{}
 // @Success 200 {object} response.Response{data=response.Paging{data=[]dbTable.User},msg=string} "paged user list, includes page size, page number, total counts"
 // @Router /api/v1/user/userList [get]
 func (b *UserApi) GetUserList(c *gin.Context) {
-	// session := middleware.GetSession(c)
-	// session.Set("asdf", 123)
-	// a, _ := session.Get("asdf")
-	// fmt.Println("key from session is: ", a)
-	// session.RemoveKey("asdf")
-	// a, _ = session.Get("asdf")
-	// fmt.Println("after remove key from session, a is : ", a)
+	/*
+		session usage example:
+
+		session := middleware.GetSession(c)
+		session.Set("asdf", 123)
+		a, _ := session.Get("asdf")
+		fmt.Println("key from session is: ", a)
+		session.RemoveKey("asdf")
+		a, _ = session.Get("asdf")
+		fmt.Println("after remove key from session, a is : ", a)
+	*/
 
 	var query request.UserSearchQuery
 	// when using ShouldBindQuery, remember to comment form:"pageNumber" in data struct

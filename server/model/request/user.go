@@ -18,7 +18,7 @@ type UserSearchQuery struct {
 	Desc     bool   `json:"desc" form:"desc"` // order by desc (by default)
 	Username string `json:"username" form:"username"`
 	Active   int    `json:"active" form:"username"`
-	OrderBy  string `json:"orderBy" form:"orderBy"`
+	OrderBy  string `json:"orderBy" form:"orderBy" binding:"oneof=username email id"`
 }
 
 type ActiveUser struct {
