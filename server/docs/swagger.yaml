@@ -32,12 +32,10 @@ definitions:
         type: string
       createdAt:
         type: string
-      icon:
-        type: string
       id:
         type: integer
-      keepAlive:
-        type: integer
+      meta:
+        $ref: '#/definitions/dbTable.Meta'
       name:
         type: string
       path:
@@ -48,11 +46,18 @@ definitions:
         items:
           $ref: '#/definitions/dbTable.Role'
         type: array
-      title:
-        type: string
       type:
         type: integer
       updatedAt:
+        type: string
+    type: object
+  dbTable.Meta:
+    properties:
+      icon:
+        type: string
+      keepAlive:
+        type: integer
+      title:
         type: string
     type: object
   dbTable.Role:
@@ -419,6 +424,60 @@ paths:
       summary: get all endpoints
       tags:
       - Endpoint
+  /api/v1/endpoint/list:
+    post:
+      consumes:
+      - application/json
+      description: return endpoint list
+      parameters:
+      - description: order by desc (by default)
+        in: query
+        name: desc
+        type: boolean
+      - in: query
+        name: method
+        type: string
+      - in: query
+        name: name
+        type: string
+      - enum:
+        - name
+        - pid
+        - path
+        - id
+        in: query
+        name: orderBy
+        type: string
+      - in: query
+        name: pageNumber
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: path
+        type: string
+      - in: query
+        name: pid
+        type: integer
+      - in: query
+        name: type
+        type: integer
+      responses:
+        "200":
+          description: 'return all search result '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Endpoint'
+                  type: array
+              type: object
+      summary: get endpoint list
+      tags:
+      - Endpoint
   /api/v1/endpoint/new:
     post:
       consumes:
@@ -636,7 +695,11 @@ paths:
         in: query
         name: desc
         type: boolean
-      - in: query
+      - enum:
+        - username
+        - email
+        - id
+        in: query
         name: orderBy
         type: string
       - in: query

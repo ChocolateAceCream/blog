@@ -50,7 +50,8 @@
 import { useRoute, useRouter } from 'vue-router'
 import { reactive, toRefs, defineComponent, createVNode, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
+import { userRouterStore } from '@/stores/routerStore'
 import Breadcrumb from './Breadcrumb.vue'
 import _ from 'lodash'
 export default defineComponent({
@@ -60,7 +61,7 @@ export default defineComponent({
 
   setup(props, ctx) {
     const router = useRouter()
-    const store = sessionStore()
+    const store = useSessionStore()
 
     const state = reactive({
       username: store.userInfo.username,
@@ -79,7 +80,7 @@ export default defineComponent({
           router.push({name: 'login'})
           store.logout()
         } catch (err) {
-          console.log('-------cancel----', err)
+          console.log('-------cancel login----', err)
         }
       }
     })

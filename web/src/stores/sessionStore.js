@@ -1,7 +1,7 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-
-export const sessionStore = defineStore({
-  id: 'sessionStore',
+import { userRouterStore } from './routerStore'
+export const useSessionStore = defineStore({
+  id: 'useSessionStore',
   state: () => ({
     counter: 0,
     name: 'di',
@@ -18,12 +18,20 @@ export const sessionStore = defineStore({
     }
   }),
   getters: {
-    doubleCount: (state) => state.counter * 2,
     isAuthenticated: (state) => state.userInfo.isAuthenticated
   },
   actions: {
     increment() {
       this.counter++
+    },
+    setUserInfo(info) {
+      Object.keys(info).map(key => {
+        this.userInfo[key] = info[key]
+      })
+      this.userInfo.isAuthenticated = true
+    },
+    setPermissionList(permissions) {
+
     },
     logout() {
       this.userInfo = {
@@ -37,6 +45,9 @@ export const sessionStore = defineStore({
         locale: 'cn',
         isAuthenticated: false,
       }
+      const routerStore = userRouterStore()
+      routerStore.cleanStore()
+      console.log('---routerStore.asyncRouterFlag---', routerStore.asyncRouterFlag)
     },
   },
 
@@ -55,5 +66,5 @@ export const sessionStore = defineStore({
 
 // enable module hot reload
 if (import.meta.hot) {
-  import.meta.hot.accept(acceptHMRUpdate(sessionStore, import.meta.hot))
+  import.meta.hot.accept(acceptHMRUpdate(useSessionStore, import.meta.hot))
 }

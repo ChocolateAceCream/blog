@@ -91,7 +91,7 @@ import {validateEmail} from '@/utils/validate'
 import VerificationCode from '@/components/shared/VerificationCode'
 import { postAddUser, getDepartList } from '@/api/user'
 import {putUpdateUserInfo} from '@/api/auth'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 import useLoading from '@/components/shared/useLoading'
 import { ElMessage } from 'element-plus'
 export default defineComponent({
@@ -101,7 +101,7 @@ export default defineComponent({
   setup(props, ctx) {
     const router = useRouter()
     const resetUserInfoFormRef = ref()
-    const store = sessionStore()
+    const store = useSessionStore()
     const {account, depart, email, username, id} = store.userInfo
     const form = ref({
       account: account,

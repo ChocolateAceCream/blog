@@ -94,7 +94,7 @@ import {validatePassword, validateEmail} from '@/utils/validate'
 import { postRegister, postSendEmailCode } from '@/api/auth'
 import useLoading from '@/components/shared/useLoading'
 import { ElMessage } from 'element-plus'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   setup(props, ctx) {
     const router = useRouter()
@@ -144,7 +144,7 @@ export default defineComponent({
             const {data: res} = response
             if (res.errorCode === 0) {
               console.log('------login success---', res.data)
-              const store = sessionStore()
+              const store = useSessionStore()
               Object.keys(res.data).map(key => {
                 store.userInfo[key] = res.data[key]
               })

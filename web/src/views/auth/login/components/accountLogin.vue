@@ -64,7 +64,8 @@ import { reactive, toRefs, defineComponent, unref, ref } from 'vue'
 import VerificationCode from '@/components/shared/VerificationCode'
 import { useRouter } from 'vue-router'
 import { validatePassword } from '@/utils/validate'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
+import { userRouterStore } from '@/stores/routerStore'
 import { throttle } from 'lodash'
 import useLoading from '@/components/shared/useLoading'
 import { postLogin } from '@/api/auth'
@@ -89,15 +90,14 @@ export default defineComponent({
             // password: md5(password),
             code: code,
           }
-          postLogin(payload).then(response => {
+          postLogin(payload).then(async response => {
             const { data: res } = response
             if (res.errorCode === 0) {
               console.log('------login success---', res.data)
-              const store = sessionStore()
-              Object.keys(res.data.user).map(key => {
-                store.userInfo[key] = res.data.user[key]
-              })
-              store.userInfo.isAuthenticated = true
+              const sStore = useSessionStore()
+              sStore.setUserInfo(res.data.user)
+              const routerStore = userRouterStore()
+              await routerStore.setAsyncRouter()
               router.push({ name: 'home' })
             }
           }).catch(() => {

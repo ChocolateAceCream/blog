@@ -77,7 +77,7 @@ import {validatePassword} from '@/utils/validate'
 import { putResetPassword, postSendEmailCode } from '@/api/auth'
 import useLoading from '@/components/shared/useLoading'
 import { ElMessage } from 'element-plus'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   setup(props, ctx) {
     const router = useRouter()
@@ -158,8 +158,7 @@ export default defineComponent({
           console.log('---filteredResult=--- ', filteredResult)
           if (filteredResult.length === 0) {
             // send request here to fetch email code
-            const store = sessionStore()
-
+            const store = useSessionStore()
             const payload = {
               email: store.userInfo.email,
             }

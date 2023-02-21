@@ -3,7 +3,7 @@ import { ElConfigProvider } from 'element-plus'
 import { defineComponent, reactive, toRefs } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   components: {
     ElConfigProvider,
@@ -13,7 +13,7 @@ export default defineComponent({
       'cn': zhCn,
       'en': en
     }
-    const store = sessionStore()
+    const store = useSessionStore()
     console.log('----store----', store)
     store.$subscribe((_, s) => {
       state.locale = elementPlusLocaleMapper[s.userInfo.locale]

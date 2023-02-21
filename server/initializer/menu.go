@@ -29,7 +29,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 1},
 			Pid:       0,
 			Name:      "home",
-			Component: "@/views/home",
+			Component: "views/home.vue",
 			Path:      "/home",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
@@ -42,8 +42,20 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 		{
 			MODEL:     global.MODEL{ID: 2},
 			Pid:       0,
+			Name:      "admin",
+			Component: "views/admin.vue",
+			Path:      "/admin",
+			Type:      1, //menu item
+			Meta: dbTable.Meta{
+				Icon:  "admin",
+				Title: "管理员",
+			},
+		},
+		{
+			MODEL:     global.MODEL{ID: 3},
+			Pid:       2,
 			Name:      "role",
-			Component: "@/views/role",
+			Component: "views/role.vue",
 			Path:      "/role",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
@@ -55,10 +67,10 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 	adminMenus = append(adminMenus, guestMenus...)
 	superadminMenus := []dbTable.Menu{
 		{
-			MODEL:     global.MODEL{ID: 3},
-			Pid:       0,
+			MODEL:     global.MODEL{ID: 4},
+			Pid:       2,
 			Name:      "menu",
-			Component: "@/views/menu",
+			Component: "views/menu.vue",
 			Path:      "/menu",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
@@ -67,10 +79,10 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			},
 		},
 		{
-			MODEL:     global.MODEL{ID: 4},
-			Pid:       0,
+			MODEL:     global.MODEL{ID: 5},
+			Pid:       2,
 			Name:      "endpoint",
-			Component: "@/views/endpoint",
+			Component: "views/endpoint.vue",
 			Path:      "/endpoint",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{

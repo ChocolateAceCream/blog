@@ -24,7 +24,7 @@ func Init() *gin.Engine {
 
 	utils.InitValidator()
 	utils.InitRedis()
-
+	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
 	router.RouterInit(r)
 	return r
@@ -50,7 +50,7 @@ func main() {
 		_db, _ := global.DB.DB()
 		defer _db.Close()
 	}
-	if err := r.Run(); err != nil {
+	if err := r.Run(":3000"); err != nil {
 		fmt.Printf("startup service failed, err:%v\n", err)
 		global.LOGGER.Error(fmt.Sprintf("startup service failed, err:%v\n", err))
 	}

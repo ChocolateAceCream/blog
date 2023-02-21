@@ -16,7 +16,6 @@ const apiAxios = new Proxy(axios.create({
   }
 }), {
   get(target, ...args) {
-    console.log('-------get????', ...args)
     return Reflect.get(target, ...args) || Reflect.get(axios, ...args)
   }
 })
@@ -35,7 +34,7 @@ supportCancelToken(apiAxios)
 
 // request interceptors
 apiAxios.interceptors.request.use(config => {
-  console.log('-------confoig===', config)
+  // console.log('-------confoig===', config)
   config.headers['Content-Type'] = 'application/json;charset=UTF-8'
   if (config.meta?.withProgressBar) { NProgress.start() }
 
@@ -48,7 +47,7 @@ apiAxios.interceptors.request.use(config => {
     const params = encodeURIComponent(JSON.stringify(config.params))
     // const serviceName = config.url.split('/')[1]
     config.url = config.url + '?params=' + params
-    console.log('---------config.url-------', config.url)
+    // console.log('---------config.url-------', config.url)
     config.params = {}
   }
 
@@ -59,14 +58,12 @@ apiAxios.interceptors.request.use(config => {
 
 // 响应拦截
 apiAxios.interceptors.response.use(res => {
+  // console.log('---------res--------- axio: ', res)
   if (res.config.meta?.withProgressBar) { NProgress.done() }
   // 请求成功
-  if (`${res.data.errorCode}` !== '0') {
-    if (!Object.prototype.hasOwnProperty.call(res.data, 'errorCode') && !Object.prototype.hasOwnProperty.call(res.data, 'errorMsg')) {
-      return Promise.resolve(res)
-    }
+  if (res.data.errorCode !== 0) {
     ElMessage({
-      message: res.data.errorMsg || res.data,
+      message: res.data.msg,
       type: 'error',
       duration: 5 * 1000
     })

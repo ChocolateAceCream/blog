@@ -13,7 +13,7 @@
 
 <script>
 import { computed, reactive, toRefs, defineComponent } from 'vue'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 
 export default defineComponent({
   props: {
@@ -22,7 +22,7 @@ export default defineComponent({
   setup(props, ctx) {
     const state = reactive({
       permission: computed(() => {
-        return sessionStore().hasPermission(props.value)
+        return useSessionStore().hasPermission(props.value)
       })
     })
     return { ...toRefs(state) }

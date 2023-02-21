@@ -3,7 +3,7 @@ import { routeMiddleware } from './middleware'
 import { auth } from './auth'
 import Layout from '@/views/layout'
 import { ElMessage } from 'element-plus'
-import { sessionStore } from '@/stores/sessionStore'
+import { useSessionStore } from '@/stores/sessionStore'
 const routes = [
   {
     path: '/', component: Layout, redirect: '/home', meta: { title: '主页', requireAuth: true },
@@ -23,11 +23,11 @@ const router = createRouter({
 
 
 router.beforeEach(async(to, from) => {
-  const isAuthenticated = sessionStore().isAuthenticated
+  const isAuthenticated = useSessionStore().isAuthenticated
   console.log('-----isAuthenticated-------', isAuthenticated)
   console.log('-----!isAuthenticated && to.meta.requireAuth-------', to)
   if (isAuthenticated) {
-    if (to.name.includes('login')) {
+    if (to.name?.includes('login')) {
       return { path: to.query?.redirect || '/' }
     }
   }

@@ -25,7 +25,7 @@ func (menuService MenuService) AssignRoleMenus(menus []dbTable.Menu, RoleId uint
 }
 
 func (menuService MenuService) GetRoleMenus(roleId int) (menus []dbTable.Menu, err error) {
-	var r dbTable.Role
-	err = global.DB.Model(&r).Where("id = ?", roleId).Association("Menus").Find(&menus)
+	//TODO: filter out unused field by define GetRoleMenus response struct
+	err = global.DB.Preload("Roles", "id = ?", roleId).Find(&menus).Error
 	return menus, err
 }

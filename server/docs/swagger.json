@@ -311,6 +311,95 @@
                 }
             }
         },
+        "/api/v1/endpoint/list": {
+            "post": {
+                "description": "return endpoint list",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "get endpoint list",
+                "parameters": [
+                    {
+                        "type": "boolean",
+                        "description": "order by desc (by default)",
+                        "name": "desc",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "method",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "enum": [
+                            "name",
+                            "pid",
+                            "path",
+                            "id"
+                        ],
+                        "type": "string",
+                        "name": "orderBy",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageNumber",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "path",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "pid",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "name": "type",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "return all search result ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbTable.Endpoint"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/endpoint/new": {
             "post": {
                 "description": "create new endpoint",
@@ -686,6 +775,11 @@
                         "in": "query"
                     },
                     {
+                        "enum": [
+                            "username",
+                            "email",
+                            "id"
+                        ],
                         "type": "string",
                         "name": "orderBy",
                         "in": "query"
@@ -797,14 +891,11 @@
                 "createdAt": {
                     "type": "string"
                 },
-                "icon": {
-                    "type": "string"
-                },
                 "id": {
                     "type": "integer"
                 },
-                "keepAlive": {
-                    "type": "integer"
+                "meta": {
+                    "$ref": "#/definitions/dbTable.Meta"
                 },
                 "name": {
                     "type": "string"
@@ -821,13 +912,24 @@
                         "$ref": "#/definitions/dbTable.Role"
                     }
                 },
-                "title": {
-                    "type": "string"
-                },
                 "type": {
                     "type": "integer"
                 },
                 "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
+        "dbTable.Meta": {
+            "type": "object",
+            "properties": {
+                "icon": {
+                    "type": "string"
+                },
+                "keepAlive": {
+                    "type": "integer"
+                },
+                "title": {
                     "type": "string"
                 }
             }
