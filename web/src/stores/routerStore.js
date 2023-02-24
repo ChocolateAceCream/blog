@@ -46,23 +46,18 @@ export const userRouterStore = defineStore({
   id: 'userRouterStore',
   state: () => ({
     asyncRouterFlag: 0, // prevent duplicated get router action
-    routerList: []
+    routerList: [],
+    routerTree: [],
+    asyncRouters: [],
   }),
 
   actions: {
-    cleanStore() {
-      this.routerList = []
-      this.asyncRouterFlag = 0
-    },
-    async setAsyncRouter() {
+    async getRouters() {
       const result = await getCurrentUserMenu()
       const asyncRouter = result.data
       if (asyncRouter.errorCode === 0) {
+        this.asyncRouters = asyncRouter.data
         this.asyncRouterFlag++
-
-        const routerTree = formatRouterTree(asyncRouter.data)
-        this.routerList = routerListArr
-        routerTree.forEach(route => router.addRoute(route))
       } else {
         ElMessage({
           message: result.msg,
@@ -70,7 +65,16 @@ export const userRouterStore = defineStore({
           duration: 5 * 1000
         })
       }
-
+    },
+    async setAsyncRouter() {
+      if (this.asyncRouterFlag === 0) {
+        await this.getRouters()
+      }
+      this.routerTree = formatRouterTree(this.asyncRouters)
+      this.routerList = routerListArr
+      console.log('----routerTree---', this.routerTree.value)
+      this.routerTree.forEach(route => router.addRoute('baseRoute', route))
+      console.log('----router---', router)
       return true
     }
   },

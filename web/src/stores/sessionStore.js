@@ -46,7 +46,7 @@ export const useSessionStore = defineStore({
         isAuthenticated: false,
       }
       const routerStore = userRouterStore()
-      routerStore.cleanStore()
+      routerStore.$reset()
       console.log('---routerStore.asyncRouterFlag---', routerStore.asyncRouterFlag)
     },
   },

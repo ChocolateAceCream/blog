@@ -2,7 +2,7 @@
 import { getUserList } from '@/api/auth'
 import { ref, onMounted, toRefs, defineComponent, computed, reactive } from 'vue'
 import { trimStart, partition } from 'lodash-es'
-import { sessionStore } from '@/store/sessionStore'
+import { useSessionStore } from '@/store/sessionStore'
 
 export default defineComponent({
   props: {
@@ -12,14 +12,10 @@ export default defineComponent({
     },
   },
   setup(props, ctx) {
-    const store = sessionStore()
+    const store = useSessionStore()
     const { name, counter } = store
     const state = reactive({
       lodashDemo: partition([1, 2, 3, 4], n => n % 2),
-
-      doubleCount: computed(() => {
-        return store.doubleCount
-      }),
     })
     var array = [1, 2, 3]
     console.log(trimStart('-_-abc-_-', '_-', '1'))
@@ -29,11 +25,11 @@ export default defineComponent({
     })
 
     const addCounter = () => {
-      console.log("counter: ", counter)
+      console.log('counter: ', counter)
       store.increment()
     }
 
-    const userList = async () => {
+    const userList = async() => {
       const { data: res } = await getUserList({
         params: {
           pageSize: 15,
@@ -42,7 +38,7 @@ export default defineComponent({
       })
       console.log('------userlist----', res)
       console.log(name)
-      console.log("counter: ", counter)
+      console.log('counter: ', counter)
     }
 
 
@@ -50,7 +46,7 @@ export default defineComponent({
       addCounter,
       ...toRefs(state),
       store,
-    };
+    }
   },
 
 })
@@ -64,7 +60,6 @@ export default defineComponent({
       type="button"
       @click="addCounter"
     >count is {{ store.counter }}</button>
-    <p>double count is {{ doubleCount }}</p>
     <p>
       Edit
       <code>components/HelloWorld.vue</code> to test HMR
