@@ -51,7 +51,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { reactive, toRefs, defineComponent, createVNode, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
-import { userRouterStore } from '@/stores/routerStore'
+import { useRouterStore } from '@/stores/routerStore'
 import Breadcrumb from './Breadcrumb.vue'
 import _ from 'lodash'
 export default defineComponent({

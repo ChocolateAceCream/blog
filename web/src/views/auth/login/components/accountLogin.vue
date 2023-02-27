@@ -65,7 +65,7 @@ import VerificationCode from '@/components/shared/VerificationCode'
 import { useRouter } from 'vue-router'
 import { validatePassword } from '@/utils/validate'
 import { useSessionStore } from '@/stores/sessionStore'
-import { userRouterStore } from '@/stores/routerStore'
+import { useRouterStore } from '@/stores/routerStore'
 import { throttle } from 'lodash'
 import useLoading from '@/components/shared/useLoading'
 import { postLogin } from '@/api/auth'
@@ -96,7 +96,7 @@ export default defineComponent({
               console.log('------login success---', res.data)
               const sStore = useSessionStore()
               sStore.setUserInfo(res.data.user)
-              const routerStore = userRouterStore()
+              const routerStore = useRouterStore()
               await routerStore.setAsyncRouter()
               router.push({ name: 'home' })
             }

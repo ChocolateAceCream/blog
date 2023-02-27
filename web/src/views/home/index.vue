@@ -12,18 +12,18 @@
 
 <script>
 import { defineComponent, toRefs, reactive } from 'vue'
-import { userRouterStore } from '@/stores/routerStore'
+import { useRouterStore } from '@/stores/routerStore'
 import router from '@/router'
 export default defineComponent({
 
   setup(props, ctx) {
     const pushRoute = () => {
-      const routerStore = userRouterStore()
+      const routerStore = useRouterStore()
 
       console.log('-------routerStore.routerTree---', routerStore.routerTree)
       // router.addRoute(routerStore.routerTree)
       console.log('-------router---', router)
-      router.push({name: 'admin'})
+      router.push({name: 'role'})
     }
     console.log('-------router---', router)
 

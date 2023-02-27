@@ -4,15 +4,19 @@ import { auth } from './auth'
 import Layout from '@/views/layout'
 import { ElMessage } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
-import { userRouterStore } from '@/stores/routerStore'
+import { useRouterStore } from '@/stores/routerStore'
 const routes = [
   {
     // path: '/', name: 'baseRoute', component: Layout, meta: { title: '主页', requireAuth: true },
-    path: '/', name: 'baseRoute', component: Layout, redirect: '/home', meta: { title: '主页', requireAuth: true },
-    children: [
-      // { path: '', name: 'home', component: () => import('@/views/home'), },
-      { path: '/home', name: 'home', component: () => import('@/views/home'), meta: { title: '主页', requireAuth: true } },
-    ]
+    path: '/', name: 'baseRoute', redirect: '/home', component: Layout, meta: { title: '主页', requireAuth: true },
+    // children: [
+    //   // { path: '', name: 'home', component: () => import('@/views/home'), },
+    //   { path: '/home', name: 'home', component: () => import('@/views/home'), meta: { title: '主页', requireAuth: true } },
+    // ],
+
+  },
+  {
+    path: '/404', name: '404', component: () => import('@/views/error/index.vue'), meta: { title: '404', requireAuth: false },
   },
   auth,
 ]
@@ -26,24 +30,23 @@ const router = createRouter({
 let flag = 0
 router.beforeEach(async(to, from) => {
   const isAuthenticated = useSessionStore().isAuthenticated
+  console.log('-----flag-------', flag)
   console.log('-----isAuthenticated-------', isAuthenticated)
   console.log('-----!isAuthenticated && to.meta.requireAuth-------', to)
   if (isAuthenticated) {
-    if (from.name == null && to.matched.length === 0) {
-      const routerStore = userRouterStore()
-      await routerStore.setAsyncRouter()
-      console.log('-----router-------', router)
-      console.log('-----to.matched.length-------', to.matched.length)
-      if (to.matched.length) {
+    if (from.name == null) {
+      if (flag === 0) {
+        const routerStore = useRouterStore()
+        await routerStore.setAsyncRouter()
+        flag++
+        console.log('-----router-------', router)
+        console.log('-----to.matched.length-------', to.matched.length)
         return { ...to, replace: true }
+      }
+      if (to.matched.length) {
+        return true
       } else {
-        if (flag === 0) {
-          flag++
-          router.push(to.path)
-        } else {
-          // todo: redirect to 404
-          router.push('/')
-        }
+        router.push('/404')
       }
     } else {
     }

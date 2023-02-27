@@ -16,10 +16,10 @@
 </template>
 
 <script>
-import LeftBar from './LeftBar.vue'
-import TopBar from './TopBar.vue'
+import LeftBar from './components/LeftBar.vue'
+import TopBar from './components/TopBar.vue'
 // import TagsView from './TagsView.vue'
-import MainBody from './MainBody.vue'
+import MainBody from './components/MainBody.vue'
 // import { getProfile } from '@/api/session'
 import { reactive, toRefs, defineComponent } from 'vue'
 

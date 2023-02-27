@@ -1,5 +1,5 @@
 import { defineStore, acceptHMRUpdate } from 'pinia'
-import { userRouterStore } from './routerStore'
+import { useRouterStore } from './routerStore'
 export const useSessionStore = defineStore({
   id: 'useSessionStore',
   state: () => ({
@@ -15,6 +15,9 @@ export const useSessionStore = defineStore({
       username: '',
       locale: 'cn',
       isAuthenticated: false,
+    },
+    userSetting: {
+      isNavBarCollapsed: false,
     }
   }),
   getters: {
@@ -45,7 +48,7 @@ export const useSessionStore = defineStore({
         locale: 'cn',
         isAuthenticated: false,
       }
-      const routerStore = userRouterStore()
+      const routerStore = useRouterStore()
       routerStore.$reset()
       console.log('---routerStore.asyncRouterFlag---', routerStore.asyncRouterFlag)
     },

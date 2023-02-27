@@ -29,7 +29,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 1},
 			Pid:       0,
 			Name:      "home",
-			Component: "views/home.vue",
+			Component: "views/home/index.vue",
 			Path:      "/home",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
@@ -43,7 +43,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 2},
 			Pid:       0,
 			Name:      "admin",
-			Component: "views/admin.vue",
+			Component: "views/admin/index.vue",
 			Path:      "/admin",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
@@ -55,8 +55,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 3},
 			Pid:       2,
 			Name:      "role",
-			Component: "views/role.vue",
-			Path:      "/role",
+			Component: "views/role/index.vue",
+			Path:      "role",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "role",
@@ -70,8 +70,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 4},
 			Pid:       2,
 			Name:      "menu",
-			Component: "views/menu.vue",
-			Path:      "/menu",
+			Component: "views/menu/index.vue",
+			Path:      "menu",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "menu",
@@ -82,8 +82,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 5},
 			Pid:       2,
 			Name:      "endpoint",
-			Component: "views/endpoint.vue",
-			Path:      "/endpoint",
+			Component: "views/endpoint/index.vue",
+			Path:      "endpoint",
 			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "endpoint",
