@@ -1,0 +1,16 @@
+{
+  "include": [
+    "./src/**/*",
+    "node_modules/lodash/*"
+  ],
+    "compilerOptions": {
+      "checkJs": true,
+      "baseUrl": ".",
+      "paths": {
+        "@/*": [
+          "./src/*"
+        ]
+      },
+    },
+
+}
