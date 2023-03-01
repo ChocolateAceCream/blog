@@ -32,17 +32,14 @@ import _ from 'lodash'
 import { reactive, toRefs, defineComponent, computed, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouterStore } from '@/stores/routerStore'
-import { useSessionStore } from '@/stores/sessionStore'
+import { navBarCollapsedHook } from '@/shared/hooks/navBarCollapsed'
 export default defineComponent({
   setup(props, ctx) {
     const router = useRoute()
     const routerStore = useRouterStore()
-    const sessionStore = useSessionStore()
+    const { isNavBarCollapsed, toggleNavBar } = navBarCollapsedHook()
     console.log('-----router-----', router.name)
     const state = reactive({
-      isNavBarCollapsed: computed(() => {
-        return sessionStore.userSetting.isNavBarCollapsed
-      }),
       currentRouter: computed(() => {
         const arr = []
         let currentRoute = routerStore.routerList.find(routerItem => { return routerItem.name === router.name })
@@ -56,12 +53,10 @@ export default defineComponent({
         return arr
       })
     })
-    const toggleNavBar = () => {
-      sessionStore.userSetting.isNavBarCollapsed = !sessionStore.userSetting.isNavBarCollapsed
-      console.log('---isNavBarCollapsed--', sessionStore.userSetting.isNavBarCollapsed)
-    }
+
     return {
       toggleNavBar,
+      isNavBarCollapsed,
       ...toRefs(state)
     }
   }

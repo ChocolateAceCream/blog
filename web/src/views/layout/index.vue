@@ -4,9 +4,7 @@
       <top-bar />
     </el-header>
     <el-container>
-      <el-aside width="220px">
-        <left-bar />
-      </el-aside>
+      <left-bar />
       <!-- <el-header style="--el-header-height: 30px"><top-bar></top-bar></el-header> -->
       <el-main>
         <main-body />
