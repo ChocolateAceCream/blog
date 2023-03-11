@@ -75,7 +75,7 @@ import { reactive, toRefs, defineComponent, unref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {validatePassword} from '@/utils/validate'
 import { putResetPassword, postSendEmailCode } from '@/api/auth'
-import useLoading from '@/components/shared/useLoading'
+import useLoading from '@/shared/useLoading'
 import { ElMessage } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
