@@ -50,17 +50,18 @@ router.beforeEach(async(to, from) => {
       }
     } else {
     }
-  }
-  if (!isAuthenticated && to.meta.requireAuth) {
-    ElMessage({
-      message: '认证已过期，请重新登录',
-      type: 'error',
-      duration: 5 * 1000
-    })
+  } else {
+    if (to.meta.requireAuth && to.matched.length > 0 || (to.matched.length === 0)) {
+      ElMessage({
+        message: '认证已过期，请重新登录',
+        type: 'error',
+        duration: 5 * 1000
+      })
 
-    return {
-      path: '/auth/login',
-      query: { redirect: to.fullPath },
+      return {
+        path: '/auth/login',
+        query: { redirect: to.fullPath },
+      }
     }
   }
 })

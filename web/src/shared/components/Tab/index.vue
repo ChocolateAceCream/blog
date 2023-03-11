@@ -27,6 +27,7 @@
 <script>
 import { defineComponent, toRefs, reactive, ref } from 'vue'
 export default defineComponent({
+  name: 'Tab',
   props: {
     config: [Object],
   },

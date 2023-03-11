@@ -32,6 +32,8 @@ const formatMenuTree = (nodes) => {
     const temp = {
       routeName: node.name,
       title: node.meta.title,
+      icon: node.meta.icon,
+      id: node.id,
       children: []
     }
     if (node.children.length > 0) {

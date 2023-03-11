@@ -9,21 +9,14 @@
         class="avatar-container right-menu-item"
         trigger="click"
       >
-        <i-svg-setting
+        <SvgIcon
+          icon-name="icon-blog-setting"
+          color="#3498db"
           class="top-bar-setting-icon"
+          size="30px"
         />
         <template #dropdown>
           <el-dropdown-menu>
-            <!-- <router-link :to="{ name: 'resetUserInfo' }">
-              <el-dropdown-item>
-                信息修改
-              </el-dropdown-item>
-            </router-link>
-            <router-link :to="{ name: 'resetPhone' }">
-              <el-dropdown-item>
-                手机号修改
-              </el-dropdown-item>
-            </router-link>-->
             <router-link :to="{ name: 'resetPassword' }">
               <el-dropdown-item>
                 密码重置
@@ -40,25 +33,14 @@
       </el-dropdown>
     </el-col>
   </el-row>
-  <el-row style="height: 40px">
-    <!-- <el-col :span="20">
-      <breadcrumb class="breadcrumb" />
-    </el-col> -->
-  </el-row>
 </template>
 <script>
-import { useRoute, useRouter } from 'vue-router'
-import { reactive, toRefs, defineComponent, createVNode, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { reactive, toRefs, defineComponent } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
-import { useRouterStore } from '@/stores/routerStore'
-import Breadcrumb from './Breadcrumb.vue'
 import _ from 'lodash'
 export default defineComponent({
-  components: {
-    Breadcrumb
-  },
-
   setup(props, ctx) {
     const router = useRouter()
     const store = useSessionStore()
@@ -108,10 +90,7 @@ export default defineComponent({
     text-align: right;
     .top-bar-setting-icon {
       cursor: pointer;
-      height: 30px;
-      width: 30px;
       margin-top: 15px;
-      fill: $blue;
     }
   }
 </style>

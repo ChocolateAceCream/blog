@@ -1,30 +1,30 @@
 <template>
-  <el-col
-    :span="1"
+  <div
+    class="icon-wrapper"
     @click="toggleNavBar"
   >
-    <i-svg-right-double-arrow
+    <SvgIcon
       v-if="isNavBarCollapsed"
-      class="double-arrow"
+      icon-name="icon-blog-double-arrow-right"
+      size="15px"
     />
-    <i-svg-left-double-arrow
+    <SvgIcon
       v-if="!isNavBarCollapsed"
-      class="double-arrow"
+      icon-name="icon-blog-double-arrow-left"
+      size="15px"
     />
-  </el-col>
-  <el-col :span="10">
-    <el-breadcrumb
-      separator="/"
-      class="breadcrumb"
+  </div>
+  <el-breadcrumb
+    separator="/"
+    class="breadcrumb"
+  >
+    <el-breadcrumb-item
+      v-for="(item, index) in currentRouter"
+      :key="index"
     >
-      <el-breadcrumb-item
-        v-for="(item, index) in currentRouter"
-        :key="index"
-      >
-        <span class="item">{{ item.meta.title }}</span>
-      </el-breadcrumb-item>
-    </el-breadcrumb>
-  </el-col>
+      <span class="item">{{ item.meta.title }}</span>
+    </el-breadcrumb-item>
+  </el-breadcrumb>
 </template>
 
 <script>
@@ -44,7 +44,7 @@ export default defineComponent({
         const arr = []
         let currentRoute = routerStore.routerList.find(routerItem => { return routerItem.name === router.name })
         console.log('-----currentRoute-----', currentRoute)
-        while (currentRoute.pid !== 0) {
+        while (currentRoute?.pid !== 0) {
           arr.unshift(currentRoute)
           currentRoute = routerStore.routerList.find(routerItem => { return routerItem.id === currentRoute.pid })
         }
@@ -65,11 +65,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .item {
-  line-height: 31px;
+  line-height: 30px;
 }
-.double-arrow{
-  height:100%;
-  width:20px;
-  margin:auto;
+.icon-wrapper{
+  position:absolute;
+  line-height: 30px;
+}
+.breadcrumb{
+  margin-left: 30px;
+  line-height: 30px;
 }
 </style>

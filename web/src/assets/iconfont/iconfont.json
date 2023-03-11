@@ -1,0 +1,65 @@
+{
+  "id": "3939856",
+  "name": "blog",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-blog-",
+  "description": "blog",
+  "glyphs": [
+    {
+      "icon_id": "4766961",
+      "name": "api",
+      "font_class": "endpoint",
+      "unicode": "e7e1",
+      "unicode_decimal": 59361
+    },
+    {
+      "icon_id": "6145588",
+      "name": "menu",
+      "font_class": "menu",
+      "unicode": "e658",
+      "unicode_decimal": 58968
+    },
+    {
+      "icon_id": "10944035",
+      "name": "sm-admin-16",
+      "font_class": "admin",
+      "unicode": "e63e",
+      "unicode_decimal": 58942
+    },
+    {
+      "icon_id": "693661",
+      "name": "角色管理",
+      "font_class": "role",
+      "unicode": "e66c",
+      "unicode_decimal": 58988
+    },
+    {
+      "icon_id": "1314418",
+      "name": "首页",
+      "font_class": "home",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "24014237",
+      "name": "组 494",
+      "font_class": "double-arrow-right",
+      "unicode": "e614",
+      "unicode_decimal": 58900
+    },
+    {
+      "icon_id": "24014258",
+      "name": "组 496",
+      "font_class": "double-arrow-left",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "8776873",
+      "name": "setting",
+      "font_class": "setting",
+      "unicode": "e63f",
+      "unicode_decimal": 58943
+    }
+  ]
+}

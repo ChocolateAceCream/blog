@@ -7,11 +7,17 @@ import i18n from './locales'
 
 import moment from 'moment'
 
+import SvgIcon from '@/shared/components/SvgIcon'
+
 import './assets/styles/element-variables.scss'
 import './assets/styles/application.scss'
+import './assets/iconfont/iconfont.css'
 
 
 const app = createApp(App)
+
+// global componnet
+app.component('SvgIcon', SvgIcon)
 
 // piania persistent
 const store = createPinia()

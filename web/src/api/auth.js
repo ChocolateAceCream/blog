@@ -7,4 +7,4 @@ export const putResetPassword = (...args) => apiAxios.put('/blog/api/v1/user/res
 export const postSendEmailCode = (...args) => apiAxios.post('/blog/api/public/auth/sendEmailCode', ...args)
 export const postRegister = (...args) => apiAxios.post('/blog/api/public/auth/register', ...args)
 // export const putResetPassword = (...args) => apiAxios.put('/cwifi-vac-admin-provider/vac/sys/user/password/change', ...args)
-// export const putUpdateUserInfo = (...args) => apiAxios.put('/cwifi-vac-admin-provider/vac/sys/user/update', ...args)
+export const putUpdateUserInfo = (...args) => apiAxios.put('/cwifi-vac-admin-provider/vac/sys/user/update', ...args)

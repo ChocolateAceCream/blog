@@ -61,13 +61,13 @@
 
 <script>
 import { reactive, toRefs, defineComponent, unref, ref } from 'vue'
-import VerificationCode from '@/components/shared/VerificationCode'
+import VerificationCode from '@/shared/components/VerificationCode'
 import { useRouter } from 'vue-router'
 import { validatePassword } from '@/utils/validate'
 import { useSessionStore } from '@/stores/sessionStore'
 import { useRouterStore } from '@/stores/routerStore'
 import { throttle } from 'lodash'
-import useLoading from '@/components/shared/useLoading'
+import useLoading from '@/shared/useLoading'
 import { postLogin } from '@/api/auth'
 
 export default defineComponent({

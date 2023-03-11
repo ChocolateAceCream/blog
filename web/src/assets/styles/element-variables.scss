@@ -714,6 +714,22 @@ $--breakpoints-spec: (
   'xl-only' : (min-width: $--xl),
 );
 
+//override styles
+.el-menu--popup{
+  padding:0px !important;
+}
+
+.el-popper.is-dark {
+  background-color: $lite-background !important;
+  border-color: $lite-background !important;
+  color:$--color-text-primary !important;
+  .el-popper__arrow::before{
+    border-color: $lite-background !important;
+    background: $lite-background !important;
+  }
+}
+
+
 
 /* 改变 icon 字体路径变量，必需 */
 $--font-path: 'element-plus/lib/theme-chalk/fonts';

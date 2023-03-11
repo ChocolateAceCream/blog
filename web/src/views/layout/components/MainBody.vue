@@ -3,9 +3,7 @@
     class="main-body"
     :class="{'is-full': isFullContainer}"
   >
-    <el-row :gutter="20">
-      <breadcrumb />
-    </el-row>
+    <breadcrumb />
     <el-row>
       <el-card>
         <router-view />

@@ -14,7 +14,7 @@
 </template>
 
 <script>
-import LeftBar from './components/LeftBar.vue'
+import LeftBar from './components/LeftBar'
 import TopBar from './components/TopBar.vue'
 // import TagsView from './TagsView.vue'
 import MainBody from './components/MainBody.vue'
