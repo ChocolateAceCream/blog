@@ -38,6 +38,15 @@
           />
         </el-form-item>
         <el-form-item
+          label="邮箱"
+          prop="email"
+        >
+          <el-input
+            v-model="form.email"
+            placeholder="请输入邮箱"
+          />
+        </el-form-item>
+        <el-form-item
           prop="emailCode"
           label="邮箱验证码"
         >
@@ -71,9 +80,9 @@
 </template>
 
 <script>
-import { reactive, toRefs, defineComponent, unref, ref } from 'vue'
+import { reactive, toRefs, defineComponent, unref, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-import {validatePassword} from '@/utils/validate'
+import {validatePassword, validateEmail } from '@/utils/validate'
 import { putResetPassword, postSendEmailCode } from '@/api/auth'
 import useLoading from '@/shared/useLoading'
 import { ElMessage } from 'element-plus'
@@ -97,11 +106,18 @@ export default defineComponent({
         passwordConfirm: [
           { required: true, message: '请二次输入新密码', trigger: 'blur' },
           { validator: validateConfirmPassword, trigger: 'blur' }
-        ]
+        ],
+        email: [
+          { required: true, message: '请输入电子邮箱', trigger: 'blur' },
+          { validator: validateEmail, trigger: 'blur' }
+        ],
       },
       form: {},
     })
-
+    onMounted(() => {
+      const store = useSessionStore()
+      state.form.email = store.userInfo.email
+    })
 
     const {loading, wrapLoading} = useLoading()
     const resetPasswordFormRef = ref()
@@ -143,7 +159,7 @@ export default defineComponent({
       isEmailButtonDisabled: false,
       emailCountdown: 60,
       onSendCode() {
-        const fieldToValidate = ['password', 'passwordConfirm']
+        const fieldToValidate = ['password', 'passwordConfirm', 'email']
         Promise.all(
           fieldToValidate.map(item => {
             const p = new Promise((resolve, reject) => {
@@ -158,9 +174,8 @@ export default defineComponent({
           console.log('---filteredResult=--- ', filteredResult)
           if (filteredResult.length === 0) {
             // send request here to fetch email code
-            const store = useSessionStore()
             const payload = {
-              email: store.userInfo.email,
+              email: state.form.email
             }
             postSendEmailCode(payload).then(response => {
               const { data: res } = response

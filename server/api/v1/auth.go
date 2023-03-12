@@ -76,6 +76,7 @@ func (a *AuthApi) SendEmailCode(c *gin.Context) {
 	}
 	currentSession := utils.GetSession(c)
 	code := utils.RandomString(global.CONFIG.Captcha.Length)
+	fmt.Println("------email code-------", code)
 	global.REDIS.Set(c, global.CONFIG.Email.Prefix+currentSession.UUID, code, time.Duration(global.CONFIG.Email.Expiration)*time.Second)
 	body := fmt.Sprintf("verification code is <b>%v</b>, expired in 2 minutes", code)
 	if err := utils.SendMail(req.Email, "Verification Code", body); err != nil {

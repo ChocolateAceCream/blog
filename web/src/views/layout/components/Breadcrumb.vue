@@ -22,7 +22,7 @@
       v-for="(item, index) in currentRouter"
       :key="index"
     >
-      <span class="item">{{ item.meta.title }}</span>
+      <span class="item">{{ item?.meta.title }}</span>
     </el-breadcrumb-item>
   </el-breadcrumb>
 </template>
@@ -43,13 +43,14 @@ export default defineComponent({
       currentRouter: computed(() => {
         const arr = []
         let currentRoute = routerStore.routerList.find(routerItem => { return routerItem.name === router.name })
-        console.log('-----currentRoute-----', currentRoute)
-        while (currentRoute?.pid !== 0) {
+        if (currentRoute !== undefined) {
+          while (currentRoute?.pid !== 0) {
+            arr.unshift(currentRoute)
+            currentRoute = routerStore.routerList.find(routerItem => { return routerItem.id === currentRoute.pid })
+          }
           arr.unshift(currentRoute)
-          currentRoute = routerStore.routerList.find(routerItem => { return routerItem.id === currentRoute.pid })
+          console.log('----ar-----', arr)
         }
-        arr.unshift(currentRoute)
-        console.log('----ar-----', arr)
         return arr
       })
     })

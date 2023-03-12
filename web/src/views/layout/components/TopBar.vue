@@ -59,8 +59,8 @@ export default defineComponent({
               type: 'warning',
             }
           )
-          router.push({name: 'login'})
           store.logout()
+          router.push({ name: 'login'})
         } catch (err) {
           console.log('-------cancel login----', err)
         }

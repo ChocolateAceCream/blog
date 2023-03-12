@@ -88,11 +88,11 @@
 import { reactive, toRefs, defineComponent, unref, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import {validateEmail} from '@/utils/validate'
-import VerificationCode from '@/components/shared/VerificationCode'
-import { postAddUser, getDepartList } from '@/api/user'
+import VerificationCode from '@/shared/components/VerificationCode'
+import { postAddUser, getDepartList } from '@/api/auth'
 import {putUpdateUserInfo} from '@/api/auth'
 import { useSessionStore } from '@/stores/sessionStore'
-import useLoading from '@/components/shared/useLoading'
+import useLoading from '@/shared/useLoading'
 import { ElMessage } from 'element-plus'
 export default defineComponent({
   components: {
@@ -171,8 +171,8 @@ export default defineComponent({
             }
           }).catch((err) => {
             ElMessage({
-              type: '修改失败',
-              message: err,
+              type: 'error',
+              message: '修改失败' + err,
             })
             verificationCodeRef.value.getUrl()
           })

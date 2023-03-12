@@ -4,7 +4,7 @@ import piniaPluginPersist from 'pinia-plugin-persist'
 import App from './App.vue'
 import router from './router'
 import i18n from './locales'
-
+import sharedComponents from '@/shared'
 import moment from 'moment'
 
 
@@ -20,6 +20,8 @@ const store = createPinia()
 store.use(piniaPluginPersist)
 app.use(store)
 app.use(i18n)
+
+app.use(sharedComponents)
 
 
 app.config.globalProperties.$moment = moment

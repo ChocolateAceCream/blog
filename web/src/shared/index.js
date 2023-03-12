@@ -1,8 +1,8 @@
-import MyTable from './MyTable'
-import Pagination from './Pagination'
-import Modal from './Modal'
-import Permission from './Permission'
-import SvgIcon from './SvgIcon'
+import MyTable from './components/MyTable'
+import Pagination from './components/Pagination'
+import Modal from './components/Modal'
+import Permission from './components/Permission'
+import SvgIcon from './components/SvgIcon'
 
 export default {
   install(app) {
@@ -10,6 +10,6 @@ export default {
     app.use(Pagination)
     app.use(Modal)
     app.use(Permission)
-    app.use(SvgIcon)
+    app.component('SvgIcon', SvgIcon)
   }
 }

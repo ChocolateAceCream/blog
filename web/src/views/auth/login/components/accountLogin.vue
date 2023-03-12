@@ -128,7 +128,7 @@ export default defineComponent({
 
 
     const handleForgetPassword = () => {
-      router.push({ name: 'forgetPassword' })
+      router.push({ name: 'resetPassword'})
     }
 
     const handleRegisterUser = () => {

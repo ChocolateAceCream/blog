@@ -24,7 +24,6 @@ func Init() *gin.Engine {
 
 	utils.InitValidator()
 	utils.InitRedis()
-	gin.SetMode(gin.DebugMode)
 	r := gin.Default()
 	router.RouterInit(r)
 	return r
