@@ -1,14 +1,12 @@
 <template>
+  <breadcrumb />
   <div
     class="main-body"
     :class="{'is-full': isFullContainer}"
   >
-    <breadcrumb />
-    <el-row>
-      <el-card>
-        <router-view />
-      </el-card>
-    </el-row>
+    <el-card>
+      <router-view />
+    </el-card>
   </div>
 </template>
 

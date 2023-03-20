@@ -31,7 +31,6 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			Name:      "home",
 			Component: "views/home/index.vue",
 			Path:      "/home",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "home",
 				Title: "主页",
@@ -45,7 +44,6 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			Name:      "admin",
 			Component: "views/admin/index.vue",
 			Path:      "/admin",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "admin",
 				Title: "管理员",
@@ -55,9 +53,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 3},
 			Pid:       2,
 			Name:      "role",
-			Component: "views/role/index.vue",
+			Component: "views/admin/role/index.vue",
 			Path:      "role",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "role",
 				Title: "角色管理",
@@ -70,9 +67,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 4},
 			Pid:       2,
 			Name:      "menu",
-			Component: "views/menu/index.vue",
+			Component: "views/admin/menu/index.vue",
 			Path:      "menu",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "menu",
 				Title: "菜单管理",
@@ -82,9 +78,8 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			MODEL:     global.MODEL{ID: 5},
 			Pid:       2,
 			Name:      "endpoint",
-			Component: "views/endpoint/index.vue",
+			Component: "views/admin/endpoint/index.vue",
 			Path:      "endpoint",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "endpoint",
 				Title: "api管理",

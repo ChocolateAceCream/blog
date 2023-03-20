@@ -15,6 +15,7 @@ export const useSessionStore = defineStore({
       username: '',
       locale: 'cn',
       isAuthenticated: false,
+      permissions: [],
     },
     userSetting: {
       isNavBarCollapsed: false,
@@ -35,6 +36,9 @@ export const useSessionStore = defineStore({
     },
     setPermissionList(permissions) {
 
+    },
+    hasPermission(name) {
+      return !!this.userInfo.permissions[name]
     },
     logout() {
       this.userInfo = {

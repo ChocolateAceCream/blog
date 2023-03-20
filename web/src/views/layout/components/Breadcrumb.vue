@@ -73,7 +73,7 @@ export default defineComponent({
   line-height: 30px;
 }
 .breadcrumb{
-  margin-left: 30px;
+  margin: 0px 0px 15px 25px;
   line-height: 30px;
 }
 </style>

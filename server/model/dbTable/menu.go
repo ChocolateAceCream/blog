@@ -11,7 +11,6 @@ type Menu struct {
 	Name      string `json:"name" gorm:"comment:route name"`
 	Component string `json:"component" gorm:"comment:web component path, e.g. @/views/auth/register"`
 	Meta      `json:"meta" gorm:"embedded"`
-	Type      int    `json:"type" gorm:"default:1;comment:1-menu item, 2-button"`
 	Roles     []Role `json:"roles" gorm:"many2many:roleMenu"`
 }
 

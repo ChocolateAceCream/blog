@@ -74,10 +74,6 @@ export default defineComponent({
 <style lang="scss" scoped>
   .content {
     display: inline-block;
-    .breadcrumb {
-      padding-left: 10px;
-      line-height: 30px;
-    }
     @include mobile-device {
       display: none;
     }

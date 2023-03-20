@@ -6,11 +6,13 @@
 usage:
 <modal
   ref="modalRef"
+    :no-footer="true"
+
   @close="onModalClose"
   @confirm="onModalConfirm"
 >
   <div>this is body</div>
-  <template #title>
+  <template #header>
     <div>this is title</div>
   </template>
   <template #footer>
@@ -55,9 +57,9 @@ setup(props, ctx) {
   >
     <template
       v-if="!noTitle"
-      #title
+      #header
     >
-      <slot name="title">
+      <slot name="header">
         <span class="dialog-title">{{ title }}</span>
       </slot>
     </template>

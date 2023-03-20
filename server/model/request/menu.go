@@ -13,7 +13,6 @@ func DefaultMenus() []dbTable.Menu {
 			Name:      "home",
 			Component: "@/views/home",
 			Path:      "/home",
-			Type:      1, //menu item
 			Meta: dbTable.Meta{
 				Icon:  "home",
 				Title: "主页",

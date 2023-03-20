@@ -34,6 +34,8 @@ const formatMenuTree = (nodes) => {
       title: node.meta.title,
       icon: node.meta.icon,
       id: node.id,
+      pid: node.pid,
+      path: node.path,
       children: []
     }
     if (node.children.length > 0) {
