@@ -12,6 +12,7 @@
       :model="form"
       :rules="rules"
       label-width="0px"
+      @keyup.enter="onSubmit"
     >
       <el-form-item prop="username">
         <el-input
