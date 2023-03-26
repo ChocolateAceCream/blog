@@ -46,8 +46,6 @@ definitions:
         items:
           $ref: '#/definitions/dbTable.Role'
         type: array
-      type:
-        type: integer
       updatedAt:
         type: string
     type: object
@@ -548,6 +546,27 @@ paths:
                   type: string
               type: object
       summary: get current user's menus
+      tags:
+      - Menu
+  /api/v1/menu/list:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Return all menus
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Menu'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      summary: get all menus
       tags:
       - Menu
   /api/v1/role/create:

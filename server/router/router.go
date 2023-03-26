@@ -95,6 +95,8 @@ func RouteLoader(r *gin.Engine) {
 		{
 			menu.POST("/create", menuApi.AddMenu)
 			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
+			menu.GET("/list", menuApi.GetMenuList)
+			menu.DELETE("/delete", menuApi.DeleteMenu)
 		}
 
 		endpoint := v1.Group("/endpoint")

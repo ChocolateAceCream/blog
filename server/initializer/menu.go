@@ -26,7 +26,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 	db := global.DB
 	guestMenus := []dbTable.Menu{
 		{
-			MODEL:     global.MODEL{ID: 1},
+			ID:        1,
 			Pid:       0,
 			Name:      "home",
 			Component: "views/home/index.vue",
@@ -39,7 +39,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 	}
 	adminMenus := []dbTable.Menu{
 		{
-			MODEL:     global.MODEL{ID: 2},
+			ID:        2,
 			Pid:       0,
 			Name:      "admin",
 			Component: "views/admin/index.vue",
@@ -50,7 +50,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			},
 		},
 		{
-			MODEL:     global.MODEL{ID: 3},
+			ID:        3,
 			Pid:       2,
 			Name:      "role",
 			Component: "views/admin/role/index.vue",
@@ -64,7 +64,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 	adminMenus = append(adminMenus, guestMenus...)
 	superadminMenus := []dbTable.Menu{
 		{
-			MODEL:     global.MODEL{ID: 4},
+			ID:        4,
 			Pid:       2,
 			Name:      "menu",
 			Component: "views/admin/menu/index.vue",
@@ -75,7 +75,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 			},
 		},
 		{
-			MODEL:     global.MODEL{ID: 5},
+			ID:        5,
 			Pid:       2,
 			Name:      "endpoint",
 			Component: "views/admin/endpoint/index.vue",

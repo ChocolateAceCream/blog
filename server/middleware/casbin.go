@@ -18,7 +18,7 @@ func CasbinHandler() gin.HandlerFunc {
 		currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 		if err != nil {
 			global.LOGGER.Error("Fail to get current user", zap.Error(err))
-			response.FailWithMessage(err.Error(), c)
+			response.FailWithUnauthorized("Current Session Expired", c)
 			c.Abort()
 			return
 		}
@@ -31,7 +31,7 @@ func CasbinHandler() gin.HandlerFunc {
 			c.Next()
 			return
 		}
-		response.FailWithFullDetails(http.StatusUnauthorized, "Access denied", c)
+		response.FailWithFullDetails(http.StatusForbidden, "Access denied", c)
 		c.Abort()
 	}
 }

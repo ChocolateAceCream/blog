@@ -3,6 +3,7 @@ package apiV1
 import (
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
+	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
 	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
@@ -51,5 +52,42 @@ func (a *MenuApi) GetCurrentUserMenu(c *gin.Context) {
 		response.FailWithMessage("Fail to get menus", c)
 	} else {
 		response.OkWithFullDetails(menus, "success", c)
+	}
+}
+
+// @Tags Menu
+// @Summary get all menus
+// @Produce  application/json
+// @Success 200 {object} response.Response{data=[]dbTable.Menu,msg=string} "Return all menus"
+// @Router /api/v1/menu/list [get]
+func (a *MenuApi) GetMenuList(c *gin.Context) {
+	if menus, err := menuService.GetMenuList(); err != nil {
+		global.LOGGER.Error("Fail to get menus!", zap.Error(err))
+		response.FailWithMessage("Fail to get menus", c)
+	} else {
+		response.OkWithFullDetails(menus, "success", c)
+	}
+}
+
+// @Tags      Menu
+// @Summary   delete menu by id
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.FindById                true  "menu id"
+// @Success   200   {object}  response.Response{msg=string}  "menu deleted "
+// @Router    /menu/deleteBaseMenu [delete]
+func (a *MenuApi) DeleteMenu(c *gin.Context) {
+	var menu request.FindByIds
+	if err := c.ShouldBindJSON(&menu); err != nil {
+		global.LOGGER.Error("delete menu params parsing error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := menuService.DeleteMenu(menu.ID); err != nil {
+		global.LOGGER.Error("fail to delete menu", zap.Error(err))
+
+		response.FailWithMessage("fail to delete menu", c)
+	} else {
+		response.OkWithMessage("delete menu success", c)
 	}
 }

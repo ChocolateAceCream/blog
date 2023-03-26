@@ -29,3 +29,19 @@ func (menuService MenuService) GetRoleMenus(roleId int) (menus []dbTable.Menu, e
 	err = global.DB.Model(&dbTable.Role{ID: uint(roleId)}).Association("Menus").Find(&menus)
 	return menus, err
 }
+
+func (menuService MenuService) GetMenuList() (menus []dbTable.Menu, err error) {
+	//TODO: filter out unused field by define GetRoleMenus response struct
+	err = global.DB.Find(&menus).Error
+	return menus, err
+}
+
+func (menuService MenuService) DeleteMenu(id []int) (err error) {
+	//TODO: test delete associated role-menu relations
+	menus := []dbTable.Menu{}
+	for _, v := range id {
+		menus = append(menus, dbTable.Menu{ID: uint(v)})
+	}
+	return global.DB.Select("Roles").Delete(&menus).Error
+	// return global.DB.Where("id = ?", id).Delete(&dbTable.Menu{}).Error
+}

@@ -2,6 +2,8 @@ import axios from 'axios'
 import supportCancelToken from './cancelToken'
 import { addSignature } from './signature'
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
+import { useSessionStore } from '@/stores/sessionStore'
 import NProgress from 'nprogress'
 import qs from 'qs'
 
@@ -58,7 +60,6 @@ apiAxios.interceptors.request.use(config => {
 
 // 响应拦截
 apiAxios.interceptors.response.use(res => {
-  // console.log('---------res--------- axio: ', res)
   if (res.config.meta?.withProgressBar) { NProgress.done() }
   // 请求成功
   if (res.data.errorCode !== 0) {
@@ -67,7 +68,15 @@ apiAxios.interceptors.response.use(res => {
       type: 'error',
       duration: 5 * 1000
     })
-    return Promise.reject(res.data)
+    // unauthorized, logout current user
+    if (res.data.errorCode === 401) {
+      const store = useSessionStore()
+      const router = useRouter()
+      store.logout()
+      router.push({ name: 'login' })
+    } else {
+      return Promise.reject(res.data)
+    }
   }
   return Promise.resolve(res)
 }, error => {

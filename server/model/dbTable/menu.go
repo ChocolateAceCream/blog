@@ -1,17 +1,18 @@
 package dbTable
 
-import (
-	"github.com/ChocolateAceCream/blog/global"
-)
+import "time"
 
 type Menu struct {
-	global.MODEL
-	Pid       uint   `json:"pid" gorm:"comment:parent id"`
-	Path      string `json:"path" gorm:"comment:route path, base menu start with /"`
-	Name      string `json:"name" gorm:"comment:route name"`
-	Component string `json:"component" gorm:"comment:web component path, e.g. @/views/auth/register"`
+	ID        uint      `json:"id" gorm:"primarykey"`
+	CreatedAt time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt"`
+	Pid       uint      `json:"pid" gorm:"comment:parent id"`
+	Path      string    `json:"path" gorm:"comment:route path, base menu start with /"`
+	Name      string    `json:"name" gorm:"comment:route name"`
+	Component string    `json:"component" gorm:"comment:web component path, e.g. @/views/auth/register"`
 	Meta      `json:"meta" gorm:"embedded"`
-	Roles     []Role `json:"roles" gorm:"many2many:roleMenu"`
+	Roles     []Role `json:"roles" gorm:"many2many:roleMenu;constraint:OnDelete:CASCADE;"`
+	// ChildMenu []Menu `gorm:"foreignkey:Pid;constraint:OnDelete:CASCADE;"`
 }
 
 type Meta struct {

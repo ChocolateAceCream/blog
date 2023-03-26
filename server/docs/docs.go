@@ -532,6 +532,43 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/menu/list": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "get all menus",
+                "responses": {
+                    "200": {
+                        "description": "Return all menus",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbTable.Menu"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/role/create": {
             "post": {
                 "consumes": [
@@ -918,9 +955,6 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/dbTable.Role"
                     }
-                },
-                "type": {
-                    "type": "integer"
                 },
                 "updatedAt": {
                     "type": "string"

@@ -37,7 +37,7 @@
       <el-button
         type="primary"
         link
-        @click="onDeleteMenu(scope.row.id)"
+        @click="onDeleteMenu(scope.row)"
       >Delete</el-button>
     </template>
   </my-table>
@@ -62,10 +62,10 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, unref, ref } from 'vue'
+import { defineComponent, toRefs, reactive, unref, ref, onMounted } from 'vue'
+import { postAddMenu, getMenuList, deleteMenu } from '@/api/menu'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
-import { postAddMenu } from '@/api/menu'
-import { ElMessage } from 'element-plus'
 import _ from 'lodash'
 import Icon from './icon.vue'
 export default defineComponent({
@@ -73,17 +73,13 @@ export default defineComponent({
     Icon
   },
   setup(props, ctx) {
-    const routerStore = useRouterStore()
-    routerStore.$subscribe((mutation, state) => {
-      tableState.tableData = state.menuTree
-    })
     const tableState = reactive({
-      tableData: routerStore.menuTree,
+      tableData: [],
       tableConfig: [
         { label: 'ID', prop: 'id' },
-        { label: 'Route', prop: 'routeName' },
+        { label: 'Route', prop: 'name' },
         { label: 'path', prop: 'path' },
-        { label: 'title', prop: 'title' },
+        { label: 'title', prop: 'meta.title' },
         { label: 'icon', prop: 'icon', bodySlot: 'iconBody' },
         { label: 'operation', bodySlot: 'operationBody' },
       ],
@@ -97,10 +93,99 @@ export default defineComponent({
         formState.formData = _.cloneDeep(row)
         modalState.onModalOpen()
       },
-      onDeleteMenu(id) {
-        console.log('----onDeleteMenu--', id)
+      onDeleteMenu(row) {
+        const payload = []
+        const helper = (node) => {
+          payload.push(node.id)
+          node.children.forEach(child => {
+            helper(child)
+          })
+        }
+        helper(row)
+        ElMessageBox.confirm(
+          'Delete menu will also delete all child menu and role-menu relations. Continue?',
+          'Warning',
+          {
+            confirmButtonText: 'OK',
+            cancelButtonText: 'Cancel',
+            type: 'warning',
+          }
+        )
+          .then(async() => {
+            const { data: res } = await deleteMenu({ data: { id: payload } })
+            if (res.errorCode === 0) {
+              ElMessage({
+                type: 'success',
+                message: 'Delete completed',
+              })
+              fetchMenuList()
+              const routerStore = useRouterStore()
+              routerStore.asyncRouterFlag = 0
+              routerStore.setAsyncRouter()
+            }
+          })
+          .catch(() => {
+            ElMessage({
+              type: 'info',
+              message: 'Delete canceled',
+            })
+          })
       }
     })
+    onMounted(() => {
+      fetchMenuList()
+    })
+    const fetchMenuList = async() => {
+      const { data: res } = await getMenuList()
+      if (res.errorCode === 0) {
+        tableState.tableData = formatMenuTree(res.data)
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    }
+    const formatMenuTree = (menus) => {
+      const mapper = {}
+      menus.forEach(menu => {
+        if (mapper[menu.pid]) {
+          mapper[menu.pid].push(menu)
+        } else {
+          mapper[menu.pid] = [menu]
+        }
+      })
+      let r = []
+      if (mapper[0] && mapper[0].length > 0) {
+        r = mapper[0].map(node => {
+          return treeHelper(node, mapper)
+        })
+      }
+      return r
+    }
+
+    const treeHelper = (root, mapper) => {
+      const temp = {
+        path: root.path,
+        name: root.name,
+        component: root.component,
+        id: root.id,
+        pid: root.pid,
+        meta: root.meta,
+        icon: root.meta.icon,
+        children: []
+      }
+      if (mapper[temp.id]) {
+        mapper[temp.id].forEach(node => {
+          const child = treeHelper(node, mapper)
+          temp.children.push(child)
+        })
+      }
+      return temp
+    }
+
+
     const onSubmit = async() => {
       try {
         await formState.formRef.validate()
@@ -112,21 +197,16 @@ export default defineComponent({
             payload[key] = val
           }
         })
-        await postAddMenu(payload).then(async response => {
-          const { data: res } = response
-          if (res.errorCode === 0) {
-            ElMessage({
-              message: 'Add Menu Success',
-              type: 'success',
-              duration: 3 * 1000
-            })
-            const routerStore = useRouterStore()
-            routerStore.asyncRouterFlag = 0
-            await routerStore.setAsyncRouter()
-            tableState.tableData = routerStore.menuTree
-            modalState.modalRef.closeModal()
-          }
-        })
+        const { data: res } = await postAddMenu(payload)
+        if (res.errorCode === 0) {
+          ElMessage({
+            message: 'Add Menu Success',
+            type: 'success',
+            duration: 3 * 1000
+          })
+          fetchMenuList()
+          modalState.modalRef.closeModal()
+        }
       } catch (err) {
         console.log('-----form validation err-', err)
       }
@@ -140,7 +220,6 @@ export default defineComponent({
       },
       onModalClose() {
         modalState.modalRef.closeModal()
-        console.log('-------onCancel------')
       },
       onModalConfirm: _.throttle(onSubmit, 2000)
     })
