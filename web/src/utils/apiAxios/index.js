@@ -2,8 +2,7 @@ import axios from 'axios'
 import supportCancelToken from './cancelToken'
 import { addSignature } from './signature'
 import { ElMessage } from 'element-plus'
-import { useRouter } from 'vue-router'
-import { useSessionStore } from '@/stores/sessionStore'
+import { logout } from '@/shared/hooks/index'
 import NProgress from 'nprogress'
 import qs from 'qs'
 
@@ -70,10 +69,7 @@ apiAxios.interceptors.response.use(res => {
     })
     // unauthorized, logout current user
     if (res.data.errorCode === 401) {
-      const store = useSessionStore()
-      const router = useRouter()
-      store.logout()
-      router.push({ name: 'login' })
+      logout()
     } else {
       return Promise.reject(res.data)
     }

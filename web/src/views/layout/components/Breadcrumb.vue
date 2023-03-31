@@ -29,16 +29,15 @@
 
 <script>
 import _ from 'lodash'
-import { reactive, toRefs, defineComponent, computed, ref } from 'vue'
+import { reactive, toRefs, defineComponent, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouterStore } from '@/stores/routerStore'
-import { navBarCollapsedHook } from '@/shared/hooks/navBarCollapsed'
+import { navBarCollapsedHook } from '@/shared/hooks/index.js'
 export default defineComponent({
   setup(props, ctx) {
     const router = useRoute()
     const routerStore = useRouterStore()
     const { isNavBarCollapsed, toggleNavBar } = navBarCollapsedHook()
-    console.log('-----router-----', router.name)
     const state = reactive({
       currentRouter: computed(() => {
         const arr = []
@@ -49,7 +48,6 @@ export default defineComponent({
             currentRoute = routerStore.routerList.find(routerItem => { return routerItem.id === currentRoute.pid })
           }
           arr.unshift(currentRoute)
-          console.log('----ar-----', arr)
         }
         return arr
       })

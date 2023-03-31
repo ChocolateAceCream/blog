@@ -24,7 +24,7 @@
 <script>
 import { defineComponent, toRefs, reactive, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
-import { navBarCollapsedHook } from '@/shared/hooks/navBarCollapsed'
+import { navBarCollapsedHook } from '@/shared/hooks/index.js'
 import _ from 'lodash'
 import MenuItem from './menuItem.vue'
 import { useRouterStore } from '@/stores/routerStore'

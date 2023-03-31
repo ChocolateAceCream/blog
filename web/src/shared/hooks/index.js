@@ -1,5 +1,7 @@
 import {computed} from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
+import { useRouterStore } from '@/stores/routerStore'
+import router from '@/router'
 export const navBarCollapsedHook = () => {
   const sessionStore = useSessionStore()
   const isNavBarCollapsed = computed({
@@ -16,4 +18,12 @@ export const navBarCollapsedHook = () => {
     isNavBarCollapsed,
     toggleNavBar
   }
+}
+
+export const logout = () => {
+  const routerStore = useRouterStore()
+  routerStore.$reset
+  const sessionStore = useSessionStore()
+  sessionStore.$reset
+  router.push({ name: 'login' })
 }

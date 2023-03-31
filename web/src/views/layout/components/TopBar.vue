@@ -35,14 +35,13 @@
   </el-row>
 </template>
 <script>
-import { useRouter } from 'vue-router'
 import { reactive, toRefs, defineComponent } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
+import { logout } from '@/shared/hooks/index'
 import _ from 'lodash'
 export default defineComponent({
   setup(props, ctx) {
-    const router = useRouter()
     const store = useSessionStore()
 
     const state = reactive({
@@ -59,8 +58,7 @@ export default defineComponent({
               type: 'warning',
             }
           )
-          store.logout()
-          router.push({ name: 'login'})
+          logout()
         } catch (err) {
           console.log('-------cancel login----', err)
         }
