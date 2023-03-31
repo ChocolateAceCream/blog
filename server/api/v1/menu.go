@@ -91,3 +91,25 @@ func (a *MenuApi) DeleteMenu(c *gin.Context) {
 		response.OkWithMessage("delete menu success", c)
 	}
 }
+
+// @Tags      Menu
+// @Summary   edit menu
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      dbTable.Menu             true  "route, path, title, icon"
+// @Success   200   {object}  response.Response{msg=string}  "menu edit success "
+// @Router    /menu/edit [put]
+func (a *MenuApi) EditMenu(c *gin.Context) {
+	var menu dbTable.Menu
+	if err := c.ShouldBindJSON(&menu); err != nil {
+		global.LOGGER.Error("edit menu params parsing error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := menuService.EditMenu(menu); err != nil {
+		global.LOGGER.Error("fail to edit menu", zap.Error(err))
+		response.FailWithMessage("fail to edit menu", c)
+	} else {
+		response.OkWithMessage("Edit menu success", c)
+	}
+}

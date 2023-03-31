@@ -45,3 +45,7 @@ func (menuService MenuService) DeleteMenu(id []int) (err error) {
 	return global.DB.Select("Roles").Delete(&menus).Error
 	// return global.DB.Where("id = ?", id).Delete(&dbTable.Menu{}).Error
 }
+
+func (menuService MenuService) EditMenu(m dbTable.Menu) error {
+	return global.DB.Model(&dbTable.Menu{}).Where("ID = ? ", m.ID).Updates(&m).Error
+}

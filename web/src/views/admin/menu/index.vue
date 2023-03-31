@@ -44,7 +44,7 @@
   <Modal
     ref="modalRef"
     width="550px"
-    :title="modalTitle"
+    :title="modalType + ' Menu'"
     @close="onModalClose"
     @confirm="onModalConfirm"
   >
@@ -62,8 +62,8 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, unref, ref, onMounted } from 'vue'
-import { postAddMenu, getMenuList, deleteMenu } from '@/api/menu'
+import { defineComponent, toRefs, reactive, onMounted } from 'vue'
+import { postAddMenu, getMenuList, deleteMenu, putEditMenu } from '@/api/menu'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
 import _ from 'lodash'
@@ -84,12 +84,12 @@ export default defineComponent({
         { label: 'operation', bodySlot: 'operationBody' },
       ],
       onAddMenu(id) {
-        modalState.modalTitle = 'Add Menu'
+        modalState.modalType = 'Add'
         formState.formData = { pid: id }
         modalState.onModalOpen()
       },
       onEditMenu(row) {
-        modalState.modalTitle = 'Edit Menu'
+        modalState.modalType = 'Edit'
         formState.formData = _.cloneDeep(row)
         modalState.onModalOpen()
       },
@@ -174,6 +174,7 @@ export default defineComponent({
         pid: root.pid,
         meta: root.meta,
         icon: root.meta.icon,
+        title: root.meta.title,
         children: []
       }
       if (mapper[temp.id]) {
@@ -184,7 +185,6 @@ export default defineComponent({
       }
       return temp
     }
-
 
     const onSubmit = async() => {
       try {
@@ -197,10 +197,16 @@ export default defineComponent({
             payload[key] = val
           }
         })
-        const { data: res } = await postAddMenu(payload)
+        let resp = {}
+        if (modalState.modalType === 'Add') {
+          resp = await postAddMenu(payload)
+        } else {
+          resp = await putEditMenu(payload)
+        }
+        const { data: res } = resp
         if (res.errorCode === 0) {
           ElMessage({
-            message: 'Add Menu Success',
+            message: `${modalState.modalType} Menu Success`,
             type: 'success',
             duration: 3 * 1000
           })
@@ -213,7 +219,7 @@ export default defineComponent({
     }
     const modalState = reactive({
       modalRef: null,
-      modalTitle: '',
+      modalType: 'Add',
       onModalOpen() {
         modalState.modalRef.openModal()
         formState.formRef?.clearAllValidate()

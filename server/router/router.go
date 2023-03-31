@@ -90,6 +90,8 @@ func RouteLoader(r *gin.Engine) {
 		role := v1.Group("/role")
 		{
 			role.POST("/create", roleApi.CreateRole)
+			// role.POST("/list", roleApi.GetRoleList)
+
 		}
 		menu := v1.Group("/menu")
 		{
@@ -97,6 +99,7 @@ func RouteLoader(r *gin.Engine) {
 			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
 			menu.GET("/list", menuApi.GetMenuList)
 			menu.DELETE("/delete", menuApi.DeleteMenu)
+			menu.PUT("/edit", menuApi.EditMenu)
 		}
 
 		endpoint := v1.Group("/endpoint")
