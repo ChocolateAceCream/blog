@@ -98,8 +98,6 @@ export const useRouterStore = defineStore({
       this.routerTree = formatRouterTree(this.asyncRouters)
       this.routerList = routerListArr
       this.menuTree = formatMenuTree(this.routerTree)
-      console.log('----routerTree---', this.routerTree)
-      console.log('----menuTree---', this.menuTree)
       const pushRoutes = (nodes) => {
         nodes.forEach(node => {
           if (node.children.length > 0) {
@@ -110,7 +108,6 @@ export const useRouterStore = defineStore({
         })
       }
       pushRoutes(this.routerTree)
-      console.log('----router---', router)
       return true
     }
   },

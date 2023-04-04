@@ -14,7 +14,6 @@ export default defineComponent({
       'en': en
     }
     const store = useSessionStore()
-    console.log('----store----', store)
     store.$subscribe((_, s) => {
       state.locale = elementPlusLocaleMapper[s.userInfo.locale]
     })

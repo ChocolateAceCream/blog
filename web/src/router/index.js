@@ -30,17 +30,12 @@ const router = createRouter({
 let flag = 0
 router.beforeEach(async(to, from) => {
   const isAuthenticated = useSessionStore().isAuthenticated
-  console.log('-----flag-------', flag)
-  console.log('-----isAuthenticated-------', isAuthenticated)
-  console.log('-----!isAuthenticated && to.meta.requireAuth-------', to)
   if (isAuthenticated) {
     if (from.name == null) {
       if (flag === 0) {
         const routerStore = useRouterStore()
         await routerStore.setAsyncRouter()
         flag++
-        console.log('-----router-------', router)
-        console.log('-----to.matched.length-------', to.matched.length)
         return { ...to, replace: true }
       }
       if (to.matched.length) {

@@ -49,7 +49,6 @@ export default defineComponent({
   },
   emits: ['update:icon'],
   setup(props, ctx) {
-    console.log('----iconJson--', iconJson)
     const iconMapper = _.map(iconJson.glyphs, 'font_class')
     const state = reactive({
       tempIcon: computed({

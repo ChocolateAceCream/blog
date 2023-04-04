@@ -7,10 +7,9 @@ type RegisterUser struct {
 	Username string `json:"username" binding:"required"`
 	Password string `json:"password" binding:"required,passwordCheck" `
 	// HeaderImg    string `json:"headerImg" gorm:"default:'https://qmplusimg.henrongyi.top/gva_header.jpg'"`
-	Email   string `json:"email" binding:"required,email"`
-	Code    string `json:"code" binding:"required"` // use email verification instead
-	RoleId  uint   `json:"role" gorm:"default:888"`
-	RoleIds []uint `json:"roles"`
+	Email  string `json:"email" binding:"required,email"`
+	Code   string `json:"code" binding:"required"` // use email verification instead
+	RoleId uint   `json:"role" gorm:"default:888"`
 }
 
 type UserSearchQuery struct {

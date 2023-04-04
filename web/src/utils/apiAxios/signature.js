@@ -11,5 +11,5 @@ export function addSignature(config = {}) {
   config.headers.appId = APP_ID
   config.headers.timestamp = timestamp
   config.headers.sign = md5(strArr.join('')).toUpperCase()
-  console.log('------origin----', strArr.join(''))
+  // console.log('------origin----', strArr.join(''))
 }

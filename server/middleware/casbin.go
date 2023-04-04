@@ -26,7 +26,15 @@ func CasbinHandler() gin.HandlerFunc {
 		// 获取请求方法
 		action := c.Request.Method
 		e := service.GetEnforcer()
-		id := strconv.Itoa(int(currentUser.Role.ID))
+		var roleService = new(service.RoleService)
+		role, err := roleService.GetUserRole(currentUser)
+		if err != nil {
+			global.LOGGER.Error("Fail to get current user's Role", zap.Error(err))
+			response.FailWithUnauthorized("Current Session Expired", c)
+			c.Abort()
+			return
+		}
+		id := strconv.Itoa(int(role.ID))
 		if success, _ := e.Enforce(id, path, action); success {
 			c.Next()
 			return

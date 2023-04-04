@@ -156,10 +156,8 @@ export default defineComponent({
             depart: depart,
           }
           putUpdateUserInfo(payload).then(response => {
-            console.log('------response---', response)
             const {data: res} = response
             if (res.errorCode === 0) {
-              console.log('------login success---', res.data)
               Object.keys(payload).map(key => {
                 store.userInfo[key] = payload[key]
               })
@@ -180,7 +178,6 @@ export default defineComponent({
       } catch (err) {
         console.log('-----form validation err-', err)
       }
-      console.log('-----onSubmit----')
     }
     const handleStepBack = () => {
       router.back()

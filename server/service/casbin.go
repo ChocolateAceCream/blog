@@ -14,6 +14,11 @@ import (
 
 type CasbinService struct{}
 
+var (
+	syncedEnforcer *casbin.SyncedEnforcer
+	once           sync.Once
+)
+
 func (c *CasbinService) Update(id uint, endpoints []request.Endpoint) error {
 	roleId := strconv.Itoa(int(id))
 	rules := [][]string{}
@@ -27,10 +32,11 @@ func (c *CasbinService) Update(id uint, endpoints []request.Endpoint) error {
 	return nil
 }
 
-var (
-	syncedEnforcer *casbin.SyncedEnforcer
-	once           sync.Once
-)
+func (c *CasbinService) ClearCasbin(v int, p ...string) bool {
+	e := GetEnforcer()
+	success, _ := e.RemoveFilteredPolicy(v, p...)
+	return success
+}
 
 func GetEnforcer() *casbin.SyncedEnforcer {
 	once.Do(func() {

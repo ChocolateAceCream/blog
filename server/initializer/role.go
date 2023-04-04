@@ -1,3 +1,4 @@
+// TODO: add role users?
 package initializer
 
 import (
@@ -26,19 +27,19 @@ func (ri *roleInitilizer) Initialize(ctx context.Context) (next context.Context,
 	db := global.DB
 	entities := []dbTable.Role{
 		{
-			ID:       1,
-			Name:     "superadmin",
-			ParentId: 0,
+			ID:   1,
+			Name: "superadmin",
+			Pid:  0,
 		},
 		{
-			ID:       2,
-			Name:     "admin",
-			ParentId: 1,
+			ID:   2,
+			Name: "admin",
+			Pid:  1,
 		},
 		{
-			ID:       3,
-			Name:     "guest",
-			ParentId: 2,
+			ID:   3,
+			Name: "guest",
+			Pid:  2,
 		},
 	}
 	if err = db.Create(&entities).Error; err != nil {

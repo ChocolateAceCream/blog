@@ -89,13 +89,15 @@ func RouteLoader(r *gin.Engine) {
 
 		role := v1.Group("/role")
 		{
-			role.POST("/create", roleApi.CreateRole)
-			// role.POST("/list", roleApi.GetRoleList)
+			role.POST("/add", roleApi.AddRole)
+			role.GET("/list", roleApi.GetRoleList)
+			role.DELETE("/delete", roleApi.DeleteRole)
+			role.PUT("/edit", roleApi.EditRole)
 
 		}
 		menu := v1.Group("/menu")
 		{
-			menu.POST("/create", menuApi.AddMenu)
+			menu.POST("/add", menuApi.AddMenu)
 			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
 			menu.GET("/list", menuApi.GetMenuList)
 			menu.DELETE("/delete", menuApi.DeleteMenu)
@@ -106,7 +108,7 @@ func RouteLoader(r *gin.Engine) {
 		{
 			endpoint.GET("/all", endpointApi.GetAllEndpoints)
 			endpoint.POST("/list", endpointApi.GetEndpointList)
-			endpoint.POST("/new", endpointApi.NewEndpoint)
+			endpoint.POST("/add", endpointApi.AddEndpoint)
 		}
 	}
 }

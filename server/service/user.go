@@ -76,7 +76,7 @@ func (userService *UserService) ActiveUser(u dbTable.User, code string) error {
 
 func (userService *UserService) Login(u *dbTable.User) (*dbTable.User, error) {
 	var user dbTable.User
-	err := global.DB.Where("username = ?", u.Username).Preload("Role").First(&user).Error
+	err := global.DB.Where("username = ?", u.Username).First(&user).Error
 	if err == nil {
 		if ok := utils.BcryptCheck(u.Password, user.Password); !ok {
 			return nil, errors.New("wrong password")
@@ -95,10 +95,30 @@ func (userService *UserService) RegisterUser(u dbTable.User) (registeredUser dbT
 		return registeredUser, errors.New("email already taken, please try again")
 	}
 
-	u.Role = dbTable.Role{Name: "guest", ID: 3}
 	u.Password = utils.BcryptHash(u.Password)
 	u.UUID = uuid.NewV4()
-	err = global.DB.Create(&u).Error
+
+	tx := global.DB.Begin()
+	defer func() {
+		if r := recover(); r != nil {
+			tx.Rollback()
+		}
+	}()
+
+	if err = tx.Error; err != nil {
+		return
+	}
+	if err = tx.Create(&u).Error; err != nil {
+		tx.Rollback()
+		return
+	}
+	if err = tx.Model(&user).Association("Roles").Append(&dbTable.Role{ID: 3}); err != nil {
+		tx.Rollback()
+		return
+	}
+	if err = tx.Commit().Error; err != nil {
+		return
+	}
 	return u, err
 }
 

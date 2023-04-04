@@ -54,7 +54,7 @@ func (b *UserApi) GetUserList(c *gin.Context) {
 // @Summary Register user
 // @Description register user
 // @Produce  application/json
-// @Param data body request.RegisterUser true "username, password, email,captcha, role IDs"
+// @Param data body request.RegisterUser true "username, password, email,captcha, roleId"
 // @Success 200 {object} response.Response{data=dbTable.User,msg=string} "register user, return user info"
 // @Router /api/public/auth/register [post]
 func (b *UserApi) RegisterUser(c *gin.Context) {

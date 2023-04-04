@@ -78,10 +78,10 @@ export default defineComponent({
       tableConfig: [
         { label: 'ID', prop: 'id' },
         { label: 'Route', prop: 'name' },
-        { label: 'path', prop: 'path' },
-        { label: 'title', prop: 'meta.title' },
-        { label: 'icon', prop: 'icon', bodySlot: 'iconBody' },
-        { label: 'operation', bodySlot: 'operationBody' },
+        { label: 'Path', prop: 'path' },
+        { label: 'Title', prop: 'meta.title' },
+        { label: 'Icon', prop: 'icon', bodySlot: 'iconBody' },
+        { label: 'Operation', bodySlot: 'operationBody' },
       ],
       onAddMenu(id) {
         modalState.modalType = 'Add'

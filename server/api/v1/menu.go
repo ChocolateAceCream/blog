@@ -18,7 +18,7 @@ type MenuApi struct{}
 // @Produce application/json
 // @Param data body dbTable.Menu true "route path, pid, route name, component"
 // @Success 200 {object} response.Response{msg=string} "新增菜单"
-// @Router /api/v1/menu/create [post]
+// @Router /api/v1/menu/add [post]
 func (a *MenuApi) AddMenu(c *gin.Context) {
 	var menu dbTable.Menu
 	if err := c.ShouldBindJSON(&menu); err != nil {
@@ -47,7 +47,13 @@ func (a *MenuApi) GetCurrentUserMenu(c *gin.Context) {
 		response.FailWithUnauthorized("User not logged in", c)
 		return
 	}
-	if menus, err := menuService.GetRoleMenus(int(currentUser.RoleId)); err != nil {
+	role, err := roleService.GetUserRole(currentUser)
+	if err != nil {
+		global.LOGGER.Error("Fail to get user role!", zap.Error(err))
+		response.FailWithMessage("Fail to get user role", c)
+		return
+	}
+	if menus, err := menuService.GetRoleMenus(role.ID); err != nil {
 		global.LOGGER.Error("Fail to get menus!", zap.Error(err))
 		response.FailWithMessage("Fail to get menus", c)
 	} else {
@@ -75,7 +81,7 @@ func (a *MenuApi) GetMenuList(c *gin.Context) {
 // @Produce   application/json
 // @Param     data  body      request.FindById                true  "menu id"
 // @Success   200   {object}  response.Response{msg=string}  "menu deleted "
-// @Router    /menu/deleteBaseMenu [delete]
+// @Router 		/api/v1/menu/delete [delete]
 func (a *MenuApi) DeleteMenu(c *gin.Context) {
 	var menu request.FindByIds
 	if err := c.ShouldBindJSON(&menu); err != nil {
@@ -98,7 +104,7 @@ func (a *MenuApi) DeleteMenu(c *gin.Context) {
 // @Produce   application/json
 // @Param     data  body      dbTable.Menu             true  "route, path, title, icon"
 // @Success   200   {object}  response.Response{msg=string}  "menu edit success "
-// @Router    /menu/edit [put]
+// @Router 		/api/v1/menu/edit [put]
 func (a *MenuApi) EditMenu(c *gin.Context) {
 	var menu dbTable.Menu
 	if err := c.ShouldBindJSON(&menu); err != nil {

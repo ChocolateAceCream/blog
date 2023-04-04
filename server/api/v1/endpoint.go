@@ -57,14 +57,14 @@ func (b *EndpointApi) GetAllEndpoints(c *gin.Context) {
 	}
 }
 
-// @Summary new endpoint
-// @Description create new endpoint
+// @Summary add new endpoint
+// @Description add new endpoint
 // @Tags Endpoint
 // @Accept json
 // @Param data body dbTable.Endpoint true "Type, Name, PID, Method, Description, Path "
 // @Success 200 {object} response.Response{msg=string} "success"
-// @Router /api/v1/endpoint/new [POST]
-func (b *EndpointApi) NewEndpoint(c *gin.Context) {
+// @Router /api/v1/endpoint/add [POST]
+func (b *EndpointApi) AddEndpoint(c *gin.Context) {
 	var r dbTable.Endpoint
 	if err := c.ShouldBindJSON(&r); err != nil {
 		global.LOGGER.Error("fail to bind endpoint data", zap.Error(err))
@@ -72,10 +72,10 @@ func (b *EndpointApi) NewEndpoint(c *gin.Context) {
 		return
 	}
 
-	if err := endpointService.NewEndpoint(r); err != nil {
-		global.LOGGER.Error("fail to create endpoint", zap.Error(err))
-		response.FailWithMessage("fail to create endpoint, err: "+err.Error(), c)
+	if err := endpointService.AddEndpoint(r); err != nil {
+		global.LOGGER.Error("fail to add endpoint", zap.Error(err))
+		response.FailWithMessage("fail to add endpoint, err: "+err.Error(), c)
 	} else {
-		response.OkWithMessage("create endpoint success", c)
+		response.OkWithMessage("add endpoint success", c)
 	}
 }

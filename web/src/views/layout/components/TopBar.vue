@@ -47,7 +47,6 @@ export default defineComponent({
     const state = reactive({
       username: store.userInfo.username,
       async handleLogout() {
-        console.log('-------handleLogout-----')
         try {
           await ElMessageBox.confirm(
             '确认退出登录？',

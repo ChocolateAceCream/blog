@@ -131,7 +131,6 @@ export default defineComponent({
 
     const {loading, wrapLoading} = useLoading()
     const onSubmit = async() => {
-      console.log('-----onSubmit----', state.form)
       const form = unref(registerUserFormRef)
       try {
         await form.validate()
@@ -139,11 +138,9 @@ export default defineComponent({
           const payload = {
             ...state.form,
           }
-          console.log('-----payload----', payload)
           postRegister(payload).then(response => {
             const {data: res} = response
             if (res.errorCode === 0) {
-              console.log('------login success---', res.data)
               const store = useSessionStore()
               Object.keys(res.data).map(key => {
                 store.userInfo[key] = res.data[key]
@@ -152,10 +149,9 @@ export default defineComponent({
               router.push({name: 'home'})
             }
           }).catch((err) => {
-            console.log('-----postRegister err------', err)
             ElMessage({
               type: 'error',
-              message: '注册失败，请重试',
+              message: '注册失败，请重试 ' + err,
             })
           })
         })

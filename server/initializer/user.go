@@ -36,7 +36,6 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 			Username: "superadmin",
 			Password: adminPassword,
 			Email:    "super@super.com",
-			RoleId:   1,
 			Active:   1,
 		},
 		{
@@ -44,7 +43,6 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 			Username: "admin",
 			Password: adminPassword,
 			Email:    adminEmail,
-			RoleId:   2,
 			Active:   1,
 		},
 		{
@@ -52,32 +50,25 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 			Username: "guest",
 			Password: guestPassword,
 			Email:    guestEmail,
-			RoleId:   3,
 			Active:   1,
 		},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init user data, err: %w", err)
 	}
-	next = context.WithValue(ctx, ui.Name(), entities)
-	ri := roleInitilizer{}
-	for _, user := range entities {
-		role, ok := ctx.Value(ri.Name() + user.Username).(dbTable.Role)
-		if !ok {
-			return next, errors.New("fail to associate user with role")
-		}
-		if err = db.Model(&user).Association("Role").Append(&role); err != nil {
-			return next, err
-		}
+
+	next = ctx
+	for _, e := range entities {
+		next = context.WithValue(next, ui.Name()+e.Username, e)
 	}
-	return next, err
+	return next, nil
 }
 
 func (ui *userInitilizer) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.User
-	err := global.DB.Where("username = ? ", "superadmin").Preload("Role").First(&record).Error
+	err := global.DB.Where("username = ? ", "superadmin").First(&record).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return false
 	}
-	return record.Role.ID == 1
+	return record.Email == "super@super.com"
 }
