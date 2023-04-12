@@ -30,16 +30,26 @@
       <el-button
         type="primary"
         link
+        @click="onMenuModalOpen(scope.row.id)"
+      >Menu</el-button>
+      <el-button
+        type="primary"
+        link
+        @click="onEndpointModalOpen(scope.row.id)"
+      >Endpoint</el-button>
+      <el-button
+        type="primary"
+        link
         @click="onDeleteRole(scope.row)"
       >Delete</el-button>
     </template>
   </my-table>
   <Modal
-    ref="modalRef"
+    ref="roleModalRef"
     width="550px"
-    :title="modalType + ' Role'"
-    @close="onModalClose"
-    @confirm="onModalConfirm"
+    :title="roleModalType + ' Role'"
+    @close="onRoleModalClose"
+    @confirm="onRoleModalConfirm"
   >
     <MyForm
       ref="formRef"
@@ -48,6 +58,12 @@
       :form-items="formItems"
     />
   </Modal>
+  <MenuModal
+    ref="menuModalRef"
+  />
+  <EndpointModal
+    ref="endpointModalRef"
+  />
 </template>
 
 <script>
@@ -55,8 +71,14 @@ import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { postAddRole, getRoleList, deleteRole, putEditRole } from '@/api/role'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
+import MenuModal from './components/MenuModal'
+import EndpointModal from './components/EndpointModal'
 import _ from 'lodash'
 export default defineComponent({
+  components: {
+    MenuModal,
+    EndpointModal
+  },
   setup(props, ctx) {
     const tableState = reactive({
       tableData: [],
@@ -66,14 +88,14 @@ export default defineComponent({
         { label: 'Operation', bodySlot: 'operationBody' },
       ],
       onAddRole(id) {
-        modalState.modalType = 'Add'
+        modalState.roleModalType = 'Add'
         formState.formData = { pid: id }
-        modalState.onModalOpen()
+        modalState.onRoleModalOpen()
       },
       onEditRole(row) {
-        modalState.modalType = 'Edit'
+        modalState.roleModalType = 'Edit'
         formState.formData = _.cloneDeep(row)
-        modalState.onModalOpen()
+        modalState.onRoleModalOpen()
       },
       onDeleteRole(row) {
         const payload = []
@@ -167,7 +189,7 @@ export default defineComponent({
       try {
         await formState.formRef.validate()
         let resp = {}
-        if (modalState.modalType === 'Add') {
+        if (modalState.roleModalType === 'Add') {
           resp = await postAddRole(formState.formData)
         } else {
           resp = await putEditRole(formState.formData)
@@ -175,28 +197,36 @@ export default defineComponent({
         const { data: res } = resp
         if (res.errorCode === 0) {
           ElMessage({
-            message: `${modalState.modalType} Role Success`,
+            message: `${modalState.roleModalType} Role Success`,
             type: 'success',
             duration: 3 * 1000
           })
           fetchRoleList()
-          modalState.modalRef.closeModal()
+          modalState.roleModalRef.closeModal()
         }
       } catch (err) {
         console.log('-----form validation err-', err)
       }
     }
     const modalState = reactive({
-      modalRef: null,
-      modalType: 'Add',
-      onModalOpen() {
-        modalState.modalRef.openModal()
+      roleModalRef: null,
+      roleModalType: 'Add',
+      onRoleModalOpen() {
+        modalState.roleModalRef.openModal()
         formState.formRef?.clearAllValidate()
       },
-      onModalClose() {
-        modalState.modalRef.closeModal()
+      onRoleModalClose() {
+        modalState.roleModalRef.closeModal()
       },
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onRoleModalConfirm: _.throttle(onSubmit, 2000),
+      menuModalRef: null,
+      onMenuModalOpen(roleId) {
+        modalState.menuModalRef.onModalOpen(roleId)
+      },
+      endpointModalRef: null,
+      onEndpointModalOpen(roleId) {
+        modalState.endpointModalRef.onModalOpen(roleId)
+      },
     })
 
     const formState = reactive({

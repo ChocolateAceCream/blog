@@ -91,6 +91,10 @@ export const useRouterStore = defineStore({
         })
       }
     },
+    async updateAsyncRouter() {
+      this.asyncRouterFlag = 0
+      this.setAsyncRouter()
+    },
     async setAsyncRouter() {
       if (this.asyncRouterFlag === 0) {
         await this.getRouters()

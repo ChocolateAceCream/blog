@@ -43,6 +43,8 @@ func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Contex
 		{Ptype: "p", V1: "/api/v1/menu/delete", V2: "DELETE"},
 		{Ptype: "p", V1: "/api/v1/menu/add", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/menu/edit", V2: "PUT"},
+		{Ptype: "p", V1: "/api/v1/menu/getRoleMenuTree", V2: "POST"},
+		{Ptype: "p", V1: "/api/v1/menu/assignRoleMenus", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/endpoint/all", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/endpoint/list", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/endpoint/add", V2: "POST"},

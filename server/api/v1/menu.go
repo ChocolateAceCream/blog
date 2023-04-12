@@ -62,6 +62,38 @@ func (a *MenuApi) GetCurrentUserMenu(c *gin.Context) {
 }
 
 // @Tags Menu
+// @Summary get menus by role id
+// @Produce  application/json
+// @Param     data  body      request.FindById                true  "role id"
+// @Success 200 {object} response.Response{data=[]dbTable.Menu,msg=string} "Return role's menu list"
+// @Router /api/v1/menu/getRoleMenuTree [post]
+func (a *MenuApi) GetRoleMenuTree(c *gin.Context) {
+	var role request.FindById
+	if err := c.ShouldBindJSON(&role); err != nil {
+		global.LOGGER.Error("Get role menu params parsing error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	roleMenus, err := menuService.GetRoleMenus(uint(role.ID))
+	if err != nil {
+		global.LOGGER.Error("Fail to get role menus!", zap.Error(err))
+		response.FailWithMessage("Fail to get role menus", c)
+		return
+	}
+	menuList, err := menuService.GetMenuList()
+	if err != nil {
+		global.LOGGER.Error("Fail to get all menus!", zap.Error(err))
+		response.FailWithMessage("Fail to get all menus", c)
+		return
+	}
+	r := response.RoleMenuTree{
+		MenuList:  menuList,
+		RoleMenus: roleMenus,
+	}
+	response.OkWithFullDetails(r, "success", c)
+}
+
+// @Tags Menu
 // @Summary get all menus
 // @Produce  application/json
 // @Success 200 {object} response.Response{data=[]dbTable.Menu,msg=string} "Return all menus"
@@ -117,5 +149,27 @@ func (a *MenuApi) EditMenu(c *gin.Context) {
 		response.FailWithMessage("fail to edit menu", c)
 	} else {
 		response.OkWithMessage("Edit menu success", c)
+	}
+}
+
+// @Tags      Menu
+// @Summary   edit menu
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.AssignRoleMenus           true  "id, menus"
+// @Success   200   {object}  response.Response{msg=string}  "assign role menus success "
+// @Router 		/api/v1/menu/assignRoleMenus [post]
+func (a *MenuApi) AssignRoleMenus(c *gin.Context) {
+	var payload request.AssignRoleMenus
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		global.LOGGER.Error("assign role menus params parsing error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := menuService.AssignRoleMenus(payload.Menus, uint(payload.ID)); err != nil {
+		global.LOGGER.Error("fail to assign role menu", zap.Error(err))
+		response.FailWithMessage("fail to assign role menus", c)
+	} else {
+		response.OkWithMessage("assign role menus success", c)
 	}
 }

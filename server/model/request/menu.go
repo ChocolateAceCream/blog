@@ -4,6 +4,11 @@ import (
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 )
 
+type AssignRoleMenus struct {
+	FindById
+	Menus []dbTable.Menu `json:"menus" binding:"required"`
+}
+
 func DefaultMenus() []dbTable.Menu {
 	return []dbTable.Menu{
 		{

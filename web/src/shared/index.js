@@ -1,4 +1,5 @@
 import MyForm from './components/MyForm'
+import MyTree from './components/MyTree'
 import MyTable from './components/MyTable'
 import Pagination from './components/Pagination'
 import Modal from './components/Modal'
@@ -8,6 +9,7 @@ import SvgIcon from './components/SvgIcon'
 export default {
   install(app) {
     app.component('MyTable', MyTable)
+    app.component('MyTree', MyTree)
     app.component('MyForm', MyForm)
     app.component('Pagination', Pagination)
     app.component('Permission', Permission)

@@ -99,6 +99,8 @@ func RouteLoader(r *gin.Engine) {
 		{
 			menu.POST("/add", menuApi.AddMenu)
 			menu.GET("/currentUserMenu", menuApi.GetCurrentUserMenu)
+			menu.POST("/getRoleMenuTree", menuApi.GetRoleMenuTree)
+			menu.POST("/assignRoleMenus", menuApi.AssignRoleMenus)
 			menu.GET("/list", menuApi.GetMenuList)
 			menu.DELETE("/delete", menuApi.DeleteMenu)
 			menu.PUT("/edit", menuApi.EditMenu)
