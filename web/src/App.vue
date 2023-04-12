@@ -34,7 +34,7 @@ export default defineComponent({
     :size="`default`"
     :z-index="3000"
   >
-    <router-view />
+    <router-view :key="$route.fullPath" />
   </el-config-provider>
 
 </template>
