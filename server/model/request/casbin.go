@@ -13,7 +13,7 @@ type UpdateCasbin struct {
 func DefaultCasbin() []Endpoint {
 	return []Endpoint{
 		//TODO: add more default routes
-		{Path: "/api/v1/user/userList", Method: "GET"},
+		{Path: "/api/v1/user/list", Method: "GET"},
 		{Path: "/api/v1/user/resetPassword", Method: "PUT"},
 		{Path: "/api/v1/user/edit", Method: "PUT"},
 		{Path: "/api/v1/user/active", Method: "POST"},

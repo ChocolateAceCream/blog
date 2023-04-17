@@ -11,8 +11,6 @@ import (
 )
 
 const InitEndpointOrder = InitOrderInternal + 1
-const GROUP = 1
-const ENDPOINT = 2
 
 type endpointInitilizer struct{}
 
@@ -26,114 +24,30 @@ func (ei *endpointInitilizer) Name() string {
 func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
 	db := global.DB
 	entities := []dbTable.Endpoint{
-		{
-			MODEL:       global.MODEL{ID: 1},
-			PID:         0,
-			Description: "user related endpoints",
-			Name:        "User Group",
-			Type:        GROUP,
-		},
-		{
-			MODEL:       global.MODEL{ID: 11},
-			PID:         1,
-			Description: "get user list",
-			Name:        "Get User List",
-			Method:      "GET",
-			Path:        "/api/v1/user/userList",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 12},
-			PID:         1,
-			Description: "Active User",
-			Name:        "Active User",
-			Method:      "POST",
-			Path:        "/api/v1/user/active",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 13},
-			PID:         1,
-			Description: "Reset user password",
-			Name:        "Reset Password",
-			Method:      "PUT",
-			Path:        "/api/v1/user/resetPassword",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 14},
-			PID:         1,
-			Description: "Edit user info",
-			Name:        "Edit User",
-			Method:      "PUT",
-			Path:        "/api/v1/user/edit",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 15},
-			PID:         1,
-			Description: "Delete user ",
-			Name:        "Delete User",
-			Method:      "DELETE",
-			Path:        "/api/v1/user/delete",
-			Type:        ENDPOINT,
-		},
+		{Method: "GET", Path: "/api/v1/user/list", Group: "User", Description: "Get user list", Name: "Get User List"},
+		{Method: "POST", Path: "/api/v1/user/active", Group: "User", Description: "Active User", Name: "Active User"},
+		{Method: "PUT", Path: "/api/v1/user/resetPassword", Group: "User", Description: "Reset user password", Name: "Reset Password"},
+		{Method: "PUT", Path: "/api/v1/user/edit", Group: "User", Description: "Edit user info", Name: "Edit User"},
+		{Method: "DELETE", Path: "/api/v1/user/delete", Group: "User", Description: "Delete user ", Name: "Delete User"},
 
-		{
-			MODEL:       global.MODEL{ID: 2},
-			PID:         0,
-			Description: "Role related endpoints",
-			Name:        "Role Group",
-			Type:        GROUP,
-		},
-		{
-			MODEL:       global.MODEL{ID: 21},
-			PID:         2,
-			Description: "Create Role",
-			Name:        "Create Role",
-			Method:      "POST",
-			Path:        "/api/v1/role/create",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 3},
-			PID:         0,
-			Description: "Menu related endpoints",
-			Name:        "Menu Group",
-			Type:        GROUP,
-		},
-		{
-			MODEL:       global.MODEL{ID: 31},
-			PID:         3,
-			Description: "Create Menu",
-			Name:        "Create Menu",
-			Method:      "POST",
-			Path:        "/api/v1/menu/create",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 32},
-			PID:         3,
-			Description: "Get Current Menu",
-			Name:        "Get Current Menu",
-			Method:      "GET",
-			Path:        "/api/v1/menu/currentUserMenu",
-			Type:        ENDPOINT,
-		},
-		{
-			MODEL:       global.MODEL{ID: 4},
-			PID:         0,
-			Description: "Casbin related endpoints",
-			Name:        "Casbin Group",
-			Type:        GROUP,
-		},
-		{
-			MODEL:       global.MODEL{ID: 5},
-			PID:         0,
-			Description: "Endpoint related endpoints",
-			Name:        "Endpoint Group",
-			Type:        GROUP,
-		},
+		{Method: "POST", Path: "/api/v1/role/add", Group: "Role", Description: "Create Role", Name: "Create Role"},
+		{Method: "DELETE", Path: "/api/v1/role/delete", Group: "Role", Description: "Delete Role", Name: "Delete Role"},
+		{Method: "PUT", Path: "/api/v1/role/edit", Group: "Role", Description: "Edit Role", Name: "Edit Role"},
+		{Method: "GET", Path: "/api/v1/role/list", Group: "Role", Description: "Get Role List", Name: "Get Role List"},
+
+		{Method: "POST", Path: "/api/v1/menu/create", Group: "Menu", Description: "Create Menu", Name: "Create Menu"},
+		{Method: "GET", Path: "/api/v1/menu/currentUserMenu", Group: "Menu", Description: "Get current user's menu ", Name: "Get Current User Menu"},
+		{Method: "GET", Path: "/api/v1/menu/list", Group: "Menu", Description: "Get all Menu list", Name: "List Menu"},
+		{Method: "DELETE", Path: "/api/v1/menu/delete", Group: "Menu", Description: "Delete Menu", Name: "Delete Menu"},
+		{Method: "POST", Path: "/api/v1/menu/add", Group: "Menu", Description: "Add Menu", Name: "Add Menu"},
+		{Method: "PUT", Path: "/api/v1/menu/edit", Group: "Menu", Description: "Edit Menu", Name: "Edit Menu"},
+		{Method: "POST", Path: "/api/v1/menu/getRoleMenuTree", Group: "Menu", Description: "Get Role Menu Tree", Name: "Role Menu Tree"},
+		{Method: "POST", Path: "/api/v1/menu/assignRoleMenus", Group: "Menu", Description: "Assign Role Menus", Name: "Assign Role Menus"},
+
+		{Method: "GET", Path: "/api/v1/endpoint/list", Group: "Endpoint", Description: "Get Endpoint list", Name: "List Endpoint"},
+		{Method: "POST", Path: "/api/v1/endpoint/add", Group: "Endpoint", Description: "Add Endpoint", Name: "Add Endpoint"},
+		{Method: "PUT", Path: "/api/v1/endpoint/edit", Group: "Endpoint", Description: "Edit Endpoint", Name: "Edit Endpoint"},
+		{Method: "DELETE", Path: "/api/v1/endpoint/delete", Group: "Endpoint", Description: "Delete Endpoint", Name: "Delete Endpoint"},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init endpoint data, err: %w", err)
@@ -144,6 +58,6 @@ func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Cont
 
 func (ei *endpointInitilizer) InitDataVerify(ctx context.Context) bool {
 	record := dbTable.Endpoint{}
-	err := global.DB.Where(dbTable.Endpoint{Name: "User Group"}).First(&record).Error
+	err := global.DB.Where(dbTable.Endpoint{Name: "Get User List"}).First(&record).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)
 }

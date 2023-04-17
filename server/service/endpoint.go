@@ -43,12 +43,6 @@ func (es *EndpointService) GetEndpointList(query request.EndpointSearchQuery) (e
 	if query.Path != "" {
 		db.Where("path LIKE ? ", "%"+query.Path+"%")
 	}
-	if query.Type != 0 {
-		db.Where("type = ? ", query.Type)
-	}
-	if query.PID != 0 {
-		db.Where("pid = ? ", query.PID)
-	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
@@ -60,7 +54,7 @@ func (es *EndpointService) GetEndpointList(query request.EndpointSearchQuery) (e
 		var orderStr string
 		orderMap := make(map[string]bool, 4)
 		orderMap["name"] = true
-		orderMap["pid"] = true
+		orderMap["method"] = true
 		orderMap["path"] = true
 		orderMap["id"] = true
 		if orderMap[query.OrderBy] {

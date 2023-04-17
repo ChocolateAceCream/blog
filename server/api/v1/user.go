@@ -18,7 +18,7 @@ type UserApi struct{}
 // @Accept json
 // @Param data query request.UserSearchQuery true "get paged user list by search query"
 // @Success 200 {object} response.Response{data=response.Paging{data=[]dbTable.User},msg=string} "paged user list, includes page size, page number, total counts"
-// @Router /api/v1/user/userList [get]
+// @Router /api/v1/user/list [get]
 func (b *UserApi) GetUserList(c *gin.Context) {
 	/*
 		session usage example:

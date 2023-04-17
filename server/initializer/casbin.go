@@ -24,7 +24,7 @@ func (ci *casbinInitilizer) Name() string {
 
 func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
 	guestRules := []gormadapter.CasbinRule{
-		{Ptype: "p", V1: "/api/v1/user/userList", V2: "GET"},
+		{Ptype: "p", V1: "/api/v1/user/list", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/user/active", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/user/resetPassword", V2: "PUT"},
 		{Ptype: "p", V1: "/api/v1/user/edit", V2: "PUT"},
@@ -45,9 +45,11 @@ func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Contex
 		{Ptype: "p", V1: "/api/v1/menu/edit", V2: "PUT"},
 		{Ptype: "p", V1: "/api/v1/menu/getRoleMenuTree", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/menu/assignRoleMenus", V2: "POST"},
-		{Ptype: "p", V1: "/api/v1/endpoint/all", V2: "GET"},
-		{Ptype: "p", V1: "/api/v1/endpoint/list", V2: "POST"},
+
+		{Ptype: "p", V1: "/api/v1/endpoint/list", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/endpoint/add", V2: "POST"},
+		{Ptype: "p", V1: "/api/v1/endpoint/delete", V2: "DELETE"},
+		{Ptype: "p", V1: "/api/v1/endpoint/edit", V2: "PUT"},
 	}
 	superadminRules = append(superadminRules, adminRules...)
 	m := map[string][]gormadapter.CasbinRule{

@@ -1,6 +1,6 @@
 import apiAxios from '@/utils/apiAxios'
 
-export const getUserList = (...args) => apiAxios.get('/blog/api/v1/user/userList', ...args)
+export const getUserList = (...args) => apiAxios.get('/blog/api/v1/user/list', ...args)
 export const postVerificationCode = (...args) => apiAxios.post('/blog/api/public/auth/captcha', ...args)
 export const postLogin = (...args) => apiAxios.post('/blog/api/public/auth/login', ...args)
 export const putResetPassword = (...args) => apiAxios.put('/blog/api/v1/user/resetPassword', ...args)

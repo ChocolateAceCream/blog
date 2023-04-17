@@ -42,21 +42,6 @@ func (b *EndpointApi) GetEndpointList(c *gin.Context) {
 	}
 }
 
-// @Summary get all endpoints
-// @Description return all endpoints
-// @Tags Endpoint
-// @Accept json
-// @Success 200 {object} response.Response{data=[]dbTable.Endpoint} "return all endpoints"
-// @Router /api/v1/endpoint/all [GET]
-func (b *EndpointApi) GetAllEndpoints(c *gin.Context) {
-	if r, err := endpointService.GetAllEndpoints(); err != nil {
-		global.LOGGER.Error("fail to get all endpoints", zap.Error(err))
-		response.FailWithMessage("fail to get all endpoints", c)
-	} else {
-		response.OkWithFullDetails(r, "success", c)
-	}
-}
-
 // @Summary add new endpoint
 // @Description add new endpoint
 // @Tags Endpoint

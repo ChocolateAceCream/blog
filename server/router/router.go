@@ -74,7 +74,7 @@ func RouteLoader(r *gin.Engine) {
 		user := v1.Group("/user")
 		// user.Use(middleware.DefaultLimiter())
 		{
-			user.GET("/userList", userApi.GetUserList)
+			user.GET("/list", userApi.GetUserList)
 			user.POST("/active", userApi.ActiveUser)
 			user.PUT("/resetPassword", userApi.ResetPassword)
 			user.PUT("/edit", userApi.EditUser)
@@ -108,8 +108,7 @@ func RouteLoader(r *gin.Engine) {
 
 		endpoint := v1.Group("/endpoint")
 		{
-			endpoint.GET("/all", endpointApi.GetAllEndpoints)
-			endpoint.POST("/list", endpointApi.GetEndpointList)
+			endpoint.GET("/list", endpointApi.GetEndpointList)
 			endpoint.POST("/add", endpointApi.AddEndpoint)
 		}
 	}
