@@ -32,7 +32,7 @@ func (es *EndpointService) AddEndpoint(endpoint dbTable.Endpoint) error {
 	return db.Create(&endpoint).Error
 }
 
-func (es *EndpointService) GetEndpointList(query request.EndpointSearchQuery) (endpointList []dbTable.Endpoint, total int64, err error) {
+func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (endpointList []dbTable.Endpoint, total int64, err error) {
 	db := global.DB.Model(&dbTable.Endpoint{})
 	if query.Method != "" {
 		db.Where("method LIKE ? ", "%"+query.Method+"%")

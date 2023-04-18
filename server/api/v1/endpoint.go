@@ -24,16 +24,18 @@ type EndpointApi struct{}
 // @Accept json
 // @Param data query request.EndpointSearchQuery true "get paged endpoint list by search query"
 // @Success 200 {object} response.Response{data=[]dbTable.Endpoint} "return all search result "
-// @Router /api/v1/endpoint/list [POST]
+// @Router /api/v1/endpoint/list [GET]
 func (b *EndpointApi) GetEndpointList(c *gin.Context) {
 	var query request.EndpointSearchQuery
-	if err := c.ShouldBindJSON(&query); err != nil {
+	if err := c.ShouldBind(&query); err != nil {
 		global.LOGGER.Error("bind endpoint list query error", zap.Error(err))
 		response.FailWithMessage("fail to bind query", c)
+		return
 	}
-	if list, total, err := endpointService.GetEndpointList(query); err != nil {
+	if list, total, err := endpointService.GetEndpointList(query.Params); err != nil {
 		global.LOGGER.Error("fail to get endpoint list", zap.Error(err))
 		response.FailWithMessage("fail to get endpoint list", c)
+		return
 	} else {
 		response.OkWithFullDetails(response.Paging{
 			List:  list,

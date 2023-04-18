@@ -15,7 +15,6 @@
     :config="tableConfig"
     row-key="id"
   >
-
     <template #operationBody="scope">
       <el-button
         type="primary"

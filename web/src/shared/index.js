@@ -1,3 +1,4 @@
+import MySelect from './components/MySelect'
 import MyForm from './components/MyForm'
 import MyTree from './components/MyTree'
 import MyTable from './components/MyTable'
@@ -11,6 +12,7 @@ export default {
     app.component('MyTable', MyTable)
     app.component('MyTree', MyTree)
     app.component('MyForm', MyForm)
+    app.component('MySelect', MySelect)
     app.component('Pagination', Pagination)
     app.component('Permission', Permission)
     app.component('SvgIcon', SvgIcon)

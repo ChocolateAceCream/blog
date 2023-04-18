@@ -4,8 +4,13 @@
     class="main-body"
     :class="{'is-full': isFullContainer}"
   >
-    <el-card>
-      <router-view />
+    <el-card
+      style="height:100%"
+      :body-style="{height: '100%'}"
+    >
+      <el-scrollbar height="100%">
+        <router-view />
+      </el-scrollbar>
     </el-card>
   </div>
 </template>
@@ -35,7 +40,9 @@ export default defineComponent({
 <style lang="scss" scoped>
   .main-body {
     flex: 1;
+    height: 100%;
     overflow: hidden;
+    padding-bottom: 50px;
 
     &.is-full {
       padding: 0;

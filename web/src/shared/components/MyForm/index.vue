@@ -40,12 +40,16 @@ export default defineComponent({
       const form = unref(formRef)
       return form.clearValidate()
     }
+    const reset = () => {
+      formRef.value.resetFields()
+    }
     const state = reactive({
     })
     return {
       validate,
       clearAllValidate,
       formRef,
+      reset,
       ...toRefs(state)
     }
   },
@@ -61,6 +65,7 @@ export default defineComponent({
         ...options,
         onInput: (target) => {
           Object.assign(form, { [field]: target })
+          console.log('-----form----', form)
           this.$emit('update:formData', form)
         }
       }
