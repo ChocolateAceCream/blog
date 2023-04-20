@@ -1,8 +1,12 @@
 package main
 
 import (
-	"fmt"
+	"context"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/ChocolateAceCream/blog/db"
 	_ "github.com/ChocolateAceCream/blog/docs"
@@ -11,6 +15,7 @@ import (
 	"github.com/ChocolateAceCream/blog/router"
 	"github.com/ChocolateAceCream/blog/utils"
 	"github.com/gin-gonic/gin"
+	"go.uber.org/zap"
 )
 
 func Init() *gin.Engine {
@@ -49,26 +54,33 @@ func main() {
 		_db, _ := global.DB.DB()
 		defer _db.Close()
 	}
-	if err := r.Run(":3000"); err != nil {
-		fmt.Printf("startup service failed, err:%v\n", err)
-		global.LOGGER.Error(fmt.Sprintf("startup service failed, err:%v\n", err))
+	s := &http.Server{
+		Addr:           ":3000",
+		Handler:        r,
+		ReadTimeout:    20 * time.Second, //request timeout
+		WriteTimeout:   20 * time.Second, //response timeout
+		MaxHeaderBytes: 1 << 20,          //default, 1MB
 	}
+	go func() {
+		if err := s.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			global.LOGGER.Error("listen: %s\n", zap.Error(err))
+		}
+	}()
 
-	// TODO: add graceful shutdown, and close db using s.Close()
-	// c := make(chan os.Signal, 1)
-	// signal.Notify(c, syscall.SIGHUP, syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT)
-	// for {
-	// 	si := <-c
-	// 	log.Printf("get a signal %s", si.String())
-	// 	switch si {
-	// 	case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
-	// 		log.Println(" exit")
-	// 		// s.Close()
-	// 		time.Sleep(10 * time.Second)
-	// 		return
-	// 	case syscall.SIGHUP:
-	// 	default:
-	// 		return
-	// 	}
-	// }
+	quit := make(chan os.Signal, 1)
+	if global.REDIS == nil {
+		quit <- syscall.SIGINT
+	} else {
+		signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	}
+	<-quit
+	global.LOGGER.Info("Shuting down Server ...")
+
+	// 3 setup withTimeout to preserve connection before close
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := s.Shutdown(ctx); err != nil {
+		global.LOGGER.Error("Server Shutdown: ", zap.Error(err))
+	}
+	global.LOGGER.Info("Server exist successful")
 }

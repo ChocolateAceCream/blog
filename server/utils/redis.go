@@ -18,6 +18,7 @@ func InitRedis() {
 	pong, err := client.Ping(context.Background()).Result()
 	if err != nil {
 		global.LOGGER.Error("redis connect ping failed, err:", zap.Error(err))
+		global.REDIS = nil
 	} else {
 		global.LOGGER.Info("redis connect ping success, response is: ", zap.String("pong", pong))
 		global.REDIS = client
