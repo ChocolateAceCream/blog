@@ -32,6 +32,10 @@ func (es *EndpointService) AddEndpoint(endpoint dbTable.Endpoint) error {
 	return db.Create(&endpoint).Error
 }
 
+func (es *EndpointService) EditEndpoint(endpoint dbTable.Endpoint) error {
+	return global.DB.Model(&dbTable.Endpoint{}).Where("ID = ? ", endpoint.ID).Updates(&endpoint).Error
+}
+
 func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (endpointList []dbTable.Endpoint, total int64, err error) {
 	db := global.DB.Model(&dbTable.Endpoint{})
 	if query.Method != "" {
@@ -69,4 +73,19 @@ func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (e
 		err = db.Order("id").Find(&endpointList).Offset(-1).Limit(-1).Error
 	}
 	return
+}
+
+func (endpointService *EndpointService) DeleteEndpoint(ids []int) (err error) {
+	//TODO: test delete associated role-endpoint relations
+	endpoints := []dbTable.Endpoint{}
+	if err = global.DB.Find(&endpoints, "id in ?", ids).Delete(&endpoints).Error; err != nil {
+		return err
+	}
+	for _, es := range endpoints {
+		success := CasbinServiceInstance.ClearCasbin(1, es.Path, es.Method) // index of path in casbin rule is 1
+		if !success {
+			return errors.New("cannot clear casbin rule: " + es.Path + ":" + es.Method)
+		}
+	}
+	return nil
 }

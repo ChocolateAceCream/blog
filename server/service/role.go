@@ -13,7 +13,7 @@ type RoleService struct{}
 
 type AuthorityService struct{}
 
-var AuthorityServiceApp = new(AuthorityService)
+var AuthorityServiceInstance = new(AuthorityService)
 
 func (roleService *RoleService) AddRole(payload dbTable.Role) (dbTable.Role, error) {
 	var role dbTable.Role
@@ -68,8 +68,7 @@ func (roleService *RoleService) DeleteRole(id []int) (err error) {
 	}
 	for _, v := range id {
 		roleId := strconv.Itoa(v)
-		var casbinService CasbinService
-		casbinService.ClearCasbin(0, roleId) //role id is index 0 in casbin
+		CasbinServiceInstance.ClearCasbin(0, roleId) //role id is index 0 in casbin
 	}
 	return err
 }

@@ -110,6 +110,8 @@ func RouteLoader(r *gin.Engine) {
 		{
 			endpoint.GET("/list", endpointApi.GetEndpointList)
 			endpoint.POST("/add", endpointApi.AddEndpoint)
+			endpoint.PUT("/edit", endpointApi.EditEndpoint)
+			endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
 		}
 	}
 }

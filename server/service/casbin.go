@@ -14,6 +14,7 @@ import (
 
 type CasbinService struct{}
 
+var CasbinServiceInstance = new(CasbinService)
 var (
 	syncedEnforcer *casbin.SyncedEnforcer
 	once           sync.Once
@@ -34,8 +35,11 @@ func (c *CasbinService) Update(id uint, endpoints []request.Endpoint) error {
 
 func (c *CasbinService) ClearCasbin(v int, p ...string) bool {
 	e := GetEnforcer()
-	success, _ := e.RemoveFilteredPolicy(v, p...)
-	return success
+	if hasPolicy := e.GetFilteredPolicy(v, p...); hasPolicy != nil {
+		success, _ := e.RemoveFilteredPolicy(v, p...)
+		return success
+	}
+	return true
 }
 
 func GetEnforcer() *casbin.SyncedEnforcer {

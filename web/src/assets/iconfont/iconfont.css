@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3939856 */
-  src: url('iconfont.woff2?t=1681787674575') format('woff2'),
-       url('iconfont.woff?t=1681787674575') format('woff'),
-       url('iconfont.ttf?t=1681787674575') format('truetype');
+  src: url('iconfont.woff2?t=1681908253886') format('woff2'),
+       url('iconfont.woff?t=1681908253886') format('woff'),
+       url('iconfont.ttf?t=1681908253886') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,10 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-blog-delete:before {
+  content: "\e67e";
 }
 
 .icon-blog-reset:before {

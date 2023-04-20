@@ -6,10 +6,9 @@
 !-->
 <template>
   <MyForm
-    ref="formRef"
-    v-model:formData="formData"
-    :config="formConfig"
-
+    ref="searchFormRef"
+    v-model:formData="searchFormData"
+    :config="searchFormConfig"
     :form-items="formItems"
   />
   <el-button
@@ -21,23 +20,38 @@
     type="primary"
     style="margin-bottom: 15px;"
     @click="fetchList"
-  >     <SvgIcon
-    :icon-name="`icon-blog-search`"
-    size="8px"
-  /> &nbsp;&nbsp;Search</el-button>
+  >
+    <SvgIcon
+      :icon-name="`icon-blog-search`"
+      size="8px"
+    /> &nbsp;&nbsp;Search
+  </el-button>
   <el-button
     type="primary"
     style="margin-bottom: 15px;"
     @click="onReset"
-  >     <SvgIcon
-    :icon-name="`icon-blog-reset`"
-    size="8px"
-  /> &nbsp;&nbsp;Reset</el-button>
+  >
+    <SvgIcon
+      :icon-name="`icon-blog-reset`"
+      size="8px"
+    /> &nbsp;&nbsp;Reset</el-button>
+  <el-button
+    type="primary"
+    style="margin-bottom: 15px;"
+    @click="onBatchDelete"
+  >
+    <SvgIcon
+      :icon-name="`icon-blog-delete`"
+      size="8px"
+    /> &nbsp;&nbsp;Batch Delete
+  </el-button>
   <my-table
     :data="tableData"
     :config="tableConfig"
     row-key="id"
+    :selectable="true"
     @sort-change="sortChange"
+    @selection-change="handleSelectionChange"
   >
     <template #operationBody="scope">
       <el-button
@@ -59,13 +73,28 @@
     style="justify-content: end"
     @change="fetchList"
   />
+  <Modal
+    ref="modalRef"
+    width="550px"
+    :title="modalType + ' Endpoint'"
+    @close="onModalClose"
+    @confirm="onModalConfirm"
+  >
+    <MyForm
+      ref="formRef"
+      v-model:formData="formData"
+      :config="formConfig"
+      :form-items="formItems"
+    />
+  </Modal>
 
 </template>
 
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
-import { getEndpointList } from '@/api/endpoint'
-import { ElMessage } from 'element-plus'
+import { getEndpointList, putEditEndpoint, postAddEndpoint, deleteEndpoint } from '@/api/endpoint'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import _ from 'lodash'
 export default defineComponent({
   setup(props, ctx) {
     const methodOptions = [
@@ -75,20 +104,40 @@ export default defineComponent({
       {value: 'DELETE', label: 'DELETE'}
     ]
     const formState = reactive({
-      formData: {},
-      formRef: null,
-      formConfig: {
+      searchFormData: {},
+      searchFormRef: null,
+      searchFormConfig: {
         labelPosition: 'left',
         // labelWidth: '10px',
         inline: true
       },
       formItems: [
-        { prop: 'group', label: 'Group', type: 'input', options: { placeholder: 'Endpoint group' } },
-        { prop: 'path', label: 'Path', type: 'input', options: { placeholder: 'Endpoint path' } },
+        { prop: 'path', label: 'Path', type: 'input', options: { placeholder: 'e.g. /api/v1/xxx/xxxx' } },
         { prop: 'name', label: 'Name', type: 'input', options: { placeholder: 'Endpoint name' } },
-        { prop: 'method', label: 'Method', type: 'select', options: { placeholder: 'Endpoint name', options: methodOptions, propName: 'method' } },
+        { prop: 'method', label: 'Method', type: 'select', options: { placeholder: 'Request Method Type', options: methodOptions, propName: 'method' } },
+        { prop: 'group', label: 'Group', type: 'input', options: { placeholder: 'Endpoint group' } },
       ],
+
+      // add & edit form
+      formData: {},
+      formRef: null,
+      formConfig: {
+        rules: {
+          path: [{ required: true, message: 'endpoint path required', trigger: 'blur' }],
+          method: [{ required: true, message: 'endpoint method required', trigger: 'blur' }],
+          name: [{ required: true, message: 'endpoint name required', trigger: 'blur' }],
+        },
+        labelPosition: 'right',
+        labelWidth: '100px'
+      },
+
+      deleteIds: null
     })
+
+    const handleSelectionChange = (val) => {
+      console.log('-------val-------', _.map(val, 'id'))
+      formState.deleteIds = val
+    }
     const tableState = reactive({
       tableData: [],
       pagination: {
@@ -109,16 +158,54 @@ export default defineComponent({
         { label: 'Operation', bodySlot: 'operationBody' },
       ],
       onAdd() {
-        console.log('-----formdata----', formState.formData)
+        modalState.modalType = 'Add'
+        formState.formData = {}
+        modalState.onModalOpen()
       },
       onEdit(row) {
-
+        modalState.modalType = 'Edit'
+        formState.formData = _.cloneDeep(row)
+        modalState.onModalOpen()
       },
-      onDelete(row) {
 
+      async onDelete(row) {
+        await ElMessageBox.confirm(
+          'Deletion will permanently remove all roles\' api, continue? ',
+          'Warning',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+        )
+        const { data: res } = await deleteEndpoint({ data: { id: [row.id] } })
+        ElMessage({
+          message: res.msg,
+          type: res.errorCode === 0 ? 'success' : 'error',
+          duration: 3 * 1000
+        })
+        fetchList()
+      },
+      async onBatchDelete() {
+        await ElMessageBox.confirm(
+          'Deletion will permanently remove all roles\' api, continue? ',
+          'Warning',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning',
+          }
+        )
+        const { data: res } = await deleteEndpoint({ data: { id: _.map(formState.deleteIds, 'id') } })
+        ElMessage({
+          message: res.msg,
+          type: res.errorCode === 0 ? 'success' : 'error',
+          duration: 3 * 1000
+        })
+        fetchList()
       },
       onReset() {
-        formState.formRef.reset()
+        formState.searchFormRef.reset()
       },
     })
 
@@ -133,7 +220,7 @@ export default defineComponent({
     })
 
     const fetchList = async() => {
-      const payload = {...formState.formData, ...tableState.pagination, ...tableState.sorting }
+      const payload = {...formState.searchFormData, ...tableState.pagination, ...tableState.sorting }
       const { data: res } = await getEndpointList({params: payload})
       if (res.errorCode === 0) {
         const {list, total} = res.data
@@ -147,11 +234,51 @@ export default defineComponent({
         })
       }
     }
+    const onSubmit = async() => {
+      try {
+        await formState.formRef.validate()
+        let resp = {}
+        if (modalState.modalType === 'Add') {
+          resp = await postAddEndpoint(formState.formData)
+        } else {
+          resp = await putEditEndpoint(formState.formData)
+        }
+        const { data: res } = resp
+        if (res.errorCode === 0) {
+          ElMessage({
+            message: `${modalState.modalType} Endpoint Success`,
+            type: 'success',
+            duration: 3 * 1000
+          })
+          fetchList()
+          modalState.modalRef.closeModal()
+        }
+      } catch (err) {
+        console.log('-----form validation err-', err)
+      }
+    }
+
+    const modalState = reactive({
+      modalRef: null,
+      modalType: 'Add',
+      onModalOpen() {
+        modalState.modalRef.openModal()
+        formState.formRef?.clearAllValidate()
+      },
+      onModalClose() {
+        modalState.modalRef.closeModal()
+      },
+      onModalConfirm: _.throttle(onSubmit, 2000)
+    })
+
     return {
+      onSubmit,
       fetchList,
       sortChange,
+      handleSelectionChange,
       ...toRefs(tableState),
-      ...toRefs(formState)
+      ...toRefs(formState),
+      ...toRefs(modalState),
     }
   }
 })

@@ -35,7 +35,6 @@ func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Cont
 		{Method: "PUT", Path: "/api/v1/role/edit", Group: "Role", Description: "Edit Role", Name: "Edit Role"},
 		{Method: "GET", Path: "/api/v1/role/list", Group: "Role", Description: "Get Role List", Name: "Get Role List"},
 
-		{Method: "POST", Path: "/api/v1/menu/create", Group: "Menu", Description: "Create Menu", Name: "Create Menu"},
 		{Method: "GET", Path: "/api/v1/menu/currentUserMenu", Group: "Menu", Description: "Get current user's menu ", Name: "Get Current User Menu"},
 		{Method: "GET", Path: "/api/v1/menu/list", Group: "Menu", Description: "Get all Menu list", Name: "List Menu"},
 		{Method: "DELETE", Path: "/api/v1/menu/delete", Group: "Menu", Description: "Delete Menu", Name: "Delete Menu"},
