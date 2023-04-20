@@ -132,9 +132,6 @@ export default defineComponent({
           })
       }
     })
-    onMounted(() => {
-      fetchMenuList()
-    })
     const fetchMenuList = async() => {
       const { data: res } = await getMenuList()
       if (res.errorCode === 0) {
@@ -147,6 +144,9 @@ export default defineComponent({
         })
       }
     }
+
+    onMounted(fetchMenuList)
+
     const formatMenuTree = (menus) => {
       const mapper = {}
       menus.forEach(menu => {

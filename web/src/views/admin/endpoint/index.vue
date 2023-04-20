@@ -215,10 +215,6 @@ export default defineComponent({
       fetchList()
     }
 
-    onMounted(() => {
-      fetchList()
-    })
-
     const fetchList = async() => {
       const payload = {...formState.searchFormData, ...tableState.pagination, ...tableState.sorting }
       const { data: res } = await getEndpointList({params: payload})
@@ -234,6 +230,9 @@ export default defineComponent({
         })
       }
     }
+
+    onMounted(fetchList)
+
     const onSubmit = async() => {
       try {
         await formState.formRef.validate()

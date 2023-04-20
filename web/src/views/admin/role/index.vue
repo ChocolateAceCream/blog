@@ -135,9 +135,6 @@ export default defineComponent({
           })
       }
     })
-    onMounted(() => {
-      fetchRoleList()
-    })
     const fetchRoleList = async() => {
       const { data: res } = await getRoleList()
       if (res.errorCode === 0) {
@@ -150,6 +147,9 @@ export default defineComponent({
         })
       }
     }
+
+    onMounted(fetchRoleList)
+
     const formatRoleTree = (roles) => {
       const mapper = {}
       roles.forEach(role => {
