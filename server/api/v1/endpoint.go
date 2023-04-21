@@ -23,7 +23,7 @@ type EndpointApi struct{}
 // @Description return endpoint list
 // @Accept json
 // @Param data query request.EndpointSearchQuery true "get paged endpoint list by search query"
-// @Success 200 {object} response.Response{data=[]dbTable.Endpoint} "return all search result "
+// @Success 200 {object} response.Response{data=response.Paging{list=[]dbTable.Endpoint,total=int}} "return all search result "
 // @Router /api/v1/endpoint/list [GET]
 func (b *EndpointApi) GetEndpointList(c *gin.Context) {
 	var query request.EndpointSearchQuery
@@ -48,7 +48,7 @@ func (b *EndpointApi) GetEndpointList(c *gin.Context) {
 // @Summary add new endpoint
 // @Description add new endpoint
 // @Accept json
-// @Param data body dbTable.Endpoint true "Group, Name, Method, Description, Path "
+// @Param data body dbTable.Endpoint true "GroupName, Name, Method, Description, Path "
 // @Success 200 {object} response.Response{msg=string} "success"
 // @Router /api/v1/endpoint/add [POST]
 func (b *EndpointApi) AddEndpoint(c *gin.Context) {
@@ -71,7 +71,7 @@ func (b *EndpointApi) AddEndpoint(c *gin.Context) {
 // @Summary   edit endpoint
 // @accept    application/json
 // @Produce   application/json
-// @Param     data  body      dbTable.Endpoint             true  "Group, Name, Method, Description, Path"
+// @Param     data  body      dbTable.Endpoint             true  "GroupName, Name, Method, Description, Path"
 // @Success   200   {object}  response.Response{msg=string}  "success "
 // @Router 		/api/v1/endpoint/edit [put]
 func (a *EndpointApi) EditEndpoint(c *gin.Context) {

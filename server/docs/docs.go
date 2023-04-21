@@ -120,7 +120,7 @@ const docTemplate = `{
                 "summary": "Register user",
                 "parameters": [
                     {
-                        "description": "username, password, email,captcha, role IDs",
+                        "description": "username, password, email,captcha, roleId",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -238,6 +238,57 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/casbin/list": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Casbin"
+                ],
+                "summary": "Get casbin rules by role id",
+                "parameters": [
+                    {
+                        "description": "get casbin privileges based on role id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/response.CasbinPolicy"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/casbin/update": {
             "post": {
                 "consumes": [
@@ -283,143 +334,19 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/endpoint/all": {
-            "get": {
-                "description": "return all endpoints",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Endpoint"
-                ],
-                "summary": "get all endpoints",
-                "responses": {
-                    "200": {
-                        "description": "return all endpoints",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/dbTable.Endpoint"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/endpoint/list": {
+        "/api/v1/endpoint/add": {
             "post": {
-                "description": "return endpoint list",
+                "description": "add new endpoint",
                 "consumes": [
                     "application/json"
                 ],
                 "tags": [
                     "Endpoint"
                 ],
-                "summary": "get endpoint list",
+                "summary": "add new endpoint",
                 "parameters": [
                     {
-                        "type": "boolean",
-                        "description": "order by desc (by default)",
-                        "name": "desc",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "method",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "enum": [
-                            "name",
-                            "pid",
-                            "path",
-                            "id"
-                        ],
-                        "type": "string",
-                        "name": "orderBy",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pageNumber",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pageSize",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "name": "path",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "pid",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "name": "type",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "return all search result ",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/definitions/dbTable.Endpoint"
-                                            }
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/endpoint/new": {
-            "post": {
-                "description": "create new endpoint",
-                "consumes": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Endpoint"
-                ],
-                "summary": "new endpoint",
-                "parameters": [
-                    {
-                        "description": "Type, Name, PID, Method, Description, Path ",
+                        "description": "GroupName, Name, Method, Description, Path ",
                         "name": "data",
                         "in": "body",
                         "required": true,
@@ -450,7 +377,147 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/menu/create": {
+        "/api/v1/endpoint/delete": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "delete endpoint by id",
+                "parameters": [
+                    {
+                        "description": "endpoint id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "endpoint deleted ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/endpoint/edit": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "edit endpoint",
+                "parameters": [
+                    {
+                        "description": "GroupName, Name, Method, Description, Path",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dbTable.Endpoint"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/endpoint/list": {
+            "get": {
+                "description": "return endpoint list",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Endpoint"
+                ],
+                "summary": "get endpoint list",
+                "responses": {
+                    "200": {
+                        "description": "return all search result ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/response.Paging"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "list": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/dbTable.Endpoint"
+                                                            }
+                                                        },
+                                                        "total": {
+                                                            "type": "integer"
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/add": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -495,6 +562,51 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/menu/assignRoleMenus": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "edit menu",
+                "parameters": [
+                    {
+                        "description": "id, menus",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.AssignRoleMenus"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "assign role menus success ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/menu/currentUserMenu": {
             "get": {
                 "produces": [
@@ -507,6 +619,144 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "Return current user's menu list",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbTable.Menu"
+                                            }
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/delete": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "delete menu by id",
+                "parameters": [
+                    {
+                        "description": "menu id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "menu deleted ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/edit": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "edit menu",
+                "parameters": [
+                    {
+                        "description": "route, path, title, icon",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dbTable.Menu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "menu edit success ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/menu/getRoleMenuTree": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Menu"
+                ],
+                "summary": "get menus by role id",
+                "parameters": [
+                    {
+                        "description": "role id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Return role's menu list",
                         "schema": {
                             "allOf": [
                                 {
@@ -569,7 +819,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/role/create": {
+        "/api/v1/role/add": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -583,12 +833,12 @@ const docTemplate = `{
                 "summary": "Create Role",
                 "parameters": [
                     {
-                        "description": "name, parentId",
+                        "description": "name, pid",
                         "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/dbTable.Role"
+                            "$ref": "#/definitions/request.AddRole"
                         }
                     }
                 ],
@@ -605,6 +855,139 @@ const docTemplate = `{
                                     "properties": {
                                         "data": {
                                             "$ref": "#/definitions/dbTable.Role"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/delete": {
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "delete role by id",
+                "parameters": [
+                    {
+                        "description": "role id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.FindById"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "role deleted ",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/edit": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Edit Role",
+                "parameters": [
+                    {
+                        "description": "name, pid, id",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.EditRole"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "edit role, return",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/dbTable.Role"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/role/list": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Role"
+                ],
+                "summary": "Get Role List",
+                "responses": {
+                    "200": {
+                        "description": "return all roles",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/definitions/dbTable.Role"
+                                            }
                                         },
                                         "msg": {
                                             "type": "string"
@@ -754,49 +1137,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/user/resetPassword": {
-            "put": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "User"
-                ],
-                "summary": "Reset user password",
-                "parameters": [
-                    {
-                        "description": "New pw, email code",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/request.ResetPassword"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Reset password",
-                        "schema": {
-                            "allOf": [
-                                {
-                                    "$ref": "#/definitions/response.Response"
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "msg": {
-                                            "type": "string"
-                                        }
-                                    }
-                                }
-                            ]
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/user/userList": {
+        "/api/v1/user/list": {
             "get": {
                 "description": "get user list",
                 "consumes": [
@@ -883,20 +1224,66 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/resetPassword": {
+            "put": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Reset user password",
+                "parameters": [
+                    {
+                        "description": "New pw, email code",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/request.ResetPassword"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Reset password",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
         "dbTable.Endpoint": {
             "type": "object",
             "required": [
+                "method",
                 "name",
-                "pid"
+                "path"
             ],
             "properties": {
                 "createdAt": {
                     "type": "string"
                 },
                 "description": {
+                    "type": "string"
+                },
+                "groupName": {
                     "type": "string"
                 },
                 "id": {
@@ -910,16 +1297,6 @@ const docTemplate = `{
                 },
                 "path": {
                     "type": "string"
-                },
-                "pid": {
-                    "type": "integer"
-                },
-                "type": {
-                    "type": "integer",
-                    "enum": [
-                        1,
-                        2
-                    ]
                 },
                 "updatedAt": {
                     "type": "string"
@@ -979,7 +1356,7 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "name",
-                "parentId"
+                "pid"
             ],
             "properties": {
                 "children": {
@@ -998,7 +1375,7 @@ const docTemplate = `{
                 "name": {
                     "type": "string"
                 },
-                "parentId": {
+                "pid": {
                     "type": "integer"
                 },
                 "roleId": {
@@ -1007,12 +1384,6 @@ const docTemplate = `{
                 "updatedAt": {
                     "description": "更新时间",
                     "type": "string"
-                },
-                "users": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/dbTable.User"
-                    }
                 }
             }
         },
@@ -1020,7 +1391,6 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "active": {
-                    "description": "UserRole  Role      ` + "`" + `json:\"role\" gorm:\"foreignKey:RoleId;references:RoleId;comment:user's role\"` + "`" + `",
                     "type": "integer"
                 },
                 "createdAt": {
@@ -1035,11 +1405,11 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "role": {
-                    "$ref": "#/definitions/dbTable.Role"
-                },
-                "roleId": {
-                    "type": "integer"
+                "roles": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbTable.Role"
+                    }
                 },
                 "updatedAt": {
                     "type": "string"
@@ -1063,6 +1433,49 @@ const docTemplate = `{
                 }
             }
         },
+        "request.AddRole": {
+            "type": "object",
+            "required": [
+                "name",
+                "pid"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "pid": {
+                    "type": "integer"
+                }
+            }
+        },
+        "request.AssignRoleMenus": {
+            "type": "object",
+            "required": [
+                "menus"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "menus": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbTable.Menu"
+                    }
+                }
+            }
+        },
+        "request.CasbinPolicy": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                }
+            }
+        },
         "request.DeleteUser": {
             "type": "object",
             "required": [
@@ -1071,6 +1484,21 @@ const docTemplate = `{
             "properties": {
                 "uuid": {
                     "description": "uuid",
+                    "type": "string"
+                }
+            }
+        },
+        "request.EditRole": {
+            "type": "object",
+            "required": [
+                "id",
+                "name"
+            ],
+            "properties": {
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
                     "type": "string"
                 }
             }
@@ -1099,14 +1527,51 @@ const docTemplate = `{
                 }
             }
         },
-        "request.Endpoint": {
+        "request.EndpointSearchParma": {
             "type": "object",
             "properties": {
+                "desc": {
+                    "description": "order by desc (by default)",
+                    "type": "boolean"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "groupName": {
+                    "type": "string"
+                },
                 "method": {
                     "type": "string"
                 },
+                "name": {
+                    "type": "string"
+                },
+                "orderBy": {
+                    "type": "string",
+                    "enum": [
+                        "name",
+                        "path",
+                        "id",
+                        "method",
+                        "group_name"
+                    ]
+                },
+                "pageNumber": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
                 "path": {
                     "type": "string"
+                }
+            }
+        },
+        "request.FindById": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer"
                 }
             }
         },
@@ -1152,12 +1617,6 @@ const docTemplate = `{
                 "role": {
                     "type": "integer"
                 },
-                "roles": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
                 "username": {
                     "type": "string"
                 }
@@ -1198,7 +1657,7 @@ const docTemplate = `{
                 "endpoints": {
                     "type": "array",
                     "items": {
-                        "$ref": "#/definitions/request.Endpoint"
+                        "$ref": "#/definitions/request.CasbinPolicy"
                     }
                 },
                 "roleId": {
@@ -1210,6 +1669,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "captcha": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.CasbinPolicy": {
+            "type": "object",
+            "properties": {
+                "method": {
+                    "type": "string"
+                },
+                "path": {
                     "type": "string"
                 }
             }

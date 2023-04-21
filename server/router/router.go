@@ -84,7 +84,7 @@ func RouteLoader(r *gin.Engine) {
 		casbin := v1.Group("/casbin")
 		{
 			casbin.POST("/update", casbinApi.UpdateCasbin)
-			// casbin.POST("/getPolicyPathByRoleId", casbinApi.getPolicyPathByRoleId)
+			casbin.GET("/list", casbinApi.GetCasbinByRoleId)
 		}
 
 		role := v1.Group("/role")

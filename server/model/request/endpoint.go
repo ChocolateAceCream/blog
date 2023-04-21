@@ -10,7 +10,7 @@ type EndpointSearchParma struct {
 	Name        string `json:"name" form:"name"`
 	Method      string `json:"method" form:"method"`
 	Path        string `json:"path" form:"path"`
-	OrderBy     string `json:"orderBy" form:"orderBy" binding:"oneof=name path id method"`
+	OrderBy     string `json:"orderBy" form:"orderBy" binding:"oneof=name path id method group_name"`
 	Description string `json:"description" form:"description"`
-	Group       string `json:"group" form:"group"`
+	GroupName   string `json:"groupName" form:"groupName"`
 }

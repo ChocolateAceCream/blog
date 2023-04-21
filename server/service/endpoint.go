@@ -47,6 +47,9 @@ func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (e
 	if query.Path != "" {
 		db.Where("path LIKE ? ", "%"+query.Path+"%")
 	}
+	if query.GroupName != "" {
+		db.Where("group_name LIKE ? ", "%"+query.GroupName+"%")
+	}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
@@ -56,11 +59,12 @@ func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (e
 	db = db.Limit(limit).Offset(offset)
 	if query.OrderBy != "" {
 		var orderStr string
-		orderMap := make(map[string]bool, 4)
+		orderMap := make(map[string]bool, 5)
 		orderMap["name"] = true
 		orderMap["method"] = true
 		orderMap["path"] = true
 		orderMap["id"] = true
+		orderMap["group_name"] = true
 		if orderMap[query.OrderBy] {
 			if query.Desc {
 				orderStr = query.OrderBy + " desc"

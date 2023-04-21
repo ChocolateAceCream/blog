@@ -5,14 +5,14 @@
 * @description: customized el-tree component
 !-->
 <template>
-  <el-input
+  <!-- TODO: add filter method -->
+  <!-- <el-input
     v-model="filterText"
     placeholder="Filter keyword"
-  />
+  /> -->
   <el-tree
     ref="treeRef"
     class="filter-tree"
-    node-key="id"
     :props="defaultProps"
     v-bind="$attrs"
     default-expand-all
@@ -41,12 +41,18 @@ export default defineComponent({
     const setKeys = (keys) => {
       state.treeRef.setCheckedKeys(keys, false)
     }
-    const getSelectKeys = () => {
-      return [...state.treeRef.getHalfCheckedNodes(), ...state.treeRef.getCheckedNodes()]
+
+    // return all selected nodes, including half check ones
+    const getSelectKeys = (param = false) => {
+      return [...state.treeRef.getHalfCheckedNodes(param), ...state.treeRef.getCheckedNodes(param)]
+    }
+    const getCheckedNodes = (param = false) => {
+      return state.treeRef.getCheckedNodes(param)
     }
     return {
       setKeys,
       getSelectKeys,
+      getCheckedNodes,
       ...toRefs(state)
     }
   }

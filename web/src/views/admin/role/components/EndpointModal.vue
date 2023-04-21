@@ -12,34 +12,47 @@
     @close="onModalClose"
     @confirm="onModalConfirm"
   >
-    <div>asdf</div>
-    <!-- <MyForm
-        ref="formRef"
-        v-model:formData="formData"
-        :config="formConfig"
-        :form-items="formItems"
-      /> -->
+    <MyTree
+      ref="treeRef"
+      :data="treeData"
+      :props="defaultProps"
+      :default-checked-keys="selectedIdList"
+      show-checkbox
+      node-key="id"
+      default-expand-all
+    />
   </Modal>
 </template>
 
 <script>
 import { defineComponent, toRefs, reactive } from 'vue'
-import { getRoleMenuTree } from '@/api/menu'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { getCasbinByRoleId, postUpdateCasbin } from '@/api/casbin'
+import { getEndpointList } from '@/api/endpoint'
+import { ElMessage } from 'element-plus'
 import _ from 'lodash'
 export default defineComponent({
   name: 'EndpointModal',
   setup(props, ctx) {
     const state = reactive({
+      treeData: [],
+      treeRef: null,
+      selectedIdList: [],
+      selectedRoleId: null,
+      defaultProps: {
+        children: 'children',
+        label: 'name',
+      }
     })
     const onSubmit = async() => {
-      console.log('-----onsubmit----')
-    }
-    const fetchMenuTree = async(roleId) => {
-      console.log('-----fetchMenuTree----')
-      const { data: res } = await getRoleMenuTree({ id: roleId })
+      const payload = state.treeRef.getCheckedNodes(true).map(i => { return { path: i.path, method: i.method } })
+      const { data: res } = await postUpdateCasbin({ roleId: state.selectedRoleId, endpoints: payload })
       if (res.errorCode === 0) {
-        console.log('-----menu list----', res.data)
+        ElMessage({
+          message: res.msg,
+          type: 'success',
+          duration: 3 * 1000
+        })
+        modalState.onModalClose()
       } else {
         ElMessage({
           message: res.msg,
@@ -48,11 +61,47 @@ export default defineComponent({
         })
       }
     }
+    const fetchTree = async(roleId) => {
+      const { data: casbinRes } = await getCasbinByRoleId({ params: { id: roleId } })
+      if (casbinRes.errorCode !== 0) {
+        ElMessage({
+          message: casbinRes.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
+      }
+      const payload = { pageNumber: 1, pageSize: 1000, orderBy: 'group_name'}
+      const { data: endpointRes } = await getEndpointList({ params: payload })
+      if (casbinRes.errorCode !== 0) {
+        ElMessage({
+          message: endpointRes.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+        return
+      }
+      const groups = _.groupBy(endpointRes.data.list, 'groupName')
+      state.treeData = _.map(groups, (arr, key) => {
+        const node = {
+          name: key,
+          children: []
+        }
+        arr.forEach(item => {
+          node.children.push({name: item.name, id: item.path + ':' + item.method, path: item.path, method: item.method})
+        })
+        return node
+      })
+      state.selectedIdList = _.map(casbinRes.data, (val) => {
+        return val.path + ':' + val.method
+      })
+    }
     const modalState = reactive({
       modalRef: null,
       onModalOpen(roleId) {
         modalState.modalRef.openModal()
-        fetchMenuTree(roleId)
+        state.selectedRoleId = roleId
+        fetchTree(roleId)
       },
       onModalClose() {
         modalState.modalRef.closeModal()

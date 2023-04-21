@@ -8,5 +8,5 @@ type Endpoint struct {
 	Description string `json:"description" gorm:"comment: api endpoint description"`
 	Method      string `json:"method" gorm:"default:POST;comment:endpoint call method" binding:"required"`
 	Name        string `json:"name" gorm:"comment: displayed name" binding:"required"`
-	Group       string `json:"group" gorm:"comment:endpoint group, to display endpoints by group"`
+	GroupName   string `json:"groupName" gorm:"comment:endpoint group, to display endpoints by group"`
 }

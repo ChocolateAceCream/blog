@@ -115,7 +115,7 @@ export default defineComponent({
         { prop: 'path', label: 'Path', type: 'input', options: { placeholder: 'e.g. /api/v1/xxx/xxxx' } },
         { prop: 'name', label: 'Name', type: 'input', options: { placeholder: 'Endpoint name' } },
         { prop: 'method', label: 'Method', type: 'select', options: { placeholder: 'Request Method Type', options: methodOptions, propName: 'method' } },
-        { prop: 'group', label: 'Group', type: 'input', options: { placeholder: 'Endpoint group' } },
+        { prop: 'groupName', label: 'Group', type: 'input', options: { placeholder: 'Endpoint group' } },
       ],
 
       // add & edit form
@@ -126,6 +126,7 @@ export default defineComponent({
           path: [{ required: true, message: 'endpoint path required', trigger: 'blur' }],
           method: [{ required: true, message: 'endpoint method required', trigger: 'blur' }],
           name: [{ required: true, message: 'endpoint name required', trigger: 'blur' }],
+          groupName: [{ required: true, message: 'endpoint group required', trigger: 'blur' }],
         },
         labelPosition: 'right',
         labelWidth: '100px'
@@ -152,7 +153,7 @@ export default defineComponent({
       tableConfig: [
         { label: 'ID', prop: 'id', sortable: 'custom' },
         { label: 'Method', prop: 'method', sortable: 'custom' },
-        { label: 'Group', prop: 'group', sortable: 'custom' },
+        { label: 'Group', prop: 'groupName', sortable: 'custom' },
         { label: 'Path', prop: 'path', sortable: 'custom' },
         { label: 'Name', prop: 'name', sortable: 'custom' },
         { label: 'Operation', bodySlot: 'operationBody' },
@@ -211,7 +212,7 @@ export default defineComponent({
 
     const sortChange = ({ prop, order }) => {
       tableState.sorting.desc = order === 'descending'
-      tableState.sorting.orderBy = prop
+      tableState.sorting.orderBy = _.snakeCase(prop)
       fetchList()
     }
 

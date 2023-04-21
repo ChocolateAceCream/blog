@@ -5,6 +5,8 @@ definitions:
         type: string
       description:
         type: string
+      groupName:
+        type: string
       id:
         type: integer
       method:
@@ -13,18 +15,12 @@ definitions:
         type: string
       path:
         type: string
-      pid:
-        type: integer
-      type:
-        enum:
-        - 1
-        - 2
-        type: integer
       updatedAt:
         type: string
     required:
+    - method
     - name
-    - pid
+    - path
     type: object
   dbTable.Menu:
     properties:
@@ -71,26 +67,20 @@ definitions:
         type: string
       name:
         type: string
-      parentId:
+      pid:
         type: integer
       roleId:
         type: integer
       updatedAt:
         description: 更新时间
         type: string
-      users:
-        items:
-          $ref: '#/definitions/dbTable.User'
-        type: array
     required:
     - name
-    - parentId
+    - pid
     type: object
   dbTable.User:
     properties:
       active:
-        description: UserRole  Role      `json:"role" gorm:"foreignKey:RoleId;references:RoleId;comment:user's
-          role"`
         type: integer
       createdAt:
         type: string
@@ -100,10 +90,10 @@ definitions:
         type: integer
       password:
         type: string
-      role:
-        $ref: '#/definitions/dbTable.Role'
-      roleId:
-        type: integer
+      roles:
+        items:
+          $ref: '#/definitions/dbTable.Role'
+        type: array
       updatedAt:
         type: string
       username:
@@ -118,6 +108,34 @@ definitions:
     required:
     - code
     type: object
+  request.AddRole:
+    properties:
+      name:
+        type: string
+      pid:
+        type: integer
+    required:
+    - name
+    - pid
+    type: object
+  request.AssignRoleMenus:
+    properties:
+      id:
+        type: integer
+      menus:
+        items:
+          $ref: '#/definitions/dbTable.Menu'
+        type: array
+    required:
+    - menus
+    type: object
+  request.CasbinPolicy:
+    properties:
+      method:
+        type: string
+      path:
+        type: string
+    type: object
   request.DeleteUser:
     properties:
       uuid:
@@ -125,6 +143,16 @@ definitions:
         type: string
     required:
     - uuid
+    type: object
+  request.EditRole:
+    properties:
+      id:
+        type: integer
+      name:
+        type: string
+    required:
+    - id
+    - name
     type: object
   request.EditUser:
     properties:
@@ -142,12 +170,38 @@ definitions:
     required:
     - uuid
     type: object
-  request.Endpoint:
+  request.EndpointSearchParma:
     properties:
+      desc:
+        description: order by desc (by default)
+        type: boolean
+      description:
+        type: string
+      groupName:
+        type: string
       method:
         type: string
+      name:
+        type: string
+      orderBy:
+        enum:
+        - name
+        - path
+        - id
+        - method
+        - group_name
+        type: string
+      pageNumber:
+        type: integer
+      pageSize:
+        type: integer
       path:
         type: string
+    type: object
+  request.FindById:
+    properties:
+      id:
+        type: integer
     type: object
   request.Login:
     properties:
@@ -174,10 +228,6 @@ definitions:
         type: string
       role:
         type: integer
-      roles:
-        items:
-          type: integer
-        type: array
       username:
         type: string
     required:
@@ -207,7 +257,7 @@ definitions:
     properties:
       endpoints:
         items:
-          $ref: '#/definitions/request.Endpoint'
+          $ref: '#/definitions/request.CasbinPolicy'
         type: array
       roleId:
         type: integer
@@ -217,6 +267,13 @@ definitions:
   response.CaptchaResponse:
     properties:
       captcha:
+        type: string
+    type: object
+  response.CasbinPolicy:
+    properties:
+      method:
+        type: string
+      path:
         type: string
     type: object
   response.Login:
@@ -306,7 +363,7 @@ paths:
     post:
       description: register user
       parameters:
-      - description: username, password, email,captcha, role IDs
+      - description: username, password, email,captcha, roleId
         in: body
         name: data
         required: true
@@ -376,6 +433,36 @@ paths:
       summary: initialize data
       tags:
       - Init
+  /api/v1/casbin/list:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: get casbin privileges based on role id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/response.CasbinPolicy'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      summary: Get casbin rules by role id
+      tags:
+      - Casbin
   /api/v1/casbin/update:
     post:
       consumes:
@@ -402,87 +489,13 @@ paths:
       summary: Update role privilege
       tags:
       - Casbin
-  /api/v1/endpoint/all:
-    get:
-      consumes:
-      - application/json
-      description: return all endpoints
-      responses:
-        "200":
-          description: return all endpoints
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dbTable.Endpoint'
-                  type: array
-              type: object
-      summary: get all endpoints
-      tags:
-      - Endpoint
-  /api/v1/endpoint/list:
+  /api/v1/endpoint/add:
     post:
       consumes:
       - application/json
-      description: return endpoint list
+      description: add new endpoint
       parameters:
-      - description: order by desc (by default)
-        in: query
-        name: desc
-        type: boolean
-      - in: query
-        name: method
-        type: string
-      - in: query
-        name: name
-        type: string
-      - enum:
-        - name
-        - pid
-        - path
-        - id
-        in: query
-        name: orderBy
-        type: string
-      - in: query
-        name: pageNumber
-        type: integer
-      - in: query
-        name: pageSize
-        type: integer
-      - in: query
-        name: path
-        type: string
-      - in: query
-        name: pid
-        type: integer
-      - in: query
-        name: type
-        type: integer
-      responses:
-        "200":
-          description: 'return all search result '
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                data:
-                  items:
-                    $ref: '#/definitions/dbTable.Endpoint'
-                  type: array
-              type: object
-      summary: get endpoint list
-      tags:
-      - Endpoint
-  /api/v1/endpoint/new:
-    post:
-      consumes:
-      - application/json
-      description: create new endpoint
-      parameters:
-      - description: 'Type, Name, PID, Method, Description, Path '
+      - description: 'GroupName, Name, Method, Description, Path '
         in: body
         name: data
         required: true
@@ -498,10 +511,89 @@ paths:
                 msg:
                   type: string
               type: object
-      summary: new endpoint
+      summary: add new endpoint
       tags:
       - Endpoint
-  /api/v1/menu/create:
+  /api/v1/endpoint/delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: endpoint id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'endpoint deleted '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: delete endpoint by id
+      tags:
+      - Endpoint
+  /api/v1/endpoint/edit:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: GroupName, Name, Method, Description, Path
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Endpoint'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'success '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: edit endpoint
+      tags:
+      - Endpoint
+  /api/v1/endpoint/list:
+    get:
+      consumes:
+      - application/json
+      description: return endpoint list
+      responses:
+        "200":
+          description: 'return all search result '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/response.Paging'
+                  - properties:
+                      list:
+                        items:
+                          $ref: '#/definitions/dbTable.Endpoint'
+                        type: array
+                      total:
+                        type: integer
+                    type: object
+              type: object
+      summary: get endpoint list
+      tags:
+      - Endpoint
+  /api/v1/menu/add:
     post:
       consumes:
       - application/json
@@ -527,6 +619,32 @@ paths:
       summary: add menu
       tags:
       - Menu
+  /api/v1/menu/assignRoleMenus:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: id, menus
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.AssignRoleMenus'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'assign role menus success '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: edit menu
+      tags:
+      - Menu
   /api/v1/menu/currentUserMenu:
     get:
       produces:
@@ -546,6 +664,86 @@ paths:
                   type: string
               type: object
       summary: get current user's menus
+      tags:
+      - Menu
+  /api/v1/menu/delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: menu id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'menu deleted '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: delete menu by id
+      tags:
+      - Menu
+  /api/v1/menu/edit:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: route, path, title, icon
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Menu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'menu edit success '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: edit menu
+      tags:
+      - Menu
+  /api/v1/menu/getRoleMenuTree:
+    post:
+      parameters:
+      - description: role id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Return role's menu list
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Menu'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      summary: get menus by role id
       tags:
       - Menu
   /api/v1/menu/list:
@@ -569,17 +767,17 @@ paths:
       summary: get all menus
       tags:
       - Menu
-  /api/v1/role/create:
+  /api/v1/role/add:
     post:
       consumes:
       - application/json
       parameters:
-      - description: name, parentId
+      - description: name, pid
         in: body
         name: data
         required: true
         schema:
-          $ref: '#/definitions/dbTable.Role'
+          $ref: '#/definitions/request.AddRole'
       produces:
       - application/json
       responses:
@@ -595,6 +793,83 @@ paths:
                   type: string
               type: object
       summary: Create Role
+      tags:
+      - Role
+  /api/v1/role/delete:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: role id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.FindById'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 'role deleted '
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: delete role by id
+      tags:
+      - Role
+  /api/v1/role/edit:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: name, pid, id
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.EditRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: edit role, return
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dbTable.Role'
+                msg:
+                  type: string
+              type: object
+      summary: Edit Role
+      tags:
+      - Role
+  /api/v1/role/list:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: return all roles
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/dbTable.Role'
+                  type: array
+                msg:
+                  type: string
+              type: object
+      summary: Get Role List
       tags:
       - Role
   /api/v1/user/active:
@@ -677,31 +952,7 @@ paths:
       summary: Edit user info
       tags:
       - User
-  /api/v1/user/resetPassword:
-    put:
-      parameters:
-      - description: New pw, email code
-        in: body
-        name: data
-        required: true
-        schema:
-          $ref: '#/definitions/request.ResetPassword'
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: Reset password
-          schema:
-            allOf:
-            - $ref: '#/definitions/response.Response'
-            - properties:
-                msg:
-                  type: string
-              type: object
-      summary: Reset user password
-      tags:
-      - User
-  /api/v1/user/userList:
+  /api/v1/user/list:
     get:
       consumes:
       - application/json
@@ -750,6 +1001,30 @@ paths:
                   type: string
               type: object
       summary: get user list
+      tags:
+      - User
+  /api/v1/user/resetPassword:
+    put:
+      parameters:
+      - description: New pw, email code
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/request.ResetPassword'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Reset password
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: Reset user password
       tags:
       - User
 swagger: "2.0"

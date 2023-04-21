@@ -24,8 +24,6 @@ func TestNewEndpointApi(t *testing.T) {
 		Name:        "Test Menu",
 		Method:      "POST",
 		Path:        "/api/v1/test",
-		PID:         3,
-		Type:        ENDPOINT,
 	}
 	body, _ := json.Marshal(payload)
 	req, _ := http.NewRequest("POST", "/api/v1/endpoint/new", bytes.NewReader(body))
@@ -38,12 +36,12 @@ func TestNewEndpointApi(t *testing.T) {
 
 func TestGetEndpointListApi(t *testing.T) {
 	r := RouterInstance
-	payload := request.EndpointSearchQuery{
+	param := request.EndpointSearchParma{
 		Pagination: request.Pagination{PageNumber: 1, PageSize: 1},
-		Type:       1,
 		OrderBy:    "name",
 		Desc:       true,
 	}
+	payload := request.EndpointSearchQuery{Params: param}
 	body, _ := json.Marshal(payload)
 	req, _ := http.NewRequest("POST", "/api/v1/endpoint/list", bytes.NewReader(body))
 	req.Host = "localhost:1234"

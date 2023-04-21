@@ -24,29 +24,32 @@ func (ei *endpointInitilizer) Name() string {
 func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
 	db := global.DB
 	entities := []dbTable.Endpoint{
-		{Method: "GET", Path: "/api/v1/user/list", Group: "User", Description: "Get user list", Name: "Get User List"},
-		{Method: "POST", Path: "/api/v1/user/active", Group: "User", Description: "Active User", Name: "Active User"},
-		{Method: "PUT", Path: "/api/v1/user/resetPassword", Group: "User", Description: "Reset user password", Name: "Reset Password"},
-		{Method: "PUT", Path: "/api/v1/user/edit", Group: "User", Description: "Edit user info", Name: "Edit User"},
-		{Method: "DELETE", Path: "/api/v1/user/delete", Group: "User", Description: "Delete user ", Name: "Delete User"},
+		{Method: "GET", Path: "/api/v1/user/list", GroupName: "User", Description: "Get user list", Name: "Get User List"},
+		{Method: "POST", Path: "/api/v1/user/active", GroupName: "User", Description: "Active User", Name: "Active User"},
+		{Method: "PUT", Path: "/api/v1/user/resetPassword", GroupName: "User", Description: "Reset user password", Name: "Reset Password"},
+		{Method: "PUT", Path: "/api/v1/user/edit", GroupName: "User", Description: "Edit user info", Name: "Edit User"},
+		{Method: "DELETE", Path: "/api/v1/user/delete", GroupName: "User", Description: "Delete user ", Name: "Delete User"},
 
-		{Method: "POST", Path: "/api/v1/role/add", Group: "Role", Description: "Create Role", Name: "Create Role"},
-		{Method: "DELETE", Path: "/api/v1/role/delete", Group: "Role", Description: "Delete Role", Name: "Delete Role"},
-		{Method: "PUT", Path: "/api/v1/role/edit", Group: "Role", Description: "Edit Role", Name: "Edit Role"},
-		{Method: "GET", Path: "/api/v1/role/list", Group: "Role", Description: "Get Role List", Name: "Get Role List"},
+		{Method: "POST", Path: "/api/v1/role/add", GroupName: "Role", Description: "Create Role", Name: "Create Role"},
+		{Method: "DELETE", Path: "/api/v1/role/delete", GroupName: "Role", Description: "Delete Role", Name: "Delete Role"},
+		{Method: "PUT", Path: "/api/v1/role/edit", GroupName: "Role", Description: "Edit Role", Name: "Edit Role"},
+		{Method: "GET", Path: "/api/v1/role/list", GroupName: "Role", Description: "Get Role List", Name: "Get Role List"},
 
-		{Method: "GET", Path: "/api/v1/menu/currentUserMenu", Group: "Menu", Description: "Get current user's menu ", Name: "Get Current User Menu"},
-		{Method: "GET", Path: "/api/v1/menu/list", Group: "Menu", Description: "Get all Menu list", Name: "List Menu"},
-		{Method: "DELETE", Path: "/api/v1/menu/delete", Group: "Menu", Description: "Delete Menu", Name: "Delete Menu"},
-		{Method: "POST", Path: "/api/v1/menu/add", Group: "Menu", Description: "Add Menu", Name: "Add Menu"},
-		{Method: "PUT", Path: "/api/v1/menu/edit", Group: "Menu", Description: "Edit Menu", Name: "Edit Menu"},
-		{Method: "POST", Path: "/api/v1/menu/getRoleMenuTree", Group: "Menu", Description: "Get Role Menu Tree", Name: "Role Menu Tree"},
-		{Method: "POST", Path: "/api/v1/menu/assignRoleMenus", Group: "Menu", Description: "Assign Role Menus", Name: "Assign Role Menus"},
+		{Method: "GET", Path: "/api/v1/menu/currentUserMenu", GroupName: "Menu", Description: "Get current user's menu ", Name: "Get Current User Menu"},
+		{Method: "GET", Path: "/api/v1/menu/list", GroupName: "Menu", Description: "Get all Menu list", Name: "List Menu"},
+		{Method: "DELETE", Path: "/api/v1/menu/delete", GroupName: "Menu", Description: "Delete Menu", Name: "Delete Menu"},
+		{Method: "POST", Path: "/api/v1/menu/add", GroupName: "Menu", Description: "Add Menu", Name: "Add Menu"},
+		{Method: "PUT", Path: "/api/v1/menu/edit", GroupName: "Menu", Description: "Edit Menu", Name: "Edit Menu"},
+		{Method: "POST", Path: "/api/v1/menu/getRoleMenuTree", GroupName: "Menu", Description: "Get Role Menu Tree", Name: "Role Menu Tree"},
+		{Method: "POST", Path: "/api/v1/menu/assignRoleMenus", GroupName: "Menu", Description: "Assign Role Menus", Name: "Assign Role Menus"},
 
-		{Method: "GET", Path: "/api/v1/endpoint/list", Group: "Endpoint", Description: "Get Endpoint list", Name: "List Endpoint"},
-		{Method: "POST", Path: "/api/v1/endpoint/add", Group: "Endpoint", Description: "Add Endpoint", Name: "Add Endpoint"},
-		{Method: "PUT", Path: "/api/v1/endpoint/edit", Group: "Endpoint", Description: "Edit Endpoint", Name: "Edit Endpoint"},
-		{Method: "DELETE", Path: "/api/v1/endpoint/delete", Group: "Endpoint", Description: "Delete Endpoint", Name: "Delete Endpoint"},
+		{Method: "GET", Path: "/api/v1/endpoint/list", GroupName: "Endpoint", Description: "Get Endpoint list", Name: "List Endpoint"},
+		{Method: "POST", Path: "/api/v1/endpoint/add", GroupName: "Endpoint", Description: "Add Endpoint", Name: "Add Endpoint"},
+		{Method: "PUT", Path: "/api/v1/endpoint/edit", GroupName: "Endpoint", Description: "Edit Endpoint", Name: "Edit Endpoint"},
+		{Method: "DELETE", Path: "/api/v1/endpoint/delete", GroupName: "Endpoint", Description: "Delete Endpoint", Name: "Delete Endpoint"},
+
+		{Method: "POST", Path: "/api/v1/casbin/update", GroupName: "Casbin", Description: "Update Role's Casbin", Name: "Update Casbin"},
+		{Method: "GET", Path: "/api/v1/casbin/list", GroupName: "Casbin", Description: "Get casbin list", Name: "list Casbin"},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init endpoint data, err: %w", err)

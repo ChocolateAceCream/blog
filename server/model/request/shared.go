@@ -11,3 +11,11 @@ type Pagination struct {
 	PageNumber int `json:"pageNumber" form:"pageNumber"`
 	PageSize   int `json:"pageSize" form:"pageSize"`
 }
+
+type FindById struct {
+	ID int `json:"id" form:"id"`
+}
+
+type FindByIds struct {
+	ID []int `json:"id" form:"id"`
+}
