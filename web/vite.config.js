@@ -14,7 +14,8 @@ import IconsResolver from 'unplugin-icons/resolver'
 
 import { visualizer } from 'rollup-plugin-visualizer'
 function pathResolve() {
-  return resolve(__dirname, '.', ...arguments)
+  return resolve(__dirname, './', ...arguments)
+  // return resolve(__dirname, '.', ...arguments)
 }
 
 // https://vitejs.dev/config/
@@ -30,7 +31,7 @@ export default defineConfig((params) => {
       extensions: ['.json', '.js', '.ts', '.vue'],
       alias: {
         '@': pathResolve('src'),
-        '@images': pathResolve('src/assets/images'),
+        '/img': pathResolve('src/assets/images'),
       },
     },
     server: {
@@ -45,6 +46,14 @@ export default defineConfig((params) => {
       },
     },
     build: {
+      minify: 'terser', // 必须启用：terserOptions配置才会有效
+      terserOptions: {
+        compress: {
+          // 生产环境时移除console.log调试代码
+          drop_console: true,
+          drop_debugger: true,
+        }
+      },
       target: 'es2015',
       manifest: false,
       sourcemap: false,
@@ -55,7 +64,6 @@ export default defineConfig((params) => {
             manualChunks: {
               moment: ['moment'],
               'lodash-es': ['lodash-es'],
-              'ant-design-vue': ['ant-design-vue'],
             }
           }
         }

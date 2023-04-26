@@ -6,7 +6,7 @@
     >
       <img
         class="qr-code"
-        :src="qrCodeUrl"
+        src="/img/qr.png"
         alt=""
       >
       <div style="margin-top: 10px;">微信扫码登录</div>
@@ -35,7 +35,6 @@ export default defineComponent({
   },
   setup(props, ctx) {
     const state = reactive({
-      qrCodeUrl: '/src/assets/images/qr.png',
       tabConfig: {
         defaultTabIdx: 0,
         tabs: [

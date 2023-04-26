@@ -18,7 +18,7 @@
         </div>
 
       </div>
-      <img src="../../assets/images/404.png">
+      <img src="/img/404.png">
     </div>
   </div>
 </template>

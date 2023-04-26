@@ -40,3 +40,4 @@ web/.env.development
 server/service/gin-bin
 server/unitTest/testConfig.yaml
 server/unitTest/log/server.log
+web/.env.production

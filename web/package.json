@@ -19,6 +19,7 @@
     "pinia": "^2.0.25",
     "pinia-plugin-persist": "^1.0.0",
     "qs": "^6.11.0",
+    "terser": "^5.17.1",
     "vue": "^3.2.41",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6"
