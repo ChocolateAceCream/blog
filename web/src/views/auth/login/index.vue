@@ -26,12 +26,12 @@
 
 <script>
 import { reactive, toRefs, defineComponent, h, markRaw } from 'vue'
-import AccountLogin from './components/accountLogin'
+import AccountLogin from './components/accountLogin.vue'
 import Tab from '@/shared/components/Tab/index.vue'
 
 export default defineComponent({
   components: {
-    AccountLogin, Tab
+    Tab
   },
   setup(props, ctx) {
     const state = reactive({

@@ -27,6 +27,7 @@ export default defineConfig((params) => {
   console.info(`--- running mode: ${mode}, command: ${command}, ENV: ${JSON.stringify(ENV)} ---`)
   return {
     base: './',
+    root: './', // js导入的资源路径，src
     resolve: {
       extensions: ['.json', '.js', '.ts', '.vue'],
       alias: {
