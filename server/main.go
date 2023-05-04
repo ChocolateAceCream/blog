@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"flag"
 	"net/http"
 	"os"
 	"os/signal"
@@ -20,6 +21,12 @@ import (
 
 func Init() *gin.Engine {
 	dir, _ := os.Getwd()
+	var mode string
+	flag.StringVar(&mode, "c", "debug", "gin mode: release mode, default is debug mode")
+	flag.Parse()
+	if mode == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	}
 	global.VIPER = utils.ViperInit(dir)
 	// must first load config
 	global.LOGGER = library.LoggerInit()
