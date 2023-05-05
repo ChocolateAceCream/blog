@@ -14,7 +14,6 @@ package middleware
 import (
 	"context"
 	"encoding/json"
-	"strings"
 	"sync"
 	"time"
 
@@ -56,9 +55,9 @@ func SessionHandler(c *gin.Context) {
 			return
 		}
 	}
-	//create new cookie, so every request will have a cookie attached
+	//create new cookie, so every request will have a cookie attachedx
 	UUID := uuid.NewV4().String() // use session key to get info from redis
-	domain := c.Request.Host[:strings.Index(c.Request.Host, ":")]
+	domain := c.Request.Host
 	path := "/"
 	c.SetCookie(sessionConfig.CookieName, UUID, sessionConfig.ExpireTime, path, domain, sessionConfig.Secure, sessionConfig.HttpOnly)
 	newSession := utils.Session{
