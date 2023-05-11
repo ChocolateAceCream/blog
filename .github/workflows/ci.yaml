@@ -1,0 +1,18 @@
+name: ci-test
+run-name: github.env --- ${{ github.env }}
+on:
+  push:
+    branches: ['ci']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "choose a version to deploy"
+        required: true
+        type: string
+jobs:
+  ci-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test#1
+        run: |
+          echo "flipped-aurora"
