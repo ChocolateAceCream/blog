@@ -1,10 +1,10 @@
 <template>
   <el-container class="layout-wrapper">
-    <el-header style="border-bottom: 1px solid #DCDCDC;">
-      <top-bar />
-    </el-header>
+    <left-bar />
     <el-container style="overflow:hidden;">
-      <left-bar />
+      <el-header style="border-bottom: 1px solid #DCDCDC;">
+        <top-bar />
+      </el-header>
       <!-- <el-header style="--el-header-height: 30px"><top-bar></top-bar></el-header> -->
       <el-main style="overflow:hidden;">
         <main-body />

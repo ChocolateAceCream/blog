@@ -1,6 +1,5 @@
 <template>
   <el-aside :width="isNavBarCollapsed ? 'auto' : '220px'">
-
     <el-menu
       class="left-bar-menu"
       active-text-color="#3498db"
@@ -9,6 +8,13 @@
       unique-opened
       @select="onSelectMenuItem"
     >
+      <div class="title">
+        <img
+          class="logo"
+          src="/img/logo.jpg"
+        >
+        <div class="title-text">BLOG</div>
+      </div>
       <template
         v-for="item in routerTree"
         :key="item.name"
@@ -74,5 +80,29 @@ export default defineComponent({
   background-color: $lite-background;
   height: 100%;
 }
+.title{
+  min-height: 60px;
+  line-height: 60px;
+  text-align: center;
+  transition: all .3s;
+  display: flex;
+  align-items: center;
+  // justify-content: center;
+  .title-text{
+    display: inline-block;
+    font-weight: 600;
+    font-size: 20px;
+    padding-left: 20px;
+  }
+
+  .logo {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 3px;
+    margin-left:20px;
+  }
+}
+
 
 </style>
