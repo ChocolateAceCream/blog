@@ -1,5 +1,4 @@
 <template>
-  <breadcrumb />
   <div
     class="main-body"
     :class="{'is-full': isFullContainer}"
@@ -16,13 +15,9 @@
 </template>
 
 <script>
-import Breadcrumb from './Breadcrumb.vue'
 import { reactive, toRefs, defineComponent, computed } from 'vue'
 import { useRoute } from 'vue-router'
 export default defineComponent({
-  components: {
-    Breadcrumb
-  },
   setup(props, ctx) {
     const router = useRoute()
     const state = reactive({

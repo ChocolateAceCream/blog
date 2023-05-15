@@ -1,9 +1,16 @@
 <template>
-  <el-row>
+  <el-row class="header">
     <!--右侧-->
     <el-col
-      :span="24"
-      class="right-menu"
+      :span="12"
+      class="left-header"
+    >
+      <breadcrumb />
+    </el-col>
+
+    <el-col
+      :span="12"
+      class="right-header"
     >
       <el-dropdown
         class="avatar-container right-menu-item"
@@ -39,8 +46,12 @@ import { reactive, toRefs, defineComponent } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { logout } from '@/shared/hooks/index'
+import Breadcrumb from './Breadcrumb.vue'
 import _ from 'lodash'
 export default defineComponent({
+  components: {
+    Breadcrumb
+  },
   setup(props, ctx) {
     const store = useSessionStore()
 
@@ -69,6 +80,10 @@ export default defineComponent({
 </script>
 <style module lang="scss" src="@/assets/styles/export.scss"></style>
 <style lang="scss" scoped>
+.header{
+  align-items: center;
+  height: 100%;
+}
   .content {
     display: inline-block;
     @include mobile-device {
@@ -76,14 +91,16 @@ export default defineComponent({
     }
   }
 
-  .right-menu {
-    //line-height: 28px;
-    overflow: hidden;
-    flex: 1;
+  .right-header {
+    display: flex;
+    flex-direction: row-reverse;
     text-align: right;
     .top-bar-setting-icon {
       cursor: pointer;
-      margin-top: 15px;
     }
+  }
+  .left-header{
+    display: flex;
+    align-items: center;
   }
 </style>

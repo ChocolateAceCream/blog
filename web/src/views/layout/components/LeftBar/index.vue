@@ -13,7 +13,10 @@
           class="logo"
           src="/img/logo.jpg"
         >
-        <div class="title-text">BLOG</div>
+        <div
+          v-if="!isNavBarCollapsed"
+          class="title-text"
+        >BLOG</div>
       </div>
       <template
         v-for="item in routerTree"
