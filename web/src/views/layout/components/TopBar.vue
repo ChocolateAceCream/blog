@@ -12,6 +12,7 @@
       :span="12"
       class="right-header"
     >
+
       <el-dropdown
         class="avatar-container right-menu-item"
         trigger="click"
@@ -38,11 +39,36 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-dropdown
+        class="avatar-container right-menu-item"
+        trigger="click"
+      >
+        <div>
+          <SvgIcon
+            icon-name="icon-blog-global"
+            color="#3498db"
+            class="top-bar-setting-icon"
+            size="30px"
+          />
+        </div>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item
+              v-for="(item,idx) in Object.keys(locales)"
+              :key="idx"
+              :divided="idx > 0"
+              @click.stop="locale=item"
+            >
+              {{ locales[item] }}
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </el-col>
   </el-row>
 </template>
 <script>
-import { reactive, toRefs, defineComponent } from 'vue'
+import { reactive, toRefs, defineComponent, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { logout } from '@/shared/hooks/index'
@@ -74,7 +100,19 @@ export default defineComponent({
         }
       }
     })
-    return { ...toRefs(state) }
+    const localeState = reactive({
+      locales: {
+        'en': 'English',
+        'cn': '中文'
+      },
+      locale: computed({
+        get: () => store.getLocale,
+        set: val => {
+          store.setLocale(val)
+        }
+      })
+    })
+    return { ...toRefs(state), ...toRefs(localeState) }
   }
 })
 </script>
@@ -97,6 +135,7 @@ export default defineComponent({
     text-align: right;
     .top-bar-setting-icon {
       cursor: pointer;
+      margin-left:25px;
     }
   }
   .left-header{

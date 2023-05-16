@@ -6,6 +6,13 @@
   "description": "blog",
   "glyphs": [
     {
+      "icon_id": "34453220",
+      "name": "global",
+      "font_class": "global",
+      "unicode": "e857",
+      "unicode_decimal": 59479
+    },
+    {
       "icon_id": "248953",
       "name": "delete",
       "font_class": "delete",

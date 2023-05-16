@@ -21,7 +21,9 @@ export const useSessionStore = defineStore({
     }
   }),
   getters: {
-    isAuthenticated: (state) => state.userInfo.isAuthenticated
+    isAuthenticated: (state) => state.userInfo.isAuthenticated,
+    getLocale: (state) => state.userInfo.locale,
+
   },
   actions: {
     increment() {
@@ -39,6 +41,9 @@ export const useSessionStore = defineStore({
     hasPermission(name) {
       return !!this.userInfo.permissions[name]
     },
+    setLocale(locale) {
+      this.userInfo.locale = locale
+    }
   },
 
   // 开启数据缓存
