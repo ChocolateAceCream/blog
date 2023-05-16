@@ -1,8 +1,18 @@
 export default {
   message: {
     Home: '首页',
-    Title: '标题'
-
+    Title: '标题',
+    setting: {
+      resetPassword: '重置密码',
+      logout: '退出登录'
+    },
+    apiTable: {
+      name: '名称',
+      operation: '操作',
+      path: '路径',
+      group: 'Api组',
+      method: '请求方法',
+    }
   },
   models: {
     users: {

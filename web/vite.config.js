@@ -33,6 +33,7 @@ export default defineConfig((params) => {
       alias: {
         '@': pathResolve('src'),
         '/img': pathResolve('src/assets/images'),
+        'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js'
       },
     },
     server: {

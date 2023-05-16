@@ -27,14 +27,14 @@
           <el-dropdown-menu>
             <router-link :to="{ name: 'resetPassword' }">
               <el-dropdown-item>
-                密码重置
+                {{ $t('message.setting.resetPassword') }}
               </el-dropdown-item>
             </router-link>
             <el-dropdown-item
               divided
               @click.stop="handleLogout"
             >
-              退出
+              {{ $t('message.setting.logout') }}
             </el-dropdown-item>
           </el-dropdown-menu>
         </template>

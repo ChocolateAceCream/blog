@@ -1,8 +1,18 @@
 export default {
   message: {
     Home: 'Home',
-    Title: 'Title'
-
+    Title: 'Title',
+    setting: {
+      resetPassword: 'Reset Password',
+      logout: 'Log Out'
+    },
+    apiTable: {
+      name: 'Name',
+      operation: 'Operation',
+      path: 'Path',
+      group: 'Group',
+      method: 'Method',
+    }
   },
   models: {
     users: {

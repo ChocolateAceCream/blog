@@ -3,9 +3,9 @@ import { createPinia } from 'pinia'
 import piniaPluginPersist from 'pinia-plugin-persist'
 import App from './App.vue'
 import router from './router'
-import i18n from './locales'
 import sharedComponents from '@/shared'
 import moment from 'moment'
+import { setI18n } from './locales'
 
 
 import './assets/styles/element-variables.scss'
@@ -19,7 +19,8 @@ const app = createApp(App)
 const store = createPinia()
 store.use(piniaPluginPersist)
 app.use(store)
-app.use(i18n)
+const i18nConfig = setI18n()
+app.use(i18nConfig)
 
 app.use(sharedComponents)
 

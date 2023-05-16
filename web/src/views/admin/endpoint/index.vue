@@ -91,12 +91,14 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, onMounted } from 'vue'
+import { defineComponent, toRefs, reactive, onMounted, computed } from 'vue'
 import { getEndpointList, putEditEndpoint, postAddEndpoint, deleteEndpoint } from '@/api/endpoint'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import _ from 'lodash'
+import { useI18n } from 'vue-i18n'
 export default defineComponent({
   setup(props, ctx) {
+    const { t } = useI18n()
     const methodOptions = [
       {value: 'GET', label: 'GET' },
       {value: 'POST', label: 'POST'},
@@ -150,14 +152,17 @@ export default defineComponent({
         desc: false,
       },
       total: 0,
-      tableConfig: [
-        { label: 'ID', prop: 'id', sortable: 'custom' },
-        { label: 'Method', prop: 'method', sortable: 'custom' },
-        { label: 'Group', prop: 'groupName', sortable: 'custom' },
-        { label: 'Path', prop: 'path', sortable: 'custom' },
-        { label: 'Name', prop: 'name', sortable: 'custom' },
-        { label: 'Operation', bodySlot: 'operationBody' },
-      ],
+      tableConfig: computed(() => {
+        return [
+          { label: 'ID', prop: 'id', sortable: 'custom' },
+          { label: t('message.apiTable.method'), prop: 'method', sortable: 'custom' },
+          { label: t('message.apiTable.group'), prop: 'groupName', sortable: 'custom' },
+          { label: t('message.apiTable.path'), prop: 'path', sortable: 'custom' },
+          { label: t('message.apiTable.name'), prop: 'name', sortable: 'custom' },
+          { label: t('message.apiTable.operation'), bodySlot: 'operationBody' },
+        ]
+      }),
+
       onAdd() {
         modalState.modalType = 'Add'
         formState.formData = {}
