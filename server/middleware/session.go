@@ -50,6 +50,12 @@ func SessionHandler(c *gin.Context) {
 			var session utils.Session
 			json.Unmarshal([]byte(rawSessionStr), &session)
 			// fmt.Println("Unmarshal sesion: ", session)
+			// renew cookie expire time if time to expire within RefreshBeforeExpireTime range
+			if (session.ExpireTime - time.Now().Unix()) < sessionConfig.RefreshBeforeExpireTime {
+				session.Renew(c)
+			}
+			// tm := time.Unix(session.ExpireTime, 0)
+			// fmt.Println("EXP: ", tm.Format("2006-01-02 15:04:05"))
 			// session.UUID = sessionID
 			c.Set(sessionConfig.Key, session) //store session in current context
 			return

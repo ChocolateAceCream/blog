@@ -36,6 +36,13 @@ func (s *Session) Get(key string) (interface{}, error) {
 	return nil, errors.New("not found key :" + key)
 }
 
+func (s *Session) Renew(c context.Context) {
+	sessionConfig := global.CONFIG.Session
+	s.ExpireTime = time.Now().Unix() + int64(sessionConfig.ExpireTime)
+	jsonStr, _ := json.Marshal(s)
+	global.REDIS.Set(c, s.UUID, jsonStr, time.Duration(sessionConfig.ExpireTime)*time.Second)
+}
+
 func (s *Session) Set(key string, val any) error {
 	s.Lock.Lock()
 	defer s.Lock.Unlock()
