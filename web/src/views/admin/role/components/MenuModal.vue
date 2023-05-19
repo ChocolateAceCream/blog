@@ -17,6 +17,7 @@
       :data="treeData"
       :props="defaultProps"
       :selected="menuIdList"
+      node-key="id"
       show-checkbox
       default-expand-all
     />
