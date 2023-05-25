@@ -40,10 +40,10 @@ export default defineConfig((params) => {
       port: ENV.VITE_APP_PORT,
       host: ENV.VITE_APP_HOST,
       proxy: {
-        '/blog': {
+        '/backend': {
           target: ENV.VITE_APP_DEV_PROXY,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/blog/, '')
+          rewrite: (path) => path.replace(/^\/backend/, '')
         }
       },
     },
