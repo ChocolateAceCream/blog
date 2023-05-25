@@ -10,6 +10,7 @@ type Menu struct {
 	Path      string    `json:"path" gorm:"comment:route path, base menu start with /"`
 	Name      string    `json:"name" gorm:"comment:route name"`
 	Component string    `json:"component" gorm:"comment:web component path, e.g. @/views/auth/register"`
+	Display   int       `json:"display" gorm:"comment:hide on menu: 1-show on menu, 2-hide"`
 	Meta      `json:"meta" gorm:"embedded"`
 	Roles     []Role `json:"roles" gorm:"many2many:roleMenu;constraint:OnDelete:CASCADE;"`
 	// ChildMenu []Menu `gorm:"foreignkey:Pid;constraint:OnDelete:CASCADE;"`

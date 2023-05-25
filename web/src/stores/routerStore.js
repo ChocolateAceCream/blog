@@ -13,6 +13,7 @@ const treeHelper = (root, mapper) => {
     component: modules[`../${root.component}`],
     id: root.id,
     pid: root.pid,
+    display: root.display,
     meta: root.meta,
     children: []
   }
@@ -29,19 +30,22 @@ const treeHelper = (root, mapper) => {
 const formatMenuTree = (nodes) => {
   const r = []
   nodes.forEach(node => {
-    const temp = {
-      routeName: node.name,
-      title: node.meta.title,
-      icon: node.meta.icon,
-      id: node.id,
-      pid: node.pid,
-      path: node.path,
-      children: []
+    if (node.display === 1) {
+      const temp = {
+        routeName: node.name,
+        display: node.display,
+        title: node.meta.title,
+        icon: node.meta.icon,
+        id: node.id,
+        pid: node.pid,
+        path: node.path,
+        children: []
+      }
+      if (node.children.length > 0) {
+        temp.children = formatMenuTree(node.children)
+      }
+      r.push(temp)
     }
-    if (node.children.length > 0) {
-      temp.children = formatMenuTree(node.children)
-    }
-    r.push(temp)
   })
   return r
 }

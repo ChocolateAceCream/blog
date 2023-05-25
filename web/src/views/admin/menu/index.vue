@@ -23,6 +23,12 @@
         /><span>&nbsp;{{ scope.row.icon }}</span>
       </div>
     </template>
+    <template #displayBody="scope">
+      <el-switch
+        :model-value="scope.row.display === 1"
+        @change="onDisplayChange(scope.row)"
+      />
+    </template>
     <template #operationBody="scope">
       <el-button
         type="primary"
@@ -54,6 +60,12 @@
       :config="formConfig"
       :form-items="formItems"
     >
+      <template #display="scope">
+        <el-switch
+          :model-value="scope.display === 1"
+          @change="scope.display = scope.display === 1 ? 2: 1"
+        />
+      </template>
       <template #icon="scope">
         <Icon v-model:icon="scope.icon" />
       </template>
@@ -79,6 +91,7 @@ export default defineComponent({
         { label: 'ID', prop: 'id' },
         { label: 'Route', prop: 'name' },
         { label: 'Path', prop: 'path' },
+        { label: 'Display', prop: 'display', bodySlot: 'displayBody' },
         { label: 'Title', prop: 'meta.title' },
         { label: 'Icon', prop: 'icon', bodySlot: 'iconBody' },
         { label: 'Operation', bodySlot: 'operationBody' },
@@ -130,7 +143,22 @@ export default defineComponent({
               message: 'Delete canceled',
             })
           })
-      }
+      },
+      async onDisplayChange(row) {
+        row.display = row.display === 1 ? 2 : 1
+        const { data: res } = await putEditMenu(row)
+        if (res.errorCode === 0) {
+          ElMessage({
+            message: `Update Menu Success`,
+            type: 'success',
+            duration: 3 * 1000
+          })
+          fetchMenuList()
+          useRouterStore().updateAsyncRouter()
+
+          modalState.modalRef.closeModal()
+        }
+      },
     })
     const fetchMenuList = async() => {
       const { data: res } = await getMenuList()
@@ -173,6 +201,7 @@ export default defineComponent({
         id: root.id,
         pid: root.pid,
         meta: root.meta,
+        display: root.display,
         icon: root.meta.icon,
         title: root.meta.title,
         children: []
@@ -211,6 +240,8 @@ export default defineComponent({
             duration: 3 * 1000
           })
           fetchMenuList()
+          useRouterStore().updateAsyncRouter()
+
           modalState.modalRef.closeModal()
         }
       } catch (err) {
@@ -255,8 +286,9 @@ export default defineComponent({
       formItems: [
         { prop: 'name', label: 'Router', type: 'input', style: 'width:80%', options: { placeholder: 'Please input route name' } },
         { prop: 'title', label: 'Title', type: 'input', style: 'width:80%', options: { placeholder: 'Please input title' } },
-        { prop: 'path', label: 'path', type: 'input', style: 'width:80%', options: { placeholder: 'Please input path' } },
-        { prop: 'component', label: 'component', type: 'input', style: 'width:80%', options: { placeholder: 'view/xxx.vue or view/xxx/index.vue ' } },
+        { prop: 'path', label: 'Path', type: 'input', style: 'width:80%', options: { placeholder: 'Please input path' } },
+        { prop: 'display', label: 'display', slot: 'display', style: 'width:80%' },
+        { prop: 'component', label: 'Component', type: 'input', style: 'width:80%', options: { placeholder: 'view/xxx.vue or view/xxx/index.vue ' } },
         { prop: 'icon', label: 'icon', slot: 'icon', style: 'width:80%' },
       ],
     })
