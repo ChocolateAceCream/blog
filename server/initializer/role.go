@@ -13,17 +13,17 @@ import (
 
 const InitRoleOrder = InitCasbinOrder + 1
 
-type roleInitilizer struct{}
+type roleInitializer struct{}
 
 func init() {
-	Register(InitRoleOrder, &roleInitilizer{})
+	Register(InitRoleOrder, &roleInitializer{})
 }
 
-func (ri *roleInitilizer) Name() string {
+func (ri *roleInitializer) Name() string {
 	return "role"
 }
 
-func (ri *roleInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
+func (ri *roleInitializer) Initialize(ctx context.Context) (next context.Context, err error) {
 	db := global.DB
 	entities := []dbTable.Role{
 		{
@@ -53,7 +53,7 @@ func (ri *roleInitilizer) Initialize(ctx context.Context) (next context.Context,
 
 }
 
-func (ri *roleInitilizer) InitDataVerify(ctx context.Context) bool {
+func (ri *roleInitializer) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.Role
 	err := global.DB.Where("name = ? ", "superadmin").First(&record).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)

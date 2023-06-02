@@ -14,17 +14,17 @@ import (
 
 const InitUserOrder = InitRoleOrder + 1
 
-type userInitilizer struct{}
+type userInitializer struct{}
 
 func init() {
-	Register(InitUserOrder, &userInitilizer{})
+	Register(InitUserOrder, &userInitializer{})
 }
 
-func (ui *userInitilizer) Name() string {
+func (ui *userInitializer) Name() string {
 	return "user"
 }
 
-func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
+func (ui *userInitializer) Initialize(ctx context.Context) (next context.Context, err error) {
 	config := global.CONFIG.Init
 	adminPassword := utils.BcryptHash(config.AdminPassword)
 	guestPassword := utils.BcryptHash(config.GuestPassword)
@@ -57,6 +57,14 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 		return ctx, fmt.Errorf("fail to init user data, err: %w", err)
 	}
 
+	if err = db.Model(&entities[0]).Association("Followers").Append([]dbTable.User{entities[1], entities[2], entities[2]}); err != nil {
+		return ctx, err
+	}
+
+	if err = db.Model(&entities[0]).Association("Followers").Append([]dbTable.User{entities[1], entities[2], entities[2]}); err != nil {
+		return ctx, err
+	}
+
 	next = ctx
 	for _, e := range entities {
 		next = context.WithValue(next, ui.Name()+e.Username, e)
@@ -64,7 +72,7 @@ func (ui *userInitilizer) Initialize(ctx context.Context) (next context.Context,
 	return next, nil
 }
 
-func (ui *userInitilizer) InitDataVerify(ctx context.Context) bool {
+func (ui *userInitializer) InitDataVerify(ctx context.Context) bool {
 	var record dbTable.User
 	err := global.DB.Where("username = ? ", "superadmin").First(&record).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {

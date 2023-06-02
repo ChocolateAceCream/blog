@@ -12,16 +12,16 @@ import (
 
 const InitEndpointOrder = InitOrderInternal + 1
 
-type endpointInitilizer struct{}
+type endpointInitializer struct{}
 
 func init() {
-	Register(InitEndpointOrder, &endpointInitilizer{})
+	Register(InitEndpointOrder, &endpointInitializer{})
 }
 
-func (ei *endpointInitilizer) Name() string {
+func (ei *endpointInitializer) Name() string {
 	return "endpoint"
 }
-func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
+func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Context, err error) {
 	db := global.DB
 	entities := []dbTable.Endpoint{
 		{Method: "GET", Path: "/api/v1/user/list", GroupName: "User", Description: "Get user list", Name: "Get User List"},
@@ -58,7 +58,7 @@ func (ei *endpointInitilizer) Initialize(ctx context.Context) (next context.Cont
 	return next, nil
 }
 
-func (ei *endpointInitilizer) InitDataVerify(ctx context.Context) bool {
+func (ei *endpointInitializer) InitDataVerify(ctx context.Context) bool {
 	record := dbTable.Endpoint{}
 	err := global.DB.Where(dbTable.Endpoint{Name: "Get User List"}).First(&record).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)

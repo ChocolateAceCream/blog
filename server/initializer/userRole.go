@@ -21,18 +21,18 @@ func (rim *initUserRole) Name() string {
 }
 
 func (rim *initUserRole) Initialize(ctx context.Context) (next context.Context, err error) {
-	ri := roleInitilizer{}
-	ru := userInitilizer{}
+	ri := roleInitializer{}
+	ru := userInitializer{}
 	db := global.DB
 	next = ctx
 	for _, name := range []string{"superadmin", "admin", "guest"} {
 		user, ok := next.Value(ru.Name() + name).(dbTable.User)
 		if !ok {
-			return next, fmt.Errorf("fail to find %s user in user-role initilizer", name)
+			return next, fmt.Errorf("fail to find %s user in user-role initializer", name)
 		}
 		role, ok := next.Value(ri.Name() + name).(dbTable.Role)
 		if !ok {
-			return next, fmt.Errorf("fail to find %s role in user-role initilizer", name)
+			return next, fmt.Errorf("fail to find %s role in user-role initializer", name)
 		}
 		if err = db.Model(&user).Association("Roles").Append([]dbTable.Role{role}); err != nil {
 			return next, err

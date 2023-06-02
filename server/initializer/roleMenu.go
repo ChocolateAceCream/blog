@@ -21,18 +21,18 @@ func (rim *initRoleMenu) Name() string {
 }
 
 func (rim *initRoleMenu) Initialize(ctx context.Context) (next context.Context, err error) {
-	ri := roleInitilizer{}
-	rm := menuInitilizer{}
+	ri := roleInitializer{}
+	rm := menuInitializer{}
 	db := global.DB
 	next = ctx
 	for _, name := range []string{"superadmin", "admin", "guest"} {
 		menus, ok := next.Value(rm.Name() + name).([]dbTable.Menu)
 		if !ok {
-			return next, fmt.Errorf("fail to find %s menu in role-menu initilizer", name)
+			return next, fmt.Errorf("fail to find %s menu in role-menu initializer", name)
 		}
 		role, ok := next.Value(ri.Name() + name).(dbTable.Role)
 		if !ok {
-			return next, fmt.Errorf("fail to find %s role in role-menu initilizer", name)
+			return next, fmt.Errorf("fail to find %s role in role-menu initializer", name)
 		}
 		if err = db.Model(&role).Association("Menus").Append(menus); err != nil {
 			return next, err

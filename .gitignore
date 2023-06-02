@@ -1,5 +1,5 @@
 backend/sql/init.sql
-server/config.yaml
+server/config.yml
 server/gin-bin
 server/log/server.log
 server/sql/init.sql

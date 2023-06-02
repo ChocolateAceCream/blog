@@ -12,17 +12,17 @@ import (
 
 const InitCasbinOrder = InitOrderInternal + 1
 
-type casbinInitilizer struct{}
+type casbinInitializer struct{}
 
 func init() {
-	Register(InitCasbinOrder, &casbinInitilizer{})
+	Register(InitCasbinOrder, &casbinInitializer{})
 }
 
-func (ci *casbinInitilizer) Name() string {
+func (ci *casbinInitializer) Name() string {
 	return "casbin"
 }
 
-func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
+func (ci *casbinInitializer) Initialize(ctx context.Context) (next context.Context, err error) {
 	guestRules := []gormadapter.CasbinRule{
 		{Ptype: "p", V1: "/api/v1/user/list", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/user/active", V2: "POST"},
@@ -75,7 +75,7 @@ func (ci *casbinInitilizer) Initialize(ctx context.Context) (next context.Contex
 	return next, nil
 }
 
-func (ci *casbinInitilizer) InitDataVerify(ctx context.Context) bool {
+func (ci *casbinInitializer) InitDataVerify(ctx context.Context) bool {
 	record := gormadapter.CasbinRule{}
 	err := global.DB.Where(gormadapter.CasbinRule{Ptype: "p", V0: "1", V1: "/api/v1/menu/add", V2: "GET"}).First(&record).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)

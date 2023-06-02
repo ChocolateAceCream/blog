@@ -12,17 +12,17 @@ import (
 
 const InitMenuOrder = InitRoleOrder + 1
 
-type menuInitilizer struct{}
+type menuInitializer struct{}
 
 func init() {
-	Register(InitMenuOrder, &menuInitilizer{})
+	Register(InitMenuOrder, &menuInitializer{})
 }
 
-func (ri *menuInitilizer) Name() string {
+func (ri *menuInitializer) Name() string {
 	return "menu"
 }
 
-func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context, err error) {
+func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context, err error) {
 	db := global.DB
 	guestMenus := []dbTable.Menu{
 		{
@@ -114,7 +114,7 @@ func (ri *menuInitilizer) Initialize(ctx context.Context) (next context.Context,
 	return next, nil
 }
 
-func (ri *menuInitilizer) InitDataVerify(ctx context.Context) bool {
+func (ri *menuInitializer) InitDataVerify(ctx context.Context) bool {
 	err := global.DB.Where("name = ?", "home").First(&dbTable.Menu{}).Error
 	return !errors.Is(err, gorm.ErrRecordNotFound)
 }

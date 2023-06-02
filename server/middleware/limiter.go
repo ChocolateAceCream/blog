@@ -80,6 +80,7 @@ func SetLimit(key string, duration int, limit int) error {
 				if timeToExpire, err := global.REDIS.PTTL(context.Background(), key).Result(); err != nil {
 					return errors.New("you have reached the limit, please try again later ")
 				} else {
+					fmt.Println("----fmt.Sprintf(, timeToExpire.Seconds())-----", timeToExpire)
 					return errors.New("you have reached the limit, please try again later after " + fmt.Sprintf("%0.1f", timeToExpire.Seconds()) + " second")
 				}
 			} else {
