@@ -42,3 +42,4 @@ server/unitTest/testConfig.yaml
 server/unitTest/log/server.log
 web/.env.production
 makefile
+blog.code-workspace

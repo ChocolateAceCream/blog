@@ -8,6 +8,7 @@ type ApiGroup struct {
 	MenuApi     MenuApi
 	InitApi     InitApi
 	EndpointApi EndpointApi
+	ArticleApi  ArticleApi
 }
 
 var ApiGroupInstance = new(ApiGroup)

@@ -231,6 +231,41 @@
                 }
             }
         },
+        "/api/v1/article/preview": {
+            "get": {
+                "description": "get article md files and other info",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "preview article",
+                "responses": {
+                    "200": {
+                        "description": "return article info \u0026 md file",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.ArticleInfo"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/casbin/list": {
             "get": {
                 "consumes": [
@@ -1143,7 +1178,7 @@
                 "parameters": [
                     {
                         "type": "integer",
-                        "name": "active",
+                        "name": "username",
                         "in": "query"
                     },
                     {
@@ -1394,6 +1429,12 @@
                 },
                 "email": {
                     "type": "string"
+                },
+                "followers": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/dbTable.User"
+                    }
                 },
                 "id": {
                     "type": "integer"
@@ -1658,6 +1699,47 @@
                 },
                 "roleId": {
                     "type": "integer"
+                }
+            }
+        },
+        "response.ArticleInfo": {
+            "type": "object",
+            "required": [
+                "title"
+            ],
+            "properties": {
+                "abstract": {
+                    "type": "string"
+                },
+                "author": {
+                    "$ref": "#/definitions/dbTable.User"
+                },
+                "authorID": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "file": {
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "published": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
                 }
             }
         },

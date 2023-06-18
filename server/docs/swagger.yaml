@@ -88,6 +88,10 @@ definitions:
         type: string
       email:
         type: string
+      followers:
+        items:
+          $ref: '#/definitions/dbTable.User'
+        type: array
       id:
         type: integer
       password:
@@ -266,6 +270,33 @@ definitions:
     required:
     - roleId
     type: object
+  response.ArticleInfo:
+    properties:
+      abstract:
+        type: string
+      author:
+        $ref: '#/definitions/dbTable.User'
+      authorID:
+        type: string
+      createdAt:
+        type: string
+      file:
+        items:
+          type: integer
+        type: array
+      id:
+        type: integer
+      path:
+        type: string
+      published:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    required:
+    - title
+    type: object
   response.CaptchaResponse:
     properties:
       captcha:
@@ -435,6 +466,26 @@ paths:
       summary: initialize data
       tags:
       - Init
+  /api/v1/article/preview:
+    get:
+      consumes:
+      - application/json
+      description: get article md files and other info
+      responses:
+        "200":
+          description: return article info & md file
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.ArticleInfo'
+                msg:
+                  type: string
+              type: object
+      summary: preview article
+      tags:
+      - Article
   /api/v1/casbin/list:
     get:
       consumes:
@@ -961,7 +1012,7 @@ paths:
       description: get user list
       parameters:
       - in: query
-        name: active
+        name: username
         type: integer
       - description: order by desc (by default)
         in: query

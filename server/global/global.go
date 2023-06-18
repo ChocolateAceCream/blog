@@ -1,6 +1,8 @@
 package global
 
 import (
+	"embed"
+
 	"github.com/ChocolateAceCream/blog/config"
 	"github.com/go-redis/redis/v8"
 	"github.com/spf13/viper"
@@ -15,4 +17,5 @@ var (
 	LOGGER *zap.Logger
 	DB     *gorm.DB
 	REDIS  *redis.Client
+	FS     embed.FS
 )

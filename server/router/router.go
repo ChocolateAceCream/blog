@@ -34,7 +34,7 @@ func RouteLoader(r *gin.Engine) {
 	menuApi := apiV1.ApiGroupInstance.MenuApi
 	initApi := apiV1.ApiGroupInstance.InitApi
 	endpointApi := apiV1.ApiGroupInstance.EndpointApi
-
+	articleApi := apiV1.ApiGroupInstance.ArticleApi
 	PublicGroup := r.Group("/api/public")
 	{
 		// health check
@@ -112,6 +112,14 @@ func RouteLoader(r *gin.Engine) {
 			endpoint.POST("/add", endpointApi.AddEndpoint)
 			endpoint.PUT("/edit", endpointApi.EditEndpoint)
 			endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
+		}
+
+		article := v1.Group("/article")
+		{
+			article.GET("/preview", articleApi.PreviewArticle)
+			// endpoint.POST("/add", endpointApi.AddEndpoint)
+			// endpoint.PUT("/edit", endpointApi.EditEndpoint)
+			// endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
 		}
 	}
 }

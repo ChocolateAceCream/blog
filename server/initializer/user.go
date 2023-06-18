@@ -61,9 +61,14 @@ func (ui *userInitializer) Initialize(ctx context.Context) (next context.Context
 		return ctx, err
 	}
 
-	if err = db.Model(&entities[0]).Association("Followers").Append([]dbTable.User{entities[1], entities[2], entities[2]}); err != nil {
-		return ctx, err
-	}
+	/*
+		// duplicated record won't be append to associations
+		e.g.
+		if err = db.Model(&entities[0]).Association("Followers").Append([]dbTable.User{entities[1], entities[2], entities[2]}); err != nil {
+			return ctx, err
+		}
+		//will not insert records since they already exited in db
+	*/
 
 	next = ctx
 	for _, e := range entities {

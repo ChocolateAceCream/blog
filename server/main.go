@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"embed"
 	"flag"
 	"net/http"
 	"os"
@@ -19,6 +20,9 @@ import (
 	"go.uber.org/zap"
 )
 
+//go:embed static/*.md
+var f embed.FS
+
 func Init() *gin.Engine {
 	dir, _ := os.Getwd()
 	var mode string
@@ -27,6 +31,8 @@ func Init() *gin.Engine {
 	if mode == "release" {
 		gin.SetMode(gin.ReleaseMode)
 	}
+
+	global.FS = f //file system
 	global.VIPER = utils.ViperInit(dir)
 	// must first load config
 	global.LOGGER = library.LoggerInit()
