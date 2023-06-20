@@ -6,6 +6,27 @@
   "description": "blog",
   "glyphs": [
     {
+      "icon_id": "2377133",
+      "name": "创作中心",
+      "font_class": "creator",
+      "unicode": "63",
+      "unicode_decimal": 99
+    },
+    {
+      "icon_id": "4766888",
+      "name": "read",
+      "font_class": "preview",
+      "unicode": "e7d8",
+      "unicode_decimal": 59352
+    },
+    {
+      "icon_id": "11372647",
+      "name": "创作",
+      "font_class": "write",
+      "unicode": "67",
+      "unicode_decimal": 103
+    },
+    {
       "icon_id": "201642",
       "name": "3.1 评论",
       "font_class": "comments",
