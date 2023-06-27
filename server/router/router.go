@@ -35,6 +35,7 @@ func RouteLoader(r *gin.Engine) {
 	initApi := apiV1.ApiGroupInstance.InitApi
 	endpointApi := apiV1.ApiGroupInstance.EndpointApi
 	articleApi := apiV1.ApiGroupInstance.ArticleApi
+	ossApi := apiV1.ApiGroupInstance.OssApi
 	PublicGroup := r.Group("/api/public")
 	{
 		// health check
@@ -120,6 +121,11 @@ func RouteLoader(r *gin.Engine) {
 			// endpoint.POST("/add", endpointApi.AddEndpoint)
 			// endpoint.PUT("/edit", endpointApi.EditEndpoint)
 			// endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
+		}
+
+		oss := v1.Group("/oss")
+		{
+			oss.POST("/upload", ossApi.Uploader)
 		}
 	}
 }

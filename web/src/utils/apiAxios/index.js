@@ -35,10 +35,12 @@ supportCancelToken(apiAxios)
 
 // request interceptors
 apiAxios.interceptors.request.use(config => {
-  // console.log('-------confoig===', config)
-  config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+  if (config['Content-Type']) {
+    config.headers['Content-Type'] = config['Content-Type']
+  } else {
+    config.headers['Content-Type'] = 'application/json;charset=UTF-8'
+  }
   if (config.meta?.withProgressBar) { NProgress.start() }
-
   if (!Object.prototype.hasOwnProperty.call(config.params || {}, 'sign')) {
     addSignature(config)
   }

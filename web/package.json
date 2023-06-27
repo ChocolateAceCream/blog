@@ -14,6 +14,7 @@
     "element-plus": "^2.2.27",
     "js-md5": "^0.7.3",
     "lodash-es": "^4.17.21",
+    "md-editor-v3": "^4.0.4",
     "moment": "^2.29.4",
     "nprogress": "^0.2.0",
     "pinia": "^2.0.25",
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "@iconify/json": "^2.1.139",
+    "@types/node": "^20.2.5",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "@typescript-eslint/parser": "^5.44.0",
     "@vitejs/plugin-vue": "^3.2.0",

@@ -17,7 +17,7 @@ type ArticleApi struct{}
 // @Param data query request.PreviewArticle true "get article md file by article id"
 // @Success 200 {object} response.Response{data=response.ArticleInfo,msg=string} "return article info & md file"
 // @Router /api/v1/article/preview [get]
-func (b *ArticleApi) PreviewArticle(c *gin.Context) {
+func (*ArticleApi) PreviewArticle(c *gin.Context) {
 	var r request.PreviewArticle
 	if err := c.ShouldBind(&r); err != nil {
 		global.LOGGER.Error("preview article validation error", zap.Error(err))

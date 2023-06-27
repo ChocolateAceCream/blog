@@ -37,16 +37,17 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 				Title: "主页",
 			},
 		},
+
 		{
-			ID:        6,
+			ID:        7,
 			Pid:       0,
-			Name:      "blog",
-			Component: "views/blog/index.vue",
-			Path:      "/blog/:id",
+			Name:      "article",
+			Component: "views/article/preview/index.vue",
+			Path:      "/article/:id",
 			Display:   2,
 			Meta: dbTable.Meta{
 				Icon:  "menu",
-				Title: "blogs",
+				Title: "Article",
 			},
 		},
 	}
@@ -55,7 +56,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			ID:        2,
 			Pid:       0,
 			Name:      "admin",
-			Component: "views/admin/index.vue",
+			Component: "views/admin/foo.vue",
 			Path:      "/admin",
 			Display:   1,
 			Meta: dbTable.Meta{
@@ -73,6 +74,31 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			Meta: dbTable.Meta{
 				Icon:  "role",
 				Title: "角色管理",
+			},
+		},
+
+		{
+			ID:        6,
+			Pid:       0,
+			Name:      "creator",
+			Component: "views/article/index.vue",
+			Path:      "/article",
+			Display:   1,
+			Meta: dbTable.Meta{
+				Icon:  "creator",
+				Title: "创作者",
+			},
+		},
+		{
+			ID:        8,
+			Pid:       6,
+			Name:      "draft",
+			Component: "views/article/draft/index.vue",
+			Path:      "/article/draft",
+			Display:   1,
+			Meta: dbTable.Meta{
+				Icon:  "write",
+				Title: "写作",
 			},
 		},
 	}

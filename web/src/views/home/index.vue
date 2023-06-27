@@ -22,6 +22,51 @@
     </div>
   </div>
   <div class="card-wrapper">
+    <el-card
+      class="abstract-card"
+      @click="onCardClick(2)"
+    >
+      <div class="card-header">
+        <el-link :underline="false">Author</el-link>
+        <div class="dividing" />
+        <el-link :underline="false">6 days ago</el-link>
+        <div class="dividing" />
+        <el-link
+          class="tag"
+          :underline="false"
+        >Tag 1</el-link>
+        <el-link
+          class="tag"
+          :underline="false"
+        >Tag 2</el-link>
+      </div>
+      <div class="card-title">title: this is a long long long title.....</div>
+      <div class="card-abstract">matlab设置画布大小代码-pyplot-tutorial:代码示例了解
+      </div>
+      <ul class="card-footer">
+        <li>
+          <SvgIcon
+            class="toolbar-icon"
+            :icon-name="`icon-blog-watching`"
+          />
+          <span> 198</span>
+        </li>
+        <li>
+          <SvgIcon
+            class="toolbar-icon"
+            :icon-name="`icon-blog-thumb-up`"
+          />
+          <span> 198</span>
+        </li>
+        <li>
+          <SvgIcon
+            class="toolbar-icon"
+            :icon-name="`icon-blog-comments`"
+          />
+          <span> 198</span>
+        </li>
+      </ul>
+    </el-card>
     <el-card class="abstract-card">
       <div class="card-header">
         <el-link :underline="false">Author</el-link>
@@ -69,9 +114,13 @@
 
 <script>
 import { defineComponent, toRefs, reactive } from 'vue'
+import router from '@/router'
 export default defineComponent({
   setup(props, ctx) {
     const state = reactive({
+      onCardClick: (id) => {
+        router.push({ path: 'article/' + id })
+      }
     })
     return {
       ...toRefs(state)
@@ -164,6 +213,7 @@ export default defineComponent({
 }
 
 .abstract-card {
+  margin:2px;
   @include mobile-device {
     width: 100%
   }

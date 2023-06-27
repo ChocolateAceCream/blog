@@ -12,4 +12,5 @@ type Server struct {
 	Signature Signature `mapstructure:"signature" json:"signature" yaml:"signature"`
 	Init      Init      `mapstructure:"init" json:"init" yaml:"init"`
 	Local     Local     `mapstructure:"local" json:"local" yaml:"local"`
+	Minio     Minio     `mapstructure:"minio" json:"minio" yaml:"minio"`
 }

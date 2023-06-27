@@ -6,6 +6,7 @@ import Pagination from './components/Pagination'
 import Modal from './components/Modal'
 import Permission from './components/Permission'
 import SvgIcon from './components/SvgIcon'
+import MyEditor from './components/MyEditor'
 
 export default {
   install(app) {
@@ -17,5 +18,6 @@ export default {
     app.component('Permission', Permission)
     app.component('SvgIcon', SvgIcon)
     app.component('Modal', Modal)
+    app.component('MyEditor', MyEditor)
   }
 }
