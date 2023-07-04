@@ -5,18 +5,20 @@
 * @description drafting new article using md-v3 editor
 !-->
 <template>
-  <el-button
-    type="primary"
-    style="margin-bottom: 15px;"
-    :loading="onLoading"
-    @click="onSave"
-  > Save</el-button>
-  <el-button
-    type="primary"
-    style="margin-bottom: 15px;"
-    @click="onPublish"
-  > Publish</el-button>
-
+  <div class="button-wrapper">
+    <el-button
+      type="primary"
+      style="margin-bottom: 15px;"
+      :loading="onSaving"
+      :disabled="onSaving"
+      @click="onSave"
+    > Save</el-button>
+    <el-button
+      type="primary"
+      style="margin-bottom: 15px;"
+      @click="onPublish"
+    > Publish</el-button>
+  </div>
   <MyEditor
     ref="editorRef"
     v-model="content"
@@ -38,6 +40,11 @@ export default defineComponent({
       } else {
         addArticle()
       }
+      state.autoSave = window.setInterval(() => {
+        if (!state.onSaving) {
+          onSave()
+        }
+      }, 20000)
       console.log('----onMounted----', store.currentEditingArticle)
     })
     const addArticle = async() => {
@@ -54,26 +61,29 @@ export default defineComponent({
       content: '',
       articleId: null,
       editorRef: null,
-      onLoading: false,
+      onSaving: false,
+      autoSave: null,
     })
     const onSave = async() => {
       console.log('----onSave----')
+      state.onSaving = true
       const payload = {
         id: state.articleId,
         content: state.editorRef.text
       }
       const resp = await putEditArticle(payload)
+      state.onSaving = false
       const { data: res } = resp
-      if (res.errorCode === 0) {
+      if (res.errorCode !== 0) {
         ElMessage({
-          message: `Article Saved`,
-          type: 'success',
+          message: res.msg,
+          type: 'error',
           duration: 3 * 1000
         })
       }
     }
     const onPublish = async() => {
-      state.onLoading = !state.onLoading
+      state.onSaving = !state.onSaving
       console.log('----onPublish----')
     }
     return {
@@ -85,4 +95,7 @@ export default defineComponent({
 })
 </script>
 <style lang='scss' scoped>
+.button-wrapper{
+  text-align: right;
+}
 </style>
