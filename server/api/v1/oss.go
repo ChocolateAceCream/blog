@@ -15,7 +15,7 @@ type OssApi struct{}
 // @accept    multipart/form-data
 // @Produce   application/json
 // @Param     file  formData  file                                                           true  "上传文件示例"
-// @Success   200   {object}  response.OkWithFullDetails{data=response.UploadFileResult,msg=string}  "上传文件示例,返回包括文件详情"
+// @Success   200   {object}  response.Response{data=response.UploadFileResult,msg=string}  "上传文件示例,返回包括文件详情"
 // @Router    /api/v1/oss/upload [post]
 func (oa *OssApi) Uploader(c *gin.Context) {
 	_, header, err := c.Request.FormFile("file")

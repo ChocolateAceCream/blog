@@ -48,6 +48,11 @@ func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Con
 		{Method: "PUT", Path: "/api/v1/endpoint/edit", GroupName: "Endpoint", Description: "Edit Endpoint", Name: "Edit Endpoint"},
 		{Method: "DELETE", Path: "/api/v1/endpoint/delete", GroupName: "Endpoint", Description: "Delete Endpoint", Name: "Delete Endpoint"},
 
+		{Method: "GET", Path: "/api/v1/article/preview", GroupName: "Article", Description: "Get article content", Name: "Preview  Article"},
+		{Method: "POST", Path: "/api/v1/article/add", GroupName: "Article", Description: "Add Article", Name: "Add Article"},
+		{Method: "PUT", Path: "/api/v1/article/edit", GroupName: "Article", Description: "Edit Article", Name: "Edit Article"},
+		// {Method: "DELETE", Path: "/api/v1/article/delete", GroupName: "Article", Description: "Delete Endpoint", Name: "Delete Endpoint"},
+
 		{Method: "POST", Path: "/api/v1/casbin/update", GroupName: "Casbin", Description: "Update Role's Casbin", Name: "Update Casbin"},
 		{Method: "GET", Path: "/api/v1/casbin/list", GroupName: "Casbin", Description: "Get casbin list", Name: "list Casbin"},
 	}

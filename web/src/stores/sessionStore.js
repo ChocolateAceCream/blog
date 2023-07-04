@@ -18,12 +18,12 @@ export const useSessionStore = defineStore({
     },
     userSetting: {
       isNavBarCollapsed: false,
-    }
+    },
+    currentEditingArticle: null,
   }),
   getters: {
     isAuthenticated: (state) => state.userInfo.isAuthenticated,
     getLocale: (state) => state.userInfo.locale,
-
   },
   actions: {
     increment() {

@@ -239,6 +239,81 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/article/add": {
+            "post": {
+                "description": "add new article",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "add new article",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/article/edit": {
+            "put": {
+                "description": "edit article",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Article"
+                ],
+                "summary": "edit article",
+                "parameters": [
+                    {
+                        "description": "Title, Content,Abstract",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dbTable.Article"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/article/preview": {
             "get": {
                 "description": "get article md files and other info",
@@ -261,7 +336,7 @@ const docTemplate = `{
                                     "type": "object",
                                     "properties": {
                                         "data": {
-                                            "$ref": "#/definitions/response.ArticleInfo"
+                                            "$ref": "#/definitions/request.PreviewArticle"
                                         },
                                         "msg": {
                                             "type": "string"
@@ -855,6 +930,52 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/oss/upload": {
+            "post": {
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Oss"
+                ],
+                "summary": "file uploader",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "上传文件示例",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "上传文件示例,返回包括文件详情",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/response.UploadFileResult"
+                                        },
+                                        "msg": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/role/add": {
             "post": {
                 "consumes": [
@@ -1305,6 +1426,38 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "dbTable.Article": {
+            "type": "object",
+            "properties": {
+                "abstract": {
+                    "type": "string"
+                },
+                "author": {
+                    "$ref": "#/definitions/dbTable.User"
+                },
+                "authorID": {
+                    "type": "integer"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "createdAt": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "published": {
+                    "type": "integer"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "updatedAt": {
+                    "type": "string"
+                }
+            }
+        },
         "dbTable.Endpoint": {
             "type": "object",
             "required": [
@@ -1639,6 +1792,17 @@ const docTemplate = `{
                 }
             }
         },
+        "request.PreviewArticle": {
+            "type": "object",
+            "required": [
+                "params"
+            ],
+            "properties": {
+                "params": {
+                    "$ref": "#/definitions/request.FindById"
+                }
+            }
+        },
         "request.RegisterUser": {
             "type": "object",
             "required": [
@@ -1710,47 +1874,6 @@ const docTemplate = `{
                 }
             }
         },
-        "response.ArticleInfo": {
-            "type": "object",
-            "required": [
-                "title"
-            ],
-            "properties": {
-                "abstract": {
-                    "type": "string"
-                },
-                "author": {
-                    "$ref": "#/definitions/dbTable.User"
-                },
-                "authorID": {
-                    "type": "string"
-                },
-                "createdAt": {
-                    "type": "string"
-                },
-                "file": {
-                    "type": "array",
-                    "items": {
-                        "type": "integer"
-                    }
-                },
-                "id": {
-                    "type": "integer"
-                },
-                "path": {
-                    "type": "string"
-                },
-                "published": {
-                    "type": "integer"
-                },
-                "title": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
         "response.CaptchaResponse": {
             "type": "object",
             "properties": {
@@ -1801,6 +1924,14 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "msg": {
+                    "type": "string"
+                }
+            }
+        },
+        "response.UploadFileResult": {
+            "type": "object",
+            "properties": {
+                "url": {
                     "type": "string"
                 }
             }

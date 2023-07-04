@@ -31,8 +31,8 @@ func (ai *articleInitializer) Initialize(ctx context.Context) (next context.Cont
 	entities := []dbTable.Article{
 		{
 			Title:     "Hello World",
-			Path:      "hello.md",
 			Abstract:  "hello world first blog",
+			Content:   "# 2023-3-28 Gorm Usage",
 			Published: 1,
 			Author:    user,
 		},

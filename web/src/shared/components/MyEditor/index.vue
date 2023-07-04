@@ -70,7 +70,6 @@ export default defineComponent({
     })
 
     const uploadImg = async(files, callback) => {
-      console.log('----uploading----', files)
       const forms = new FormData()
       forms.append('file', files[0])
       const { data: res } = await postUploadFile(
@@ -79,7 +78,6 @@ export default defineComponent({
           'Content-Type': 'multipart/form-data'
         }
       )
-      console.log('-----res-----', res)
       callback([res.data.url])
       // callback(res.map(item => item.data.url))
     }

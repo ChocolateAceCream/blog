@@ -25,7 +25,7 @@ export const toolbarConfig = [
   '-',
   'revoke',
   'next',
-  'save',
+  // 'save', //using customized save function
   '=',
   'prettier',
   'pageFullscreen',

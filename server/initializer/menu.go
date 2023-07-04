@@ -94,7 +94,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			Pid:       6,
 			Name:      "draft",
 			Component: "views/article/draft/index.vue",
-			Path:      "/article/draft",
+			Path:      "article/draft",
 			Display:   1,
 			Meta: dbTable.Meta{
 				Icon:  "write",

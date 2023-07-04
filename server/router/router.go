@@ -118,8 +118,8 @@ func RouteLoader(r *gin.Engine) {
 		article := v1.Group("/article")
 		{
 			article.GET("/preview", articleApi.PreviewArticle)
-			// endpoint.POST("/add", endpointApi.AddEndpoint)
-			// endpoint.PUT("/edit", endpointApi.EditEndpoint)
+			article.POST("/add", articleApi.AddArticle)
+			article.PUT("/edit", articleApi.EditArticle)
 			// endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
 		}
 

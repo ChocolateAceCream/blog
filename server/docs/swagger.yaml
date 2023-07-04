@@ -1,4 +1,25 @@
 definitions:
+  dbTable.Article:
+    properties:
+      abstract:
+        type: string
+      author:
+        $ref: '#/definitions/dbTable.User'
+      authorID:
+        type: integer
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      published:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+    type: object
   dbTable.Endpoint:
     properties:
       createdAt:
@@ -222,6 +243,13 @@ definitions:
     - password
     - username
     type: object
+  request.PreviewArticle:
+    properties:
+      params:
+        $ref: '#/definitions/request.FindById'
+    required:
+    - params
+    type: object
   request.RegisterUser:
     properties:
       code:
@@ -270,33 +298,6 @@ definitions:
     required:
     - roleId
     type: object
-  response.ArticleInfo:
-    properties:
-      abstract:
-        type: string
-      author:
-        $ref: '#/definitions/dbTable.User'
-      authorID:
-        type: string
-      createdAt:
-        type: string
-      file:
-        items:
-          type: integer
-        type: array
-      id:
-        type: integer
-      path:
-        type: string
-      published:
-        type: integer
-      title:
-        type: string
-      updatedAt:
-        type: string
-    required:
-    - title
-    type: object
   response.CaptchaResponse:
     properties:
       captcha:
@@ -330,6 +331,11 @@ definitions:
       errorCode:
         type: integer
       msg:
+        type: string
+    type: object
+  response.UploadFileResult:
+    properties:
+      url:
         type: string
     type: object
 host: localhost:3000
@@ -466,6 +472,49 @@ paths:
       summary: initialize data
       tags:
       - Init
+  /api/v1/article/add:
+    post:
+      consumes:
+      - application/json
+      description: add new article
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: add new article
+      tags:
+      - Article
+  /api/v1/article/edit:
+    put:
+      consumes:
+      - application/json
+      description: edit article
+      parameters:
+      - description: Title, Content,Abstract
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/dbTable.Article'
+      responses:
+        "200":
+          description: success
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                msg:
+                  type: string
+              type: object
+      summary: edit article
+      tags:
+      - Article
   /api/v1/article/preview:
     get:
       consumes:
@@ -479,7 +528,7 @@ paths:
             - $ref: '#/definitions/response.Response'
             - properties:
                 data:
-                  $ref: '#/definitions/response.ArticleInfo'
+                  $ref: '#/definitions/request.PreviewArticle'
                 msg:
                   type: string
               type: object
@@ -820,6 +869,33 @@ paths:
       summary: get all menus
       tags:
       - Menu
+  /api/v1/oss/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      parameters:
+      - description: 上传文件示例
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: 上传文件示例,返回包括文件详情
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/response.UploadFileResult'
+                msg:
+                  type: string
+              type: object
+      summary: file uploader
+      tags:
+      - Oss
   /api/v1/role/add:
     post:
       consumes:

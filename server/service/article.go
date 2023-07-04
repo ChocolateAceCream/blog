@@ -1,26 +1,32 @@
 package service
 
 import (
-	"errors"
-
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
-	"github.com/ChocolateAceCream/blog/model/response"
-	"gorm.io/gorm"
 )
 
 type ArticleService struct{}
 
-func (articleService *ArticleService) GetArticleInfo(id int) (article response.ArticleInfo, err error) {
-	var a dbTable.Article
-	if err := global.DB.Preload("Author").Where("id = ?", id).First(&a).Error; errors.Is(err, gorm.ErrRecordNotFound) {
-		return article, errors.New("article not found ")
-	}
-
-	fileBytes, err := global.FS.ReadFile(global.CONFIG.Local.StaticFilePath + a.Path)
-	article = response.ArticleInfo{
-		File:    fileBytes,
-		Article: a,
-	}
+func (articleService *ArticleService) GetArticleInfo(articleId int) (a dbTable.Article, err error) {
+	err = global.DB.Preload("Author").Where("id = ?", articleId).First(&a).Error
 	return
+}
+
+func (*ArticleService) AddArticle(a dbTable.Article) (dbTable.Article, error) {
+	err := global.DB.Create(&a).Error
+	return a, err
+}
+
+func (*ArticleService) EditArticle(a dbTable.Article) error {
+	return global.DB.Model(&dbTable.Article{}).Where("ID = ? ", a.ID).Updates(&a).Error
+}
+
+func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {
+	r := dbTable.Article{}
+	err := global.DB.First(&r, articleId).Error
+	if err != nil || r.AuthorID != authorId {
+		return false
+	} else {
+		return true
+	}
 }
