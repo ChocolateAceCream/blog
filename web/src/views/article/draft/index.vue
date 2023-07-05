@@ -24,17 +24,28 @@
     v-model="content"
     class="md-editor"
   />
+  <PublishModal
+    ref="modalRef"
+    :content="content"
+    :article-id="articleId"
+    :author-i-d="authorId"
+  />
 </template>
 
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
+import PublishModal from './components/publishModal'
 import { postAddArticle, putEditArticle } from '@/api/article'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 export default defineComponent({
+  components: {
+    PublishModal
+  },
   setup(props, ctx) {
     onMounted(() => {
       const store = useSessionStore()
+      state.authorId = store.userInfo.id
       if (store.currentEditingArticle) {
         state.articleId = store.currentEditingArticle
       } else {
@@ -60,9 +71,11 @@ export default defineComponent({
     const state = reactive({
       content: '',
       articleId: null,
+      authorId: null,
       editorRef: null,
       onSaving: false,
       autoSave: null,
+      modalRef: null,
     })
     const onSave = async() => {
       console.log('----onSave----')
@@ -83,8 +96,7 @@ export default defineComponent({
       }
     }
     const onPublish = async() => {
-      state.onSaving = !state.onSaving
-      console.log('----onPublish----')
+      state.modalRef.openModal()
     }
     return {
       onSave,
