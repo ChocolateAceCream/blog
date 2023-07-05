@@ -8,7 +8,8 @@
       :body-style="{height: '100%'}"
     >
       <el-scrollbar height="100%">
-        <router-view />
+        <!-- 避免了组件复用，子路由间来回切换时，页面都会重新加载. -->
+        <router-view :key="path" />
       </el-scrollbar>
     </el-card>
   </div>
@@ -23,7 +24,8 @@ export default defineComponent({
     const state = reactive({
       isFullContainer: computed(() => {
         return !!router.meta.fullContainer
-      })
+      }),
+      path: router.path,
     })
     return { ...toRefs(state) }
   }

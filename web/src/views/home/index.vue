@@ -24,7 +24,7 @@
   <div class="card-wrapper">
     <el-card
       class="abstract-card"
-      @click="onCardClick(2)"
+      @click="onCardClick(11)"
     >
       <div class="card-header">
         <el-link :underline="false">Author</el-link>

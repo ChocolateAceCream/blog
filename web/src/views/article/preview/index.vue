@@ -36,14 +36,10 @@ export default defineComponent({
         onFetchArticle()
       }
     })
-    const getDecode = (str) => {
-      return decodeURIComponent(atob(str).split('').map(function(c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
-      }).join(''))
-    }
+
     const onFetchArticle = async() => {
       try {
-        const resp = await getArticleFile({ params: { id: 1 } })
+        const resp = await getArticleFile({ params: { id: 11 } })
         console.log('----res---', resp)
         const { data: res } = resp
         if (res.errorCode === 0) {
@@ -52,8 +48,7 @@ export default defineComponent({
             type: 'success',
             duration: 3 * 1000
           })
-          const decStr = getDecode(res.data.file)
-          state.text = decStr
+          state.text = res.data.content
           console.log('----state.text---', state.text)
         }
       } catch (err) {

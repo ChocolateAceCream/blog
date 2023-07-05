@@ -6,7 +6,7 @@ type Article struct {
 	global.MODEL
 	Title     string `json:"title" gorm:"comment:article title" binding:"required_if=Published 1"`
 	Author    User   `json:"author" gorm:"foreignKey:AuthorID"`
-	AuthorID  uint   `json:"authorID" gorm:"comment:foreignKey" binding:"required_if=Published 1"`
+	AuthorID  uint   `json:"authorId" gorm:"comment:foreignKey" binding:"required_if=Published 1"`
 	Abstract  string `json:"abstract" gorm:"comment:first line of articles" binding:"required_if=Published 1"`
 	Content   string `json:"content" gorm:"comment:article content in md" binding:"required_if=Published 1"`
 	Published int    `json:"published" gorm:"default:2;comment:1-published, 2-private"`

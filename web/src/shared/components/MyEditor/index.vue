@@ -9,6 +9,7 @@
     <MdEditor
       ref="editorRef"
       v-model="text"
+      v-bind="$attrs"
       :editor-id="editorId"
       :language="locale"
       :theme="theme"
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive } from 'vue'
+import { defineComponent, toRefs, reactive, computed } from 'vue'
 import { MdEditor } from 'md-editor-v3'
 import { toolbarConfig } from './toolbarConfig.js'
 import 'md-editor-v3/lib/style.css'
@@ -48,10 +49,15 @@ import { useSessionStore } from '@/stores/sessionStore'
 import { postUploadFile } from '@/api/oss'
 export default defineComponent({
   components: { MdEditor },
-
+  emits: ['update:modelValue'],
   setup(props, ctx) {
     const state = reactive({
-      text: '',
+      text: computed({
+        get: () => ctx.attrs.modelValue,
+        set: val => {
+          ctx.emit('update:modelValue', val)
+        }
+      }),
       editorId: 'editor',
       locale: 'en-US',
       theme: 'light', // or dark
