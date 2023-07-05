@@ -88,7 +88,7 @@ export default defineComponent({
       formData: {},
       formItems: [
         { prop: 'title', label: 'Title', type: 'input', options: { placeholder: 'Article Title', maxlength: 80 } },
-        { prop: 'abstract', label: 'Abstract', type: 'input', options: { placeholder: '', type: 'contentarea', maxlength: 150, showWordLimit: true } },
+        { prop: 'abstract', label: 'Abstract', type: 'input', options: { placeholder: '', type: 'textarea', maxlength: 150, showWordLimit: true } },
         // { prop: 'method', label: 'Method', type: 'select', options: { placeholder: 'Request Method Type', options: methodOptions, propName: 'method' } },
       ],
       formConfig: {
