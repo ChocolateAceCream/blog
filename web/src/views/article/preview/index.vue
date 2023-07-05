@@ -5,8 +5,6 @@
 * @description blog preview page
 !-->
 <template>
-  <div>hello world</div>
-  <el-button @click="onClose">取消</el-button>
   <!-- <MdEditor v-model="text" /> -->
   <MdCatalog
     :editor-id="id"
@@ -16,11 +14,11 @@
     :editor-id="id"
     :model-value="text"
   />
-
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive } from 'vue'
+import { useRoute } from 'vue-router'
+import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { getArticleFile } from '@/api/article'
 import { ElMessage } from 'element-plus'
 import { MdPreview, MdCatalog } from 'md-editor-v3'
@@ -28,6 +26,10 @@ import 'md-editor-v3/lib/preview.css'
 export default defineComponent({
   components: { MdPreview, MdCatalog },
   setup(props, ctx) {
+    onMounted(() => {
+      onFetchArticle()
+    })
+    const route = useRoute()
     const state = reactive({
       text: '',
       id: 'preview-only',
@@ -39,7 +41,7 @@ export default defineComponent({
 
     const onFetchArticle = async() => {
       try {
-        const resp = await getArticleFile({ params: { id: 11 } })
+        const resp = await getArticleFile({ params: { id: parseInt(route.params.id) } })
         console.log('----res---', resp)
         const { data: res } = resp
         if (res.errorCode === 0) {
@@ -61,5 +63,4 @@ export default defineComponent({
   }
 })
 </script>
-<style lang='scss' scoped>
-</style>
+<style lang='scss' scoped></style>
