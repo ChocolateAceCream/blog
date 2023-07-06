@@ -51,9 +51,13 @@ export default defineComponent({
       } else {
         addArticle()
       }
+      let content = ''
       state.autoSave = window.setInterval(() => {
         if (!state.onSaving) {
-          onSave()
+          if (content !== state.content) {
+            onSave()
+            content = state.content
+          }
         }
       }, 20000)
       console.log('----onMounted----', store.currentEditingArticle)
