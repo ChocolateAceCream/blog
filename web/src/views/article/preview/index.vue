@@ -5,11 +5,24 @@
 * @description blog preview page
 !-->
 <template>
-  <!-- <MdEditor v-model="text" /> -->
-  <MdCatalog
-    :editor-id="id"
-    :scroll-element="scrollElement"
-  />
+  <h1>{{ title }}</h1>
+  <div style="font-size:12px;">
+    <el-link type="primary">
+      <span>Author: {{ author }}</span>
+    </el-link> &nbsp;&nbsp;
+    <el-text
+      type="info"
+      style="vertical-align: top;"
+    >
+      <time datetime="publishDate">Last Update: {{ publishDate }}</time>  &nbsp;&nbsp;
+    </el-text>
+
+    <el-button
+      type="primary"
+      link
+      @click="onEdit()"
+    >Edit</el-button>
+  </div>
   <MdPreview
     :editor-id="id"
     :model-value="text"
@@ -21,10 +34,11 @@ import { useRoute } from 'vue-router'
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { getArticleFile } from '@/api/article'
 import { ElMessage } from 'element-plus'
-import { MdPreview, MdCatalog } from 'md-editor-v3'
+import { MdPreview } from 'md-editor-v3'
+import { formatTimeToStr } from '@/utils/date'
 import 'md-editor-v3/lib/preview.css'
 export default defineComponent({
-  components: { MdPreview, MdCatalog },
+  components: { MdPreview },
   setup(props, ctx) {
     onMounted(() => {
       onFetchArticle()
@@ -32,7 +46,10 @@ export default defineComponent({
     const route = useRoute()
     const state = reactive({
       text: '',
+      title: '',
+      author: '',
       id: 'preview-only',
+      publishDate: '',
       scrollElement: document.documentElement,
       onClose: () => {
         onFetchArticle()
@@ -45,19 +62,22 @@ export default defineComponent({
         console.log('----res---', resp)
         const { data: res } = resp
         if (res.errorCode === 0) {
-          ElMessage({
-            message: res.msg,
-            type: 'success',
-            duration: 3 * 1000
-          })
           state.text = res.data.content
-          console.log('----state.text---', state.text)
+          state.title = res.data.title
+          state.author = res.data.author.username
+          const date = new Date(res.data.updatedAt)
+          state.publishDate = formatTimeToStr(date, 'yyyy-MM-dd hh:mm:ss')
         }
       } catch (err) {
         console.log('-----form validation err-', err)
       }
     }
+
+    const onEdit = () => {
+      console.log('---onEdit---')
+    }
     return {
+      onEdit,
       ...toRefs(state)
     }
   }

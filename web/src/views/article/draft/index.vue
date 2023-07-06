@@ -86,7 +86,7 @@ export default defineComponent({
       state.onSaving = true
       const payload = {
         id: state.articleId,
-        content: state.editorRef.text
+        content: state.editorRef.content
       }
       const resp = await putEditArticle(payload)
       state.onSaving = false
