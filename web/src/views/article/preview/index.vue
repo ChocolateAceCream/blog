@@ -31,11 +31,13 @@
 
 <script>
 import { useRoute } from 'vue-router'
+import router from '@/router'
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { getArticleFile } from '@/api/article'
 import { ElMessage } from 'element-plus'
 import { MdPreview } from 'md-editor-v3'
 import { formatTimeToStr } from '@/utils/date'
+import { useSessionStore } from '@/stores/sessionStore'
 import 'md-editor-v3/lib/preview.css'
 export default defineComponent({
   components: { MdPreview },
@@ -75,6 +77,9 @@ export default defineComponent({
 
     const onEdit = () => {
       console.log('---onEdit---')
+      const store = useSessionStore()
+      store.currentEditingArticle = parseInt(route.params.id)
+      router.push({ path: '/article/draft' })
     }
     return {
       onEdit,

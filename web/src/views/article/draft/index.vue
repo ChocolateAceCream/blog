@@ -21,14 +21,12 @@
   </div>
   <MyEditor
     ref="editorRef"
-    v-model="content"
+    v-model="articleInfo.content"
     class="md-editor"
   />
   <PublishModal
     ref="modalRef"
-    :content="content"
-    :article-id="articleId"
-    :author-i-d="authorId"
+    :article-info="articleInfo"
   />
 </template>
 
@@ -36,19 +34,25 @@
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
 import PublishModal from './components/publishModal'
-import { postAddArticle, putEditArticle } from '@/api/article'
+import { postAddArticle, putEditArticle, getArticleFile } from '@/api/article'
 import { ElMessage } from 'element-plus'
 export default defineComponent({
   components: {
     PublishModal
   },
   setup(props, ctx) {
-    onMounted(() => {
+    onMounted(async() => {
       const store = useSessionStore()
-      state.authorId = store.userInfo.id
       if (store.currentEditingArticle) {
+        const resp = await getArticleFile({ params: { id: store.currentEditingArticle } })
+        console.log('----res---', resp)
+        const { data: res } = resp
+        if (res.errorCode === 0) {
+          state.articleInfo = res.data
+        }
         state.articleId = store.currentEditingArticle
       } else {
+        state.articleInfo.authorId = store.userInfo.id
         addArticle()
       }
       let content = ''
@@ -69,13 +73,15 @@ export default defineComponent({
       if (res.errorCode === 0) {
         const store = useSessionStore()
         store.currentEditingArticle = res.data.id
-        state.articleId = res.data.id
+        state.articleInfo = res.data
       }
     }
     const state = reactive({
-      content: '',
-      articleId: null,
-      authorId: null,
+      articleInfo: {
+        content: '',
+        articleId: null,
+        authorId: null,
+      },
       editorRef: null,
       onSaving: false,
       autoSave: null,
@@ -84,10 +90,7 @@ export default defineComponent({
     const onSave = async() => {
       console.log('----onSave----')
       state.onSaving = true
-      const payload = {
-        id: state.articleId,
-        content: state.editorRef.content
-      }
+      const payload = state.articleInfo
       const resp = await putEditArticle(payload)
       state.onSaving = false
       const { data: res } = resp
