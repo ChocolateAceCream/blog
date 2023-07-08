@@ -53,6 +53,7 @@ func SessionHandler(c *gin.Context) {
 			// renew cookie expire time if time to expire within RefreshBeforeExpireTime range
 			if (session.ExpireTime - time.Now().Unix()) < sessionConfig.RefreshBeforeExpireTime {
 				session.Renew(c)
+				c.SetCookie(sessionConfig.CookieName, session.UUID, int(session.ExpireTime-time.Now().Unix()), "/", c.Request.Host, sessionConfig.Secure, sessionConfig.HttpOnly)
 			}
 			// tm := time.Unix(session.ExpireTime, 0)
 			// fmt.Println("EXP: ", tm.Format("2006-01-02 15:04:05"))
