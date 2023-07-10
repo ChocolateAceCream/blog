@@ -80,7 +80,6 @@ export default defineComponent({
       })
     })
     return {
-      dayjs,
       ...toRefs(state)
     }
   }

@@ -80,7 +80,7 @@ export default defineComponent({
     const state = reactive({
       cursorId: 0,
       articleList: [],
-      pageSize: 4,
+      pageSize: 10,
       desc: false, // default article order by create time
     })
     const onLoad = () => {

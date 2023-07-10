@@ -22,12 +22,13 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, onUpdated } from 'vue'
+import { defineComponent, toRefs, reactive, inject } from 'vue'
 import { ElMessage } from 'element-plus'
 import { putEditArticle } from '@/api/article'
 import { useSessionStore } from '@/stores/sessionStore'
 import _ from 'lodash'
-import router from '@/router'
+import { useRouter } from 'vue-router'
+
 export default defineComponent({
   name: 'PublishModal',
   props: {
@@ -44,13 +45,10 @@ export default defineComponent({
   },
   emits: ['onSubmit'],
   setup(props, ctx) {
-    onUpdated(() => {
-      console.log('----onUpdated-----')
-      formState.formData = {
-        ...props.articleInfo
-      }
-    })
+    const router = useRouter()
+    const reload = inject('reload')
     console.log('----route-----', router)
+
     const onSubmit = async() => {
       console.log('----props---', props)
       console.log('----onSubmit-----')
@@ -77,6 +75,7 @@ export default defineComponent({
           modalState.modalRef.closeModal()
           console.log('---articleInfo.id---', articleInfo.id)
           router.push({ path: `/article/${articleInfo.id}` })
+          reload()
         }
       } catch (err) {
         console.log('-----form validation err-', err)
@@ -108,6 +107,9 @@ export default defineComponent({
     })
 
     const openModal = () => {
+      formState.formData = {
+        ...props.articleInfo
+      }
       modalState.modalRef.openModal()
     }
     const closeModal = () => {
