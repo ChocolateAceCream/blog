@@ -3,6 +3,7 @@ package service
 import (
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
+	"github.com/ChocolateAceCream/blog/model/request"
 )
 
 type ArticleService struct{}
@@ -29,4 +30,23 @@ func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {
 	} else {
 		return true
 	}
+}
+
+func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (articleList []dbTable.Article, total int64, err error) {
+	db := global.DB.Model(&dbTable.Article{})
+	err = db.Count(&total).Error
+	if err != nil {
+		return
+	}
+	db = db.Limit(query.PageSize)
+	queryStr := "id > ?"
+	if query.Desc {
+		db = db.Order("id desc")
+		queryStr = "id < ?"
+	}
+	if query.CursorId > 0 {
+		db = db.Where(queryStr, query.CursorId)
+	}
+	err = db.Preload("Author").Find(&articleList).Error
+	return
 }

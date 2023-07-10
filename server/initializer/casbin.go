@@ -31,7 +31,7 @@ func (ci *casbinInitializer) Initialize(ctx context.Context) (next context.Conte
 		{Ptype: "p", V1: "/api/v1/user/delete", V2: "DELETE"},
 		{Ptype: "p", V1: "/api/v1/menu/currentUserMenu", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/article/preview", V2: "GET"},
-		{Ptype: "p", V1: "/api/v1/oss/upload", V2: "POST"},
+		{Ptype: "p", V1: "/api/v1/article/list", V2: "GET"},
 	}
 	adminRules := []gormadapter.CasbinRule{
 		{Ptype: "p", V1: "/api/v1/role/add", V2: "POST"},
@@ -40,6 +40,8 @@ func (ci *casbinInitializer) Initialize(ctx context.Context) (next context.Conte
 		{Ptype: "p", V1: "/api/v1/role/list", V2: "GET"},
 		{Ptype: "p", V1: "/api/v1/article/add", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/article/edit", V2: "PUT"},
+		{Ptype: "p", V1: "/api/v1/article/delete", V2: "DELETE"},
+		{Ptype: "p", V1: "/api/v1/oss/upload", V2: "POST"},
 	}
 	adminRules = append(adminRules, guestRules...)
 	superadminRules := []gormadapter.CasbinRule{

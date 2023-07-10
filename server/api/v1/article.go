@@ -94,3 +94,29 @@ func (*ArticleApi) EditArticle(c *gin.Context) {
 		response.OkWithMessage("edit article success", c)
 	}
 }
+
+// @Tags article
+// @Summary get article list by cursorId
+// @Description return article list
+// @Accept json
+// @Param data query request.ArticleSearchQuery true "get paged article list by search query"
+// @Success 200 {object} response.Response{data=response.Paging{list=[]dbTable.Article,total=int}} "return all search result "
+// @Router /api/v1/article/list [GET]
+func (b *ArticleApi) GetArticleList(c *gin.Context) {
+	var query request.ArticleSearchQuery
+	if err := c.ShouldBind(&query); err != nil {
+		global.LOGGER.Error("bind article list query error", zap.Error(err))
+		response.FailWithMessage("fail to bind query", c)
+		return
+	}
+	if list, total, err := articleService.GetArticleList(query.Params); err != nil {
+		global.LOGGER.Error("fail to get article list", zap.Error(err))
+		response.FailWithMessage("fail to get article list", c)
+		return
+	} else {
+		response.OkWithFullDetails(response.Paging{
+			List:  list,
+			Total: total,
+		}, "Success", c)
+	}
+}

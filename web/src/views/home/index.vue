@@ -10,6 +10,7 @@
       <SvgIcon
         class="toolbar-icon"
         :icon-name="`icon-blog-add`"
+        @click="onAddArticle"
       />
       <SvgIcon
         class="toolbar-icon"
@@ -21,108 +22,83 @@
       />
     </div>
   </div>
-  <div class="card-wrapper">
-    <el-card
-      class="abstract-card"
-      @click="onCardClick(11)"
+  <div
+    v-infinite-scroll="onLoad"
+    :infinite-scroll-immediate="false"
+    class="card-wrapper"
+  >
+    <template
+      v-for="article in articleList"
+      :key="article.id"
     >
-      <div class="card-header">
-        <el-link :underline="false">Author</el-link>
-        <div class="dividing" />
-        <el-link :underline="false">6 days ago</el-link>
-        <div class="dividing" />
-        <el-link
-          class="tag"
-          :underline="false"
-        >Tag 1</el-link>
-        <el-link
-          class="tag"
-          :underline="false"
-        >Tag 2</el-link>
-      </div>
-      <div class="card-title">title: this is a long long long title.....</div>
-      <div class="card-abstract">matlab设置画布大小代码-pyplot-tutorial:代码示例了解
-      </div>
-      <ul class="card-footer">
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-watching`"
-          />
-          <span> 198</span>
-        </li>
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-thumb-up`"
-          />
-          <span> 198</span>
-        </li>
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-comments`"
-          />
-          <span> 198</span>
-        </li>
-      </ul>
-    </el-card>
-    <el-card class="abstract-card">
-      <div class="card-header">
-        <el-link :underline="false">Author</el-link>
-        <div class="dividing" />
-        <el-link :underline="false">6 days ago</el-link>
-        <div class="dividing" />
-        <el-link
-          class="tag"
-          :underline="false"
-        >Tag 1</el-link>
-        <el-link
-          class="tag"
-          :underline="false"
-        >Tag 2</el-link>
-      </div>
-      <div class="card-title">title: this is a long long long title.....</div>
-      <div class="card-abstract">matlab设置画布大小代码-pyplot-tutorial:代码示例了解
-      </div>
-      <ul class="card-footer">
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-watching`"
-          />
-          <span> 198</span>
-        </li>
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-thumb-up`"
-          />
-          <span> 198</span>
-        </li>
-        <li>
-          <SvgIcon
-            class="toolbar-icon"
-            :icon-name="`icon-blog-comments`"
-          />
-          <span> 198</span>
-        </li>
-      </ul>
-    </el-card>
+      <card :article-info="article" />
+    </template>
+
   </div>
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive } from 'vue'
+import { defineComponent, toRefs, reactive, onMounted } from 'vue'
+import { ElMessage, ElMessageBox } from 'element-plus'
+import { getArticleList } from '@/api/article'
+import Card from './components/card'
 import router from '@/router'
 export default defineComponent({
+  components: {
+    Card,
+  },
   setup(props, ctx) {
-    const state = reactive({
-      onCardClick: (id) => {
-        router.push({ path: 'article/' + id })
+    onMounted(() => {
+      const payload = {
+        pageSize: state.pageSize,
+        cursorId: state.cursorId,
+        desc: state.desc
       }
+      onFetchArticleList(payload)
     })
+    const onFetchArticleList = async(payload) => {
+      const { data: res } = await getArticleList({ params: payload })
+      if (res.errorCode === 0) {
+        const { list } = res.data
+        if (list.length === 0) {
+          ElMessage({
+            message: 'No more articles!',
+            type: 'success',
+            duration: 3 * 1000
+          })
+        } else {
+          state.articleList = [...state.articleList, ...list]
+        }
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    }
+    const state = reactive({
+      cursorId: 0,
+      articleList: [],
+      pageSize: 4,
+      desc: false, // default article order by create time
+    })
+    const onLoad = () => {
+      const [last] = state.articleList.slice(-1)
+      const payload = {
+        pageSize: state.pageSize,
+        cursorId: last.id,
+        desc: state.desc
+      }
+      onFetchArticleList(payload)
+    }
+    const onAddArticle = () => {
+      router.push({ path: '/article/draft' })
+    }
     return {
+      onAddArticle,
+      onLoad,
+      onFetchArticleList,
       ...toRefs(state)
     }
   }
@@ -144,82 +120,7 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .card-header {
-    display: flex;
-    // justify-content: space-between;
-    align-items: center;
-    margin-bottom: 8px;
-    cursor: pointer;
-
-    .dividing {
-      width: 1px;
-      height: 14px;
-      background: $lite-background;
-      margin: 0 8px;
-    }
-
-    .tag {
-      position: relative;
-      flex-shrink: 0;
-      font-size: 13px;
-      line-height: 22px;
-      padding: 0 8px;
-
-      &:not(:last-child):after {
-        position: absolute;
-        right: -1px;
-        display: block;
-        content: " ";
-        width: 2px;
-        height: 2px;
-        border-radius: 50%;
-        background-color: $dark-brown;
-      }
-    }
-  }
-
-  .card-title {
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 24px;
-    width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-bottom: 8px;
-  }
-
-  .card-abstract {
-    font-size: 14px;
-    line-height: 22px;
-    overflow: hidden;
-    margin-bottom: 8px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .card-footer {
-    display: flex;
-    align-items: center;
-    padding: 0;
-    margin: 0;
-    font-size: 12px;
-
-    li {
-      list-style: none;
-      margin-right: 20px;
-    }
-  }
+  flex-wrap: wrap;
 }
 
-.abstract-card {
-  margin:2px;
-  @include mobile-device {
-    width: 100%
-  }
-
-  @include desktop-device {
-    width: 50%
-  }
-}
 </style>

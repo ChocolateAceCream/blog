@@ -117,6 +117,7 @@ func RouteLoader(r *gin.Engine) {
 
 		article := v1.Group("/article")
 		{
+			article.GET("/list", articleApi.GetArticleList)
 			article.GET("/preview", articleApi.PreviewArticle)
 			article.POST("/add", articleApi.AddArticle)
 			article.PUT("/edit", articleApi.EditArticle)

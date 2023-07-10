@@ -37,7 +37,7 @@ export default defineComponent({
         return {
           articleId: null,
           content: null,
-          authorID: null
+          authorId: null
         }
       }
     }
