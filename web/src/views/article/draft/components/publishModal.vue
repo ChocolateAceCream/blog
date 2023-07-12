@@ -46,7 +46,6 @@ export default defineComponent({
   emits: ['onSubmit'],
   setup(props, ctx) {
     const router = useRouter()
-    const reload = inject('reload')
     console.log('----route-----', router)
 
     const onSubmit = async() => {
@@ -68,14 +67,12 @@ export default defineComponent({
             type: 'success',
             duration: 3 * 1000
           })
-          const store = useSessionStore()
-          store.currentEditingArticle = null
           // TODO: jump to article preview page
 
-          modalState.modalRef.closeModal()
           console.log('---articleInfo.id---', articleInfo.id)
-          router.push({ path: `/article/${articleInfo.id}` })
-          reload()
+          await router.push({ path: `/article/${articleInfo.id}` })
+          const store = useSessionStore()
+          store.currentEditingArticle = null
         }
       } catch (err) {
         console.log('-----form validation err-', err)
