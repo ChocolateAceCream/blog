@@ -4,6 +4,8 @@ import (
 	"github.com/ChocolateAceCream/blog/global"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/request"
+	"github.com/ChocolateAceCream/blog/model/response"
+	"github.com/ChocolateAceCream/blog/utils"
 )
 
 type ArticleService struct{}
@@ -32,8 +34,9 @@ func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {
 	}
 }
 
-func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (articleList []dbTable.Article, total int64, err error) {
+func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
 	db := global.DB.Model(&dbTable.Article{})
+	articleList := []dbTable.Article{}
 	err = db.Count(&total).Error
 	if err != nil {
 		return
@@ -48,5 +51,6 @@ func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (arti
 		db = db.Where(queryStr, query.CursorId)
 	}
 	err = db.Preload("Author").Find(&articleList).Error
+	articleBaseInfo = utils.MapSlice(articleList, response.ArticleBaseInfoFormatter)
 	return
 }

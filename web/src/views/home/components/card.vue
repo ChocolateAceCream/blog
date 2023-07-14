@@ -10,7 +10,7 @@
     @click="onCardClick(articleInfo.id)"
   >
     <div class="card-header">
-      <el-link :underline="false">{{ articleInfo.author.username }}</el-link>
+      <el-link :underline="false">{{ articleInfo.author }}</el-link>
       <div class="dividing" />
       <el-link :underline="false">{{ timestamp }}</el-link>
       <div class="dividing" />
