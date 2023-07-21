@@ -49,6 +49,8 @@ export default defineComponent({
     })
     const onSearch = (input) => {
       console.log('----input---', input)
+      state.keywords = input
+      fetchList()
     }
     const fetchList = async() => {
       state.myCollapse.resetActiveNames()
