@@ -50,6 +50,7 @@ func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Con
 
 		{Method: "GET", Path: "/api/v1/article/preview", GroupName: "Article", Description: "Get article content", Name: "Preview  Article"},
 		{Method: "GET", Path: "/api/v1/article/list", GroupName: "Article", Description: "Get article list", Name: "List  Article"},
+		{Method: "GET", Path: "/api/v1/article/search", GroupName: "Article", Description: "Get article search list", Name: "search  Article"},
 		{Method: "POST", Path: "/api/v1/article/add", GroupName: "Article", Description: "Add Article", Name: "Add Article"},
 		{Method: "PUT", Path: "/api/v1/article/edit", GroupName: "Article", Description: "Edit Article", Name: "Edit Article"},
 		{Method: "DELETE", Path: "/api/v1/article/delete", GroupName: "Article", Description: "Delete Endpoint", Name: "Delete Endpoint"},

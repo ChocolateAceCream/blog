@@ -34,7 +34,7 @@ func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {
 	}
 }
 
-func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
+func (es *ArticleService) GetArticleList(query request.ArticleCursorListParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
 	db := global.DB.Model(&dbTable.Article{})
 	articleList := []dbTable.Article{}
 	err = db.Count(&total).Error
@@ -53,4 +53,42 @@ func (es *ArticleService) GetArticleList(query request.ArticleSearchParma) (arti
 	err = db.Preload("Author").Find(&articleList).Error
 	articleBaseInfo = utils.MapSlice(articleList, response.ArticleBaseInfoFormatter)
 	return
+}
+
+func (es *ArticleService) GetArticleSearchList(authorId uint, query request.ArticleSearchParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
+	// fmt.Println("----query----", query)
+	articleList := []dbTable.Article{}
+	sql := `
+	SELECT SQL_CALC_FOUND_ROWS * FROM articles a
+	WHERE 1=1
+	AND
+	deleted_at IS NULL
+	AND
+	author_id = ?
+	AND
+	published = ?
+	AND
+	CONCAT_WS('', a.content, a.title) LIKE CONCAT('%', ?, '%')
+	ORDER BY created_at DESC
+	LIMIT ? OFFSET ?
+	`
+	limit := query.PageSize
+	offset := query.PageSize * (query.PageNumber - 1)
+	db := global.DB.Debug().Raw(sql, authorId, query.Published, query.Keywords, limit, offset).Scan(&articleList)
+	// fmt.Println("--------articleList---", articleList)
+	err = db.Debug().Raw("select found_rows() as count").Scan(&total).Error
+	if err != nil {
+		return
+	}
+	articleBaseInfo = utils.MapSlice(articleList, response.ArticleBaseInfoFormatter)
+	return
+}
+
+func (articleService *ArticleService) DeleteArticle(authorId uint, ids []int) (err error) {
+	//TODO: test delete associated role-article relations
+	articles := []dbTable.Article{}
+	if err = global.DB.Where("author_id = ? AND id in ?", authorId, ids).Delete(&articles).Error; err != nil {
+		return err
+	}
+	return nil
 }

@@ -99,11 +99,11 @@ func (*ArticleApi) EditArticle(c *gin.Context) {
 // @Summary get article list by cursorId
 // @Description return article list
 // @Accept json
-// @Param data query request.ArticleSearchQuery true "get paged article list by search query"
+// @Param data query request.ArticleCursorListQuery true "get paged article list by search query"
 // @Success 200 {object} response.Response{data=response.Paging{list=[]dbTable.Article,total=int}} "return all search result "
 // @Router /api/v1/article/list [GET]
 func (b *ArticleApi) GetArticleList(c *gin.Context) {
-	var query request.ArticleSearchQuery
+	var query request.ArticleCursorListQuery
 	if err := c.ShouldBind(&query); err != nil {
 		global.LOGGER.Error("bind article list query error", zap.Error(err))
 		response.FailWithMessage("fail to bind query", c)
@@ -118,5 +118,65 @@ func (b *ArticleApi) GetArticleList(c *gin.Context) {
 			List:  list,
 			Total: total,
 		}, "Success", c)
+	}
+}
+
+// @Tags Article
+// @Summary get article search list
+// @Description return article search result in paged list, only applied to articles with current user as author
+// @Accept json
+// @Param data query request.ArticleSearchQuery true "get paged article list by search query"
+// @Success 200 {object} response.Response{data=response.Paging{list=[]dbTable.Article,total=int}} "return all search result "
+// @Router /api/v1/article/list [GET]
+func (b *ArticleApi) GetArticleSearchList(c *gin.Context) {
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
+	if err != nil {
+		global.LOGGER.Error("User not logged in", zap.Error(err))
+		response.FailWithUnauthorized("User not logged in", c)
+		return
+	}
+	var query request.ArticleSearchQuery
+	if err := c.ShouldBind(&query); err != nil {
+		global.LOGGER.Error("bind article list query error", zap.Error(err))
+		response.FailWithMessage("fail to bind query", c)
+		return
+	}
+	if list, total, err := articleService.GetArticleSearchList(currentUser.ID, query.Params); err != nil {
+		global.LOGGER.Error("fail to get article list", zap.Error(err))
+		response.FailWithMessage("fail to get article list", c)
+		return
+	} else {
+		response.OkWithFullDetails(response.Paging{
+			List:  list,
+			Total: total,
+		}, "Success", c)
+	}
+}
+
+// @Tags      Article
+// @Summary   delete article by id
+// @accept    application/json
+// @Produce   application/json
+// @Param     data  body      request.FindById                true  "article id"
+// @Success   200   {object}  response.Response{msg=string}  "article deleted "
+// @Router 		/api/v1/article/delete [delete]
+func (a *ArticleApi) DeleteArticle(c *gin.Context) {
+	var article request.FindByIds
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
+	if err != nil {
+		global.LOGGER.Error("User not logged in", zap.Error(err))
+		response.FailWithUnauthorized("User not logged in", c)
+		return
+	}
+	if err := c.ShouldBindJSON(&article); err != nil {
+		global.LOGGER.Error("delete article params parsing error", zap.Error(err))
+		response.FailWithMessage(err.Error(), c)
+		return
+	}
+	if err := articleService.DeleteArticle(currentUser.ID, article.ID); err != nil {
+		global.LOGGER.Error("fail to delete article", zap.Error(err))
+		response.FailWithMessage("fail to delete article", c)
+	} else {
+		response.OkWithMessage("delete article success", c)
 	}
 }

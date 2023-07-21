@@ -118,10 +118,11 @@ func RouteLoader(r *gin.Engine) {
 		article := v1.Group("/article")
 		{
 			article.GET("/list", articleApi.GetArticleList)
+			article.GET("/search", articleApi.GetArticleSearchList)
 			article.GET("/preview", articleApi.PreviewArticle)
 			article.POST("/add", articleApi.AddArticle)
 			article.PUT("/edit", articleApi.EditArticle)
-			// endpoint.DELETE("/delete", endpointApi.DeleteEndpoint)
+			article.DELETE("/delete", articleApi.DeleteArticle)
 		}
 
 		oss := v1.Group("/oss")

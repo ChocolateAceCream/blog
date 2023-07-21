@@ -18,6 +18,7 @@ type ArticleBaseInfo struct {
 	Content   string    `json:"content"`
 	AuthorID  uint      `json:"authorId"`
 	Author    string    `json:"author"`
+	ID        uint      `json:"id"`
 }
 
 func ArticleBaseInfoFormatter(a dbTable.Article) ArticleBaseInfo {
@@ -28,6 +29,7 @@ func ArticleBaseInfoFormatter(a dbTable.Article) ArticleBaseInfo {
 		Content:   a.Content,
 		AuthorID:  a.AuthorID,
 		Author:    a.Author.Username,
+		ID:        a.ID,
 	}
 }
 

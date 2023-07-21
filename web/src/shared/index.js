@@ -7,6 +7,7 @@ import Modal from './components/Modal'
 import Permission from './components/Permission'
 import SvgIcon from './components/SvgIcon'
 import MyEditor from './components/MyEditor'
+import MySearchBar from './components/MySearchBar'
 
 export default {
   install(app) {
@@ -19,5 +20,6 @@ export default {
     app.component('SvgIcon', SvgIcon)
     app.component('Modal', Modal)
     app.component('MyEditor', MyEditor)
+    app.component('MySearchBar', MySearchBar)
   }
 }

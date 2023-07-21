@@ -101,6 +101,18 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 				Title: "写作",
 			},
 		},
+		{
+			ID:        9,
+			Pid:       6,
+			Name:      "contentManagement",
+			Component: "views/article/contentManagement/index.vue",
+			Path:      "article/content",
+			Display:   1,
+			Meta: dbTable.Meta{
+				Icon:  "content",
+				Title: "Content Management",
+			},
+		},
 	}
 	adminMenus = append(adminMenus, guestMenus...)
 	superadminMenus := []dbTable.Menu{
