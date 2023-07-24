@@ -12,24 +12,26 @@ type ArticleInfo struct {
 }
 
 type ArticleBaseInfo struct {
-	UpdatedAt time.Time `json:"updatedAt"`
-	Title     string    `json:"title"`
-	Abstract  string    `json:"abstract"`
-	Content   string    `json:"content"`
-	AuthorID  uint      `json:"authorId"`
-	Author    string    `json:"author"`
-	ID        uint      `json:"id"`
+	UpdatedAt   time.Time `json:"updatedAt"`
+	Title       string    `json:"title"`
+	Abstract    string    `json:"abstract"`
+	Content     string    `json:"content"`
+	AuthorID    uint      `json:"authorId"`
+	Author      string    `json:"author"`
+	ID          uint      `json:"id"`
+	ViewedTimes int       `json:"viewedTimes"`
 }
 
 func ArticleBaseInfoFormatter(a dbTable.Article) ArticleBaseInfo {
 	return ArticleBaseInfo{
-		UpdatedAt: a.MODEL.UpdatedAt,
-		Title:     a.Title,
-		Abstract:  a.Abstract,
-		Content:   a.Content,
-		AuthorID:  a.AuthorID,
-		Author:    a.Author.Username,
-		ID:        a.ID,
+		UpdatedAt:   a.MODEL.UpdatedAt,
+		Title:       a.Title,
+		Abstract:    a.Abstract,
+		Content:     a.Content,
+		AuthorID:    a.AuthorID,
+		Author:      a.Author.Username,
+		ID:          a.ID,
+		ViewedTimes: a.ViewedTimes,
 	}
 }
 

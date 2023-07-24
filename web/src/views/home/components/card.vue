@@ -31,7 +31,7 @@
           class="toolbar-icon"
           :icon-name="`icon-blog-watching`"
         />
-        <span> 198</span>
+        <span> {{ articleInfo.viewedTimes }}</span>
       </li>
       <li>
         <SvgIcon
@@ -63,7 +63,8 @@ export default defineComponent({
         return {
           articleId: null,
           content: null,
-          authorId: null
+          authorId: null,
+          viewedTimes: 0,
         }
       }
     }
@@ -150,6 +151,9 @@ export default defineComponent({
     li {
       list-style: none;
       margin-right: 20px;
+    }
+    .toolbar-icon{
+      margin-right: 5px;
     }
   }
 

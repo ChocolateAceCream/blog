@@ -6,6 +6,7 @@ import (
 	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
 	"github.com/ChocolateAceCream/blog/utils"
+	"gorm.io/gorm"
 )
 
 type ArticleService struct{}
@@ -22,6 +23,10 @@ func (*ArticleService) AddArticle(a dbTable.Article) (dbTable.Article, error) {
 
 func (*ArticleService) EditArticle(a dbTable.Article) error {
 	return global.DB.Model(&dbTable.Article{}).Where("ID = ? ", a.ID).Updates(&a).Error
+}
+
+func (*ArticleService) ViewedTimesPlusOne(articleId int) {
+	global.DB.Model(&dbTable.Article{}).Where("ID = ? ", articleId).UpdateColumn("viewed_times", gorm.Expr("viewed_times + ?", 1))
 }
 
 func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {

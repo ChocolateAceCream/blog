@@ -42,6 +42,10 @@ func Init() *gin.Engine {
 
 	utils.InitValidator()
 	utils.InitRedis()
+
+	//migration example
+	// global.DB.Migrator().AddColumn(&dbTable.Article{}, "ViewedTimes")
+
 	r := gin.Default()
 	router.RouterInit(r)
 	return r

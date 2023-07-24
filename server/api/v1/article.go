@@ -31,6 +31,7 @@ func (*ArticleApi) PreviewArticle(c *gin.Context) {
 		global.LOGGER.Error("Fail to get article info!", zap.Error(err))
 		response.FailWithMessage("Fail to get article info", c)
 	} else {
+		articleService.ViewedTimesPlusOne(r.Params.ID)
 		response.OkWithFullDetails(article, "Success", c)
 	}
 }

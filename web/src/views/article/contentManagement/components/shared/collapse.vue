@@ -24,7 +24,7 @@
           type="primary"
           style="margin-top: 15px;"
           @click="onEdit(item.id)"
-        > &#43; Edit</el-button>
+        > Edit</el-button>
         <el-button
           type="danger"
           style="margin-top: 15px;"
