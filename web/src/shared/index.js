@@ -8,6 +8,8 @@ import Permission from './components/Permission'
 import SvgIcon from './components/SvgIcon'
 import MyEditor from './components/MyEditor'
 import MySearchBar from './components/MySearchBar'
+import VDebounce from './directive/debounce'
+import VKeyboard from './directive/keyboard'
 
 export default {
   install(app) {
@@ -21,5 +23,9 @@ export default {
     app.component('Modal', Modal)
     app.component('MyEditor', MyEditor)
     app.component('MySearchBar', MySearchBar)
+
+    // directives
+    app.directive('debounce', VDebounce)
+    app.directive('keyboard', VKeyboard)
   }
 }

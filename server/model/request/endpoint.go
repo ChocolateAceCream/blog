@@ -1,10 +1,10 @@
 package request
 
 type EndpointSearchQuery struct {
-	Params EndpointSearchParma `json:"params" form:"params" binding:"required"`
+	Params EndpointSearchParam `json:"params" form:"params" binding:"required"`
 }
 
-type EndpointSearchParma struct {
+type EndpointSearchParam struct {
 	Pagination
 	Desc        bool   `json:"desc" form:"desc"` // order by desc (by default)
 	Name        string `json:"name" form:"name"`

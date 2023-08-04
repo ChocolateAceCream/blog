@@ -7,6 +7,14 @@
 
 package request
 
+type CursorListParam struct {
+	Pagination
+	CursorId uint `json:"cursorId" form:"cursorId"`
+	// Title    string `json:"title" form:"title"`
+	// Author   string `json:"author" form:"author"`
+	Desc bool `json:"desc" form:"desc"` // order by desc (by default)
+}
+
 type Pagination struct {
 	PageNumber int `json:"pageNumber" form:"pageNumber"`
 	PageSize   int `json:"pageSize" form:"pageSize"`

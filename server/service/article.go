@@ -39,7 +39,7 @@ func (*ArticleService) HasPermission(authorId uint, articleId uint) bool {
 	}
 }
 
-func (es *ArticleService) GetArticleList(query request.ArticleCursorListParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
+func (es *ArticleService) GetArticleList(query request.CursorListParam) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
 	db := global.DB.Model(&dbTable.Article{})
 	articleList := []dbTable.Article{}
 	err = db.Count(&total).Error
@@ -60,7 +60,7 @@ func (es *ArticleService) GetArticleList(query request.ArticleCursorListParma) (
 	return
 }
 
-func (es *ArticleService) GetArticleSearchList(authorId uint, query request.ArticleSearchParma) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
+func (es *ArticleService) GetArticleSearchList(authorId uint, query request.ArticleSearchParam) (articleBaseInfo []response.ArticleBaseInfo, total int64, err error) {
 	// fmt.Println("----query----", query)
 	articleList := []dbTable.Article{}
 	sql := `

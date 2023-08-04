@@ -27,7 +27,7 @@
     :editor-id="id"
     :model-value="text"
   />
-</template>
+  <Comments /></template>
 
 <script>
 import { useRoute } from 'vue-router'
@@ -39,8 +39,9 @@ import { MdPreview } from 'md-editor-v3'
 import { formatTimeToStr } from '@/utils/date'
 import { useSessionStore } from '@/stores/sessionStore'
 import 'md-editor-v3/lib/preview.css'
+import Comments from './components/comments.vue'
 export default defineComponent({
-  components: { MdPreview },
+  components: { MdPreview, Comments },
   setup(props, ctx) {
     onMounted(() => {
       onFetchArticle()

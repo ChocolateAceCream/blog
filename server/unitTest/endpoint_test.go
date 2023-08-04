@@ -36,7 +36,7 @@ func TestNewEndpointApi(t *testing.T) {
 
 func TestGetEndpointListApi(t *testing.T) {
 	r := RouterInstance
-	param := request.EndpointSearchParma{
+	param := request.EndpointSearchParam{
 		Pagination: request.Pagination{PageNumber: 1, PageSize: 1},
 		OrderBy:    "name",
 		Desc:       true,

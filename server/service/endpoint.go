@@ -36,7 +36,7 @@ func (es *EndpointService) EditEndpoint(endpoint dbTable.Endpoint) error {
 	return global.DB.Model(&dbTable.Endpoint{}).Where("ID = ? ", endpoint.ID).Updates(&endpoint).Error
 }
 
-func (es *EndpointService) GetEndpointList(query request.EndpointSearchParma) (endpointList []dbTable.Endpoint, total int64, err error) {
+func (es *EndpointService) GetEndpointList(query request.EndpointSearchParam) (endpointList []dbTable.Endpoint, total int64, err error) {
 	db := global.DB.Model(&dbTable.Endpoint{})
 	if query.Method != "" {
 		db.Where("method LIKE ? ", "%"+query.Method+"%")
