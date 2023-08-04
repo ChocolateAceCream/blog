@@ -12,5 +12,5 @@ type Article struct {
 	Published   int    `json:"published" gorm:"default:2;comment:1-published, 2-private"`
 	ViewedTimes int    `json:"viewedTimes" gorm:"default:0;comment: count of viewed times"`
 	// Tags      []Tag m2m
-	// Comments []Comment
+	Comments []Comment `json:"comments"`
 }

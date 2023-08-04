@@ -57,6 +57,10 @@ func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Con
 
 		{Method: "POST", Path: "/api/v1/casbin/update", GroupName: "Casbin", Description: "Update Role's Casbin", Name: "Update Casbin"},
 		{Method: "GET", Path: "/api/v1/casbin/list", GroupName: "Casbin", Description: "Get casbin list", Name: "list Casbin"},
+
+		{Method: "POST", Path: "/api/v1/comment/add", GroupName: "Comment", Description: "Add comment", Name: "Add comment"},
+		{Method: "DELETE", Path: "/api/v1/comment/delete", GroupName: "Comment", Description: "Delete comment", Name: "Delete comment"},
+		{Method: "GET", Path: "/api/v1/comment/list", GroupName: "Comment", Description: "Get comment list", Name: "list comment"},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init endpoint data, err: %w", err)

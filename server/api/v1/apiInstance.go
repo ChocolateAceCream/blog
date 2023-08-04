@@ -10,6 +10,7 @@ type ApiGroup struct {
 	EndpointApi EndpointApi
 	ArticleApi  ArticleApi
 	OssApi      OssApi
+	CommentApi  CommentApi
 }
 
 var ApiGroupInstance = new(ApiGroup)

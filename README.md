@@ -1,6 +1,6 @@
 # blog
 a blog project
-frontend: vue3 + dayjs + elementPlus
+frontend: vue3 + dayjs + elementPlus + md-editor-v3
 backend:  gin + gorm + casbin + minio + zap
 db: mysql + redis
 deploy: github runner + docker-compose + nginx
@@ -27,14 +27,14 @@ guestPassword: '123qwe!@#QWE'
     ├── library         ()
     ├── log             (store server log files)
     ├── middleware
-    ├── model           (模型层)
+    ├── model           ()
     │   ├── dbTable     (data models)
     │   ├── request     (api request data structs)
     │   └── response    (api response data structs )
     ├── router          ()
     ├── service         (service layer)
     ├── unitTest         ()
-    ├── source          (source层)
+    ├── source          ()
     └── utils           ()
         └── upload      (oss interface)
 
@@ -67,3 +67,13 @@ TOOD:
 - [x] add README
 - [x] Article preview/editing
 - [ ] Add comments
+- [ ] rank most popular blogs (top viewed blogs) using go-routing to update data every 5 mins, then save the cached data to redis
+
+
+Gotcha
+1. no dao layer since gorm take in action
+
+notice:
+1. signature is calculated md5(APP_ID, nonce, timestamp, SIGNATURE_SECRET), turn off by default, change config to turn on this function
+2. after adding a new model, remember to add it to /server/db/table_register.go
+3. after adding a new route, remember to check if it's necessary also add it to casbin, endpoint list, initializer etc...
