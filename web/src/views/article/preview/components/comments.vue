@@ -24,10 +24,13 @@
         <div class="comment-content">
           {{ comment.content }}
         </div>
-        <div class="action-box">
+        <div
+          class="action-box"
+        >
           <SvgIcon
             class="item"
-            :icon-name="`icon-blog-thumb-up`"
+            :icon-name="comment.isLiked ? `icon-blog-thumb-up-fill` : `icon-blog-thumb-up-line`"
+            @click="onLikeComment(comment)"
           />
           <span> {{ comment.likesCount }}</span>
           <SvgIcon
@@ -51,7 +54,7 @@ import { useRoute } from 'vue-router'
 import { defineComponent, toRefs, reactive, onMounted, inject } from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import _ from 'lodash'
-import { getCommentList, deleteComment } from '@/api/comment'
+import { getCommentList, deleteComment, likeComment } from '@/api/comment'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import CommentInput from './commentInput.vue'
 import { useSessionStore } from '@/stores/sessionStore'
@@ -67,6 +70,25 @@ export default defineComponent({
     onMounted(() => {
       onFetchCommentList()
     })
+    const onLikeComment = _.throttle(async(comment) => {
+      console.log('---onLikeComment-------')
+      const payload = {
+        commentId: comment.id,
+        like: !comment.isLiked,
+      }
+      const { data: res } = await likeComment(payload)
+      if (res.errorCode === 0) {
+        console.log('---success-------', res)
+        comment.isLiked = !comment.isLiked
+        comment.likesCount = comment.isLiked ? comment.likesCount + 1 : comment.likesCount - 1
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    }, 1000)
     const state = reactive({
       cursorId: 0,
       pageSize: 10,
@@ -96,7 +118,7 @@ export default defineComponent({
       if (res.errorCode === 0) state.commentList = state.commentList.filter(item => item.id !== id)
     }
 
-    const onFetchCommentList = async() => {
+    const onFetchCommentList = _.throttle(async() => {
       const payload = {
         pageSize: state.pageSize,
         cursorId: state.commentList.slice(-1)[0]?.id || 0,
@@ -125,10 +147,11 @@ export default defineComponent({
           duration: 3 * 1000
         })
       }
-    }
+    }, 1000)
 
 
     return {
+      onLikeComment,
       dayjs,
       onDeleteComment,
       onFetchCommentList,
@@ -200,7 +223,7 @@ export default defineComponent({
     line-height:22px;
     font-size:14px;
     cursor: pointer;
-    color: $lite-grey;
+    color: $blue;
   }
   span {
     margin-right: 16px;

@@ -13,15 +13,17 @@ type CommentBaseInfo struct {
 	Author     string    `json:"author"`
 	ID         uint      `json:"id"`
 	LikesCount uint      `json:"likesCount"`
+	IsLiked    bool      `json:"isLiked"`
 }
 
 func CommentBaseInfoFormatter(a dbTable.Comment) CommentBaseInfo {
 	return CommentBaseInfo{
-		UpdatedAt:  a.MODEL.UpdatedAt,
+		UpdatedAt:  a.UpdatedAt,
 		Content:    a.CommentContent,
 		AuthorID:   a.AuthorID,
 		Author:     a.Author.Username,
 		ID:         a.ID,
 		LikesCount: a.LikesCount,
+		IsLiked:    a.IsLiked,
 	}
 }

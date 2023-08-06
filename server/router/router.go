@@ -131,6 +131,7 @@ func RouteLoader(r *gin.Engine) {
 			comment.GET("/list", commentApi.GetCommentList)
 			comment.POST("/add", commentApi.AddComment)
 			comment.DELETE("/delete", commentApi.DeleteComment)
+			comment.POST("/like", commentApi.LikeComment)
 		}
 
 		oss := v1.Group("/oss")

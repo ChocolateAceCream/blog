@@ -36,7 +36,7 @@
       <li>
         <SvgIcon
           class="toolbar-icon"
-          :icon-name="`icon-blog-thumb-up`"
+          :icon-name="`icon-blog-thumb-up-line`"
         />
         <span> 198</span>
       </li>

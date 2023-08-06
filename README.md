@@ -66,7 +66,9 @@ TOOD:
 <!-- - [x] ~~~add README~~ -->
 - [x] add README
 - [x] Article preview/editing
-- [ ] Add comments
+- [x] Add comments add, list and delete
+- [x] Add comments like count function
+- [ ] Add reply section
 - [ ] rank most popular blogs (top viewed blogs) using go-routing to update data every 5 mins, then save the cached data to redis
 
 

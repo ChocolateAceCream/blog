@@ -1,8 +1,8 @@
 @font-face {
   font-family: "iconfont"; /* Project id 3939856 */
-  src: url('iconfont.woff2?t=1690988046821') format('woff2'),
-       url('iconfont.woff?t=1690988046821') format('woff'),
-       url('iconfont.ttf?t=1690988046821') format('truetype');
+  src: url('iconfont.woff2?t=1691307593551') format('woff2'),
+       url('iconfont.woff?t=1691307593551') format('woff'),
+       url('iconfont.ttf?t=1691307593551') format('truetype');
 }
 
 .iconfont {
@@ -11,6 +11,14 @@
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-blog-thumb-up-line:before {
+  content: "\e84f";
+}
+
+.icon-blog-thumb-up-fill:before {
+  content: "\e84e";
 }
 
 .icon-blog-Emoji:before {
@@ -43,10 +51,6 @@
 
 .icon-blog-watching:before {
   content: "\e661";
-}
-
-.icon-blog-thumb-up:before {
-  content: "\ec7f";
 }
 
 .icon-blog-blog:before {

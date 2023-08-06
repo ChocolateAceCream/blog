@@ -20,6 +20,7 @@ func RegisterTables(db *gorm.DB) {
 		dbTable.Endpoint{},
 		dbTable.Article{},
 		dbTable.Comment{},
+		dbTable.CommentLiker{},
 		dbTable.Reply{},
 	)
 	if err != nil {
