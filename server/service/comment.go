@@ -51,10 +51,10 @@ func (es *CommentService) GetCommentList(query request.CommentCursorListParam, c
 	}
 	fmt.Println("----total-----", total)
 	db = db.Limit(query.PageSize)
-	queryStr := "id > ?"
+	queryStr := "comments.id > ?"
 	if query.Desc {
 		db = db.Order("id desc")
-		queryStr = "id < ?"
+		queryStr = "comments.id < ?"
 	}
 	if query.CursorId > 0 {
 		db = db.Where(queryStr, query.CursorId)
