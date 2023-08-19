@@ -5,7 +5,10 @@
 * @description display article comments
 !-->
 <template>
-  <CommentInput @submit="onFetchCommentList" />
+  <EmojiInput
+    ref="commentInputRef"
+    @submit="onCommentSubmit"
+  />
   <div class="title">All Comments {{ commentsTotal }}</div>
   <div
     v-infinite-scroll="onFetchCommentList"
@@ -13,7 +16,7 @@
     :infinite-scroll-immediate="false"
   >
     <template
-      v-for="comment in commentList"
+      v-for="(comment,idx) in commentList"
       :key="comment.id"
     >
       <div class="commment-wrapper">
@@ -32,12 +35,28 @@
             :icon-name="comment.isLiked ? `icon-blog-thumb-up-fill` : `icon-blog-thumb-up-line`"
             @click="onLikeComment(comment)"
           />
+
           <span> {{ comment.likesCount }}</span>
-          <SvgIcon
-            class="item"
-            :icon-name="`icon-blog-comments`"
-          />
-          <span> Reply</span>
+          <div
+            @click="onReplying(comment)"
+          >
+            <SvgIcon
+              class="item"
+              :icon-name="`icon-blog-comments`"
+            />
+            <span>{{ comment.isReplying ? 'Cancel': 'Reply' }} </span>
+          </div>
+
+          <div
+            v-if="comment.repliesCount>0"
+            @click="onShowReplies(comment)"
+          >
+            <SvgIcon
+              class="item"
+              :icon-name="`icon-blog-check-all-replies`"
+            />
+            <span>All Replies ({{ comment.repliesCount }})</span>
+          </div>
         </div>
         <div
           v-if="comment.authorId === currentUserId"
@@ -45,6 +64,17 @@
           @click="onDeleteComment(comment.id)"
         >delete</div>
       </div>
+      <EmojiInput
+        v-if="comment.isReplying"
+        ref="replyInputRef"
+        @submit="onReplySubmit(comment, $event)"
+      />
+      <Replies
+        v-if="comment.showReplies && comment.replyList?.length > 0"
+        :current-user-id="currentUserId"
+        :comment="comment"
+        @update-comment="updateComment(idx,$event)"
+      />
     </template>
   </div>
 </template>
@@ -54,14 +84,16 @@ import { useRoute } from 'vue-router'
 import { defineComponent, toRefs, reactive, onMounted, inject } from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import _ from 'lodash'
-import { getCommentList, deleteComment, likeComment } from '@/api/comment'
+import { getCommentList, deleteComment, likeComment, postAddComment } from '@/api/comment'
+import { getReplyList, postAddReply } from '@/api/reply'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import CommentInput from './commentInput.vue'
+import EmojiInput from './emojiInput.vue'
+import Replies from './replies.vue'
 import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   name: 'Comments',
   components: {
-    CommentInput
+    EmojiInput, Replies
   },
   setup(props, ctx) {
     const dayjs = inject('dayjs')
@@ -90,6 +122,8 @@ export default defineComponent({
       }
     }, 1000)
     const state = reactive({
+      commentInputRef: null,
+      currentReplyingComment: {},
       cursorId: 0,
       pageSize: 10,
       desc: false, // default comment order by create time
@@ -97,6 +131,12 @@ export default defineComponent({
       commentsTotal: 0,
       commentList: [],
       currentUserId: store.userInfo.id
+    })
+
+    const replyState = reactive({
+      replyInputRef: null,
+      pageSize: 10,
+      parentReply: {},
     })
 
     const onDeleteComment = async(id) => {
@@ -149,13 +189,125 @@ export default defineComponent({
       }
     }, 1000)
 
+    const onShowReplies = (comment) => {
+      if (!comment.showReplies) {
+        // currently replies not shown, so fetch the reply list
+        fetchReplyList(comment)
+        comment.showReplies = true
+      } else {
+        // current showing replies, so hide it
+        comment.showReplies = false
+      }
+    }
 
+    const fetchReplyList = async(comment) => {
+      const payload = {
+        pageSize: replyState.pageSize,
+        cursorId: comment.replyList?.slice(-1)[0]?.id || 0, // 0 ?
+        desc: state.desc,
+        commentId: comment.id
+      }
+      console.log('---payload-----', payload)
+      const { data: res } = await getReplyList({ params: payload })
+      if (res.errorCode === 0) {
+        const { list, total } = res.data
+        comment.repliesCount = total
+        console.log('---reply list-------', list)
+        if (list.length === 0) {
+          ElMessage({
+            message: 'No more replies!',
+            type: 'success',
+            duration: 3 * 1000
+          })
+        } else {
+          comment.replyList = comment.replyList ? [...comment.replyList, ...list] : list
+        }
+      } else {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      }
+    }
+
+    const onCommentSubmit = async(content) => {
+      const payload = {
+        articleId: state.articleId,
+        commentContent: content
+      }
+      const { data: res } = await postAddComment(payload)
+      if (res.errorCode !== 0) {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      } else {
+        onFetchCommentList()
+        state.commentInputRef.reset()
+        ElMessage({
+          message: 'comment posted',
+          type: 'success',
+          duration: 3 * 1000
+        })
+      }
+    }
+
+    const onReplySubmit = async(comment, content) => {
+      console.log('----comment, content-------', comment, content)
+      const payload = {
+        replyContent: content,
+        commentID: state.currentReplyingComment.id,
+      }
+      if (replyState.parentReply.id) {
+        payload.parentReply = replyState.parentReply.id
+      }
+      const { data: res } = await postAddReply(payload)
+      if (res.errorCode !== 0) {
+        ElMessage({
+          message: res.msg,
+          type: 'error',
+          duration: 3 * 1000
+        })
+      } else {
+        state.currentReplyingComment.isReplying = false // reset emoji input
+        ElMessage({
+          message: 'reply posted',
+          type: 'success',
+          duration: 3 * 1000
+        })
+
+        // display replies
+        comment.repliesCount += 1
+        comment.showReplies = true
+        fetchReplyList(comment)
+      }
+    }
+    const onReplying = (comment) => {
+      comment.isReplying = !comment.isReplying
+      if (comment !== state.currentReplyingComment) {
+        state.currentReplyingComment.isReplying = false
+      }
+      state.currentReplyingComment = comment
+    }
+
+    const updateComment = (idx, newComment) => {
+      state.commentList[idx] = newComment
+      // close
+    }
     return {
+      updateComment,
+      onReplySubmit,
+      onReplying,
+      onCommentSubmit,
       onLikeComment,
+      onShowReplies,
       dayjs,
       onDeleteComment,
       onFetchCommentList,
-      ...toRefs(state)
+      ...toRefs(state),
+      ...toRefs(replyState)
     }
   }
 })
@@ -177,14 +329,14 @@ export default defineComponent({
   padding-bottom: 40px;
 }
 .commment-wrapper{
-  margin-bottom:40px;
+  margin-bottom:20px;
   position: relative;
   .comment-header{
-      color: $lite-grey;
-      display:flex;
-      align-items: center;
-      margin-bottom:10px;
-    }
+    color: $lite-grey;
+    display:flex;
+    align-items: center;
+    margin-bottom:10px;
+  }
   .timestamp{
     margin-left: 100px;
     font-size: 14px;
@@ -213,9 +365,10 @@ export default defineComponent({
     display: block;
   }
 }
+
 .action-box {
   display: flex;
-  aligh-items: center;
+  align-items: center;
   flex: 0 0 auto;
   margin-top:10px;
   .item {
@@ -227,6 +380,7 @@ export default defineComponent({
   }
   span {
     margin-right: 16px;
+    cursor: pointer;
   }
 }
 </style>

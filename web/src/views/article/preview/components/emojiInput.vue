@@ -47,27 +47,22 @@
 
 <script>
 import { defineComponent, toRefs, reactive, nextTick } from 'vue'
-import { useRoute } from 'vue-router'
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import { insertAt } from '@/utils/stringFun.js'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import _ from 'lodash'
-import { postAddComment } from '@/api/comment'
-import { ElMessage } from 'element-plus'
 export default defineComponent({
-  name: 'CommentInput',
+  name: 'EmojiInput',
   components: {
     Picker,
   },
   emits: ['submit'],
   setup(props, ctx) {
-    const route = useRoute()
     const state = reactive({
       inputRef: null,
       input: '',
       showEmojiPicker: false,
-      articleId: parseInt(route.params.id)
     })
     const emojiIndex = new EmojiIndex(data)
     const addEmoji = async(emoji) => {
@@ -82,26 +77,7 @@ export default defineComponent({
       state.showEmojiPicker = !state.showEmojiPicker
     }
     const onSubmit = async() => {
-      const payload = {
-        articleId: state.articleId,
-        commentContent: state.input
-      }
-      const { data: res } = await postAddComment(payload)
-      if (res.errorCode !== 0) {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      } else {
-        reset()
-        ElMessage({
-          message: 'comment posted',
-          type: 'success',
-          duration: 3 * 1000
-        })
-      }
-      ctx.emit('submit')
+      ctx.emit('submit', state.input)
     }
 
     const reset = () => {

@@ -720,12 +720,12 @@ $--breakpoints-spec: (
 }
 
 .el-popper.is-dark {
-  background-color: $lite-background !important;
-  border-color: $lite-background !important;
+  background-color: $liter-background !important;
+  border-color: $liter-background !important;
   color:$--color-text-primary !important;
   .el-popper__arrow::before{
-    border-color: $lite-background !important;
-    background: $lite-background !important;
+    border-color: $liter-background !important;
+    background: $liter-background !important;
   }
 }
 

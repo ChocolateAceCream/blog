@@ -22,6 +22,7 @@ func RegisterTables(db *gorm.DB) {
 		dbTable.Comment{},
 		dbTable.CommentLiker{},
 		dbTable.Reply{},
+		dbTable.ReplyLiker{},
 	)
 	if err != nil {
 		global.LOGGER.Error("register table failed", zap.Error(err))

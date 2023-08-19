@@ -71,6 +71,6 @@ export default defineComponent({
 </script>
 <style lang='scss' scoped>
 .menu-item {
-  background-color: $lite-background;
+  background-color: $liter-background;
 }
 </style>

@@ -98,7 +98,7 @@ export default defineComponent({
     .dividing {
       width: 1px;
       height: 14px;
-      background: $lite-background;
+      background: $liter-background;
       margin: 0 8px;
     }
 

@@ -15,4 +15,5 @@ type User struct {
 	Roles         []Role         `json:"roles" gorm:"many2many:userRole;constraint:OnDelete:CASCADE;"`
 	Followers     []User         `json:"followers" gorm:"many2many:user_followers;comment:Self-referencing many2many"`
 	CommentLikers []CommentLiker `gorm:"foreignKey:UserID;"`
+	ReplyLikers   []ReplyLiker   `gorm:"foreignKey:UserID;"`
 }

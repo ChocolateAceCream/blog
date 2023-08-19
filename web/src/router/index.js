@@ -48,7 +48,7 @@ router.beforeEach(async(to, from) => {
   } else {
     if (to.meta.requireAuth && to.matched.length > 0 || (to.matched.length === 0)) {
       ElMessage({
-        message: '认证已过期，请重新登录',
+        message: 'Please Login Again',
         type: 'error',
         duration: 5 * 1000
       })

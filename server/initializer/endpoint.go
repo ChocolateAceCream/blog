@@ -62,6 +62,11 @@ func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Con
 		{Method: "DELETE", Path: "/api/v1/comment/delete", GroupName: "Comment", Description: "Delete comment", Name: "Delete comment"},
 		{Method: "GET", Path: "/api/v1/comment/list", GroupName: "Comment", Description: "Get comment list", Name: "list comment"},
 		{Method: "POST", Path: "/api/v1/comment/like", GroupName: "Comment", Description: "like comment", Name: "like comment"},
+
+		{Method: "POST", Path: "/api/v1/reply/add", GroupName: "Reply", Description: "Add reply", Name: "Add reply"},
+		{Method: "DELETE", Path: "/api/v1/reply/delete", GroupName: "Reply", Description: "Delete reply", Name: "Delete reply"},
+		{Method: "GET", Path: "/api/v1/reply/list", GroupName: "Reply", Description: "Get reply list", Name: "list reply"},
+		{Method: "POST", Path: "/api/v1/reply/like", GroupName: "Reply", Description: "like reply", Name: "like reply"},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init endpoint data, err: %w", err)

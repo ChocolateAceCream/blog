@@ -6,6 +6,13 @@
   "description": "blog",
   "glyphs": [
     {
+      "icon_id": "1302495",
+      "name": "edit",
+      "font_class": "comments",
+      "unicode": "e609",
+      "unicode_decimal": 58889
+    },
+    {
       "icon_id": "17512076",
       "name": "thumb-up-line",
       "font_class": "thumb-up-line",
@@ -64,7 +71,7 @@
     {
       "icon_id": "201642",
       "name": "3.1 评论",
-      "font_class": "comments",
+      "font_class": "check-all-replies",
       "unicode": "e601",
       "unicode_decimal": 58881
     },

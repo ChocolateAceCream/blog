@@ -80,7 +80,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .left-bar-menu {
-  background-color: $lite-background;
+  background-color: $liter-background;
   height: 100%;
 }
 .title{
