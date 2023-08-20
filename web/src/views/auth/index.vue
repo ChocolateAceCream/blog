@@ -1,16 +1,19 @@
 <template>
   <div class="auth-wrapper">
-    <router-view />
+    <router-view :key="path" />
   </div>
-
 </template>
 
 <script>
 import { reactive, toRefs, defineComponent } from 'vue'
+import { useRoute } from 'vue-router'
 
 export default defineComponent({
   setup(props, ctx) {
-    const state = reactive({})
+    const router = useRoute()
+    const state = reactive({
+      path: router.path,
+    })
     return { ...toRefs(state) }
   },
 })

@@ -121,7 +121,7 @@ func (b *CommentApi) GetCommentList(c *gin.Context) {
 // @Success   200   {object}  response.Response{msg=string}  "comment deleted "
 // @Router 		/api/v1/comment/delete [delete]
 func (a *CommentApi) DeleteComment(c *gin.Context) {
-	var comment request.FindByIds
+	var comment request.FindById
 	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
 	if err != nil {
 		global.LOGGER.Error("User not logged in", zap.Error(err))

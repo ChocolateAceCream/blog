@@ -149,7 +149,7 @@ export default defineComponent({
           type: 'warning',
         }
       )
-      const { data: res } = await deleteComment({ data: { id: [id] } })
+      const { data: res } = await deleteComment({ data: { id: id } })
       ElMessage({
         message: res.msg,
         type: res.errorCode === 0 ? 'success' : 'error',

@@ -74,10 +74,11 @@ func (es *CommentService) GetCommentList(query request.CommentCursorListParam, c
 	commentBaseInfo = utils.MapSlice(commentList, response.CommentBaseInfoFormatter)
 	return
 }
-func (commentService *CommentService) DeleteComment(authorId uint, ids []int) (err error) {
+func (commentService *CommentService) DeleteComment(authorId uint, id int) (err error) {
 	//TODO: test delete associated role-comment relations
-	comments := []dbTable.Comment{}
-	if err = global.DB.Where("author_id = ? AND id in ?", authorId, ids).Delete(&comments).Error; err != nil {
+	var comment dbTable.Comment
+	comment.ID = uint(id)
+	if err = global.DB.Select("Replies").Where("author_id = ? ", authorId).Delete(&comment).Error; err != nil {
 		return err
 	}
 	return nil

@@ -15,7 +15,7 @@
       <div class="reply">
         <div class="reply-header">
           <span> {{ reply.author }} </span>
-          <template v-if="reply.parentReplyId">
+          <template v-if="reply.parentReply">
             <span> Reply to  </span>
             <span> {{ reply.parentReply.author.username }}</span>
           </template>
@@ -28,7 +28,7 @@
           v-if="reply.parentReplyId"
           class="parent-reply-content"
         >
-          "{{ reply.parentReply.replyContent }}"
+          {{ reply.parentReply ? reply.parentReply.replyContent : '------The Reply Has Been Deleted-------' }}
         </div>
         <div
           class="action-box"
@@ -116,6 +116,15 @@ export default defineComponent({
         const deep = cloneDeep(props.comment)
         deep.repliesCount -= 1
         deep.replyList = deep.replyList.filter(r => r.id !== reply.id)
+        deep.replyList = deep.replyList.reduce((accumulator, r) => {
+          if (r.id !== reply.id) {
+            if (r.parentReplyId === reply.id) {
+              r.parentReply = null
+            }
+            accumulator.push(r) // Multiply each remaining number by 2 and add it to the accumulator
+          }
+          return accumulator
+        }, [])
         ctx.emit('updateComment', deep)
       }
     }

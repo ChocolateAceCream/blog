@@ -68,7 +68,9 @@ TOOD:
 - [x] Article preview/editing
 - [x] Add comments add, list and delete
 - [x] Add comments like count function
-- [ ] Add reply section
+- [x] Add reply section
+- [ ] Add reply likes logic
+- [ ] add loading more reply/comments button instead of infinite scroll
 - [ ] rank most popular blogs (top viewed blogs) using go-routing to update data every 5 mins, then save the cached data to redis
 
 
