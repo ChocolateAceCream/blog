@@ -141,11 +141,6 @@ export default defineComponent({
               })
               router.back()
             }
-          }).catch((err) => {
-            ElMessage({
-              type: 'error',
-              message: err,
-            })
           })
         })
       } catch (err) {
@@ -182,14 +177,14 @@ export default defineComponent({
               if (res.errorCode === 0) {
                 ElMessage({
                   type: 'success',
-                  message: '验证码已发送至邮箱，请查收',
+                  message: 'code has been sent, please check your email',
                 })
               }
             }).catch((err) => {
               console.log('-----sendEmailCode err------', err)
               ElMessage({
                 type: 'error',
-                message: '验证码发送失败，请重试',
+                message: 'fail to send code, please try again',
               })
             })
             setTimeCallback()

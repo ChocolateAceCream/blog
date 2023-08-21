@@ -21,10 +21,10 @@ export const navBarCollapsedHook = () => {
 }
 
 export const logout = () => {
+  router.push({ name: 'login' })
   const routerStore = useRouterStore()
   routerStore.$reset()
   const sessionStore = useSessionStore()
   sessionStore.$reset()
   console.log('jump to login', router)
-  router.push({ name: 'login' })
 }

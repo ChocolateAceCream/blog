@@ -185,12 +185,14 @@ export default defineComponent({
           }
         )
         const { data: res } = await deleteEndpoint({ data: { id: [row.id] } })
-        ElMessage({
-          message: res.msg,
-          type: res.errorCode === 0 ? 'success' : 'error',
-          duration: 3 * 1000
-        })
-        fetchList()
+        if (res.errorCode === 0) {
+          ElMessage({
+            message: res.msg,
+            type: 'success',
+            duration: 3 * 1000
+          })
+          fetchList()
+        }
       },
       async onBatchDelete() {
         await ElMessageBox.confirm(
@@ -203,12 +205,14 @@ export default defineComponent({
           }
         )
         const { data: res } = await deleteEndpoint({ data: { id: _.map(formState.deleteIds, 'id') } })
-        ElMessage({
-          message: res.msg,
-          type: res.errorCode === 0 ? 'success' : 'error',
-          duration: 3 * 1000
-        })
-        fetchList()
+        if (res.errorCode === 0) {
+          ElMessage({
+            message: res.msg,
+            type: 'success',
+            duration: 3 * 1000
+          })
+          fetchList()
+        }
       },
       onReset() {
         formState.searchFormRef.reset()
@@ -228,12 +232,6 @@ export default defineComponent({
         const {list, total} = res.data
         tableState.tableData = list
         tableState.total = total
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
 

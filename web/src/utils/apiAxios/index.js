@@ -33,8 +33,11 @@ apiAxios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8
 
 supportCancelToken(apiAxios)
 
+let activeRequest = 0
+let logoutFlag = false
 // request interceptors
 apiAxios.interceptors.request.use(config => {
+  activeRequest++
   if (config['Content-Type']) {
     config.headers['Content-Type'] = config['Content-Type']
   } else {
@@ -56,6 +59,7 @@ apiAxios.interceptors.request.use(config => {
 
   return config
 }, error => {
+  activeRequest--
   return Promise.reject(error)
 })
 
@@ -63,6 +67,7 @@ apiAxios.interceptors.request.use(config => {
 apiAxios.interceptors.response.use(res => {
   if (res.config.meta?.withProgressBar) { NProgress.done() }
   // 请求成功
+  activeRequest--
   if (res.data.errorCode !== 0) {
     ElMessage({
       message: res.data.msg,
@@ -71,14 +76,21 @@ apiAxios.interceptors.response.use(res => {
     })
     // unauthorized, logout current user
     if (res.data.errorCode === 401) {
-      logout()
-    } else {
-      return Promise.reject(res.data)
+      if (!logoutFlag) {
+        logout()
+        logoutFlag = true
+      }
+      if (activeRequest === 0) {
+        // last request
+        logoutFlag = false
+      }
     }
+    return Promise.reject(res.data)
   }
   return Promise.resolve(res)
 }, error => {
   // 请求失败
+  activeRequest--
   if (axios.isCancel(error)) {
     console.error('cancel by client')
   } else {

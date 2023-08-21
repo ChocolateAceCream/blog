@@ -106,11 +106,6 @@ export default defineComponent({
       )
       console.log('---reply.id---', reply.id)
       const { data: res } = await deleteReply({ data: { id: reply.id } })
-      ElMessage({
-        message: res.msg,
-        type: res.errorCode === 0 ? 'success' : 'error',
-        duration: 3 * 1000
-      })
       if (res.errorCode === 0) {
         // delete success, comment reply count -1
         const deep = cloneDeep(props.comment)
@@ -149,13 +144,7 @@ export default defineComponent({
         parentReplyId: reply.id
       }
       const { data: res } = await postAddReply(payload)
-      if (res.errorCode !== 0) {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      } else {
+      if (res.errorCode === 0) {
         state.currentReplyingReply.isReplying = false // reset emoji input
         ElMessage({
           message: 'reply posted',
@@ -193,12 +182,6 @@ export default defineComponent({
         } else {
           comment.replyList = comment.replyList ? [...comment.replyList, ...list] : list
         }
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
 

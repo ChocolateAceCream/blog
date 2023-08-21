@@ -113,12 +113,6 @@ export default defineComponent({
         console.log('---success-------', res)
         comment.isLiked = !comment.isLiked
         comment.likesCount = comment.isLiked ? comment.likesCount + 1 : comment.likesCount - 1
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }, 1000)
     const state = reactive({
@@ -180,12 +174,6 @@ export default defineComponent({
         } else {
           state.commentList = [...state.commentList, ...list]
         }
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }, 1000)
 
@@ -222,12 +210,6 @@ export default defineComponent({
         } else {
           comment.replyList = comment.replyList ? [...comment.replyList, ...list] : list
         }
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
 
@@ -237,13 +219,7 @@ export default defineComponent({
         commentContent: content
       }
       const { data: res } = await postAddComment(payload)
-      if (res.errorCode !== 0) {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      } else {
+      if (res.errorCode === 0) {
         onFetchCommentList()
         state.commentInputRef.reset()
         ElMessage({
@@ -264,13 +240,7 @@ export default defineComponent({
         payload.parentReply = replyState.parentReply.id
       }
       const { data: res } = await postAddReply(payload)
-      if (res.errorCode !== 0) {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      } else {
+      if (res.errorCode === 0) {
         state.currentReplyingComment.isReplying = false // reset emoji input
         ElMessage({
           message: 'reply posted',

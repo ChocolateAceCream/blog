@@ -53,32 +53,16 @@ export default defineComponent({
           duration: 3 * 1000
         })
         modalState.onModalClose()
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
     const fetchTree = async(roleId) => {
       const { data: casbinRes } = await getCasbinByRoleId({ params: { id: roleId } })
       if (casbinRes.errorCode !== 0) {
-        ElMessage({
-          message: casbinRes.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
         return
       }
       const payload = { pageNumber: 1, pageSize: 1000, orderBy: 'group_name'}
       const { data: endpointRes } = await getEndpointList({ params: payload })
       if (casbinRes.errorCode !== 0) {
-        ElMessage({
-          message: endpointRes.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
         return
       }
       const groups = _.groupBy(endpointRes.data.list, 'groupName')

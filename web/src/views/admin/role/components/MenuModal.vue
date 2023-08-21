@@ -68,12 +68,6 @@ export default defineComponent({
         leafNodes.forEach(menu => temp.push(menu.id))
         state.treeRef.setKeys(temp)
         state.menuIdList = temp
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
     const modalState = reactive({

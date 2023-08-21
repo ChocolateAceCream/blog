@@ -139,12 +139,6 @@ export default defineComponent({
       const { data: res } = await getRoleList()
       if (res.errorCode === 0) {
         tableState.tableData = formatRoleTree(res.data)
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
 

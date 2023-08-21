@@ -10,7 +10,7 @@ export const routeMiddleware = (routes = []) => {
 function routeFormation(route) {
   const result = addNProgress(route)
   if (route.children?.length > 0) {
-    result.children = route.children.map(childRoute => {
+    result['children'] = route.children.map(childRoute => {
       return routeFormation(childRoute)
     })
   }

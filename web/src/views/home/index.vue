@@ -69,12 +69,6 @@ export default defineComponent({
         } else {
           state.articleList = [...state.articleList, ...list]
         }
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
     const state = reactive({

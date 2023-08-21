@@ -8,7 +8,7 @@ import { useRouterStore } from '@/stores/routerStore'
 const routes = [
   {
     // path: '/', name: 'baseRoute', component: Layout, meta: { title: '主页', requireAuth: true },
-    path: '/', name: 'baseRoute', redirect: '/home', component: Layout, meta: { title: '主页', requireAuth: true },
+    path: '/', name: 'baseRoute', redirect: '/home', component: Layout, meta: { title: 'Home Page', requireAuth: true },
     // children: [
     //   // { path: '', name: 'home', component: () => import('@/views/home'), },
     //   { path: '/home', name: 'home', component: () => import('@/views/home'), meta: { title: '主页', requireAuth: true } },

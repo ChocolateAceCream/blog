@@ -91,16 +91,8 @@ export default defineComponent({
       console.log('----onSave----')
       state.onSaving = true
       const payload = state.articleInfo
-      const resp = await putEditArticle(payload)
+      await putEditArticle(payload)
       state.onSaving = false
-      const { data: res } = resp
-      if (res.errorCode !== 0) {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
-      }
     }
     const onPublish = async() => {
       state.modalRef.openModal()

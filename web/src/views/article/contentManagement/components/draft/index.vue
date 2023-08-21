@@ -67,12 +67,6 @@ export default defineComponent({
         console.log('---total---', total)
         console.log('---articleList---', state.articleList)
         // tableState.total = total
-      } else {
-        ElMessage({
-          message: res.msg,
-          type: 'error',
-          duration: 3 * 1000
-        })
       }
     }
     const onDelete = async(id) => {
