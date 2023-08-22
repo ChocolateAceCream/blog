@@ -55,7 +55,8 @@ func (es *ArticleService) GetArticleList(query request.CursorListParam) (article
 	if query.CursorId > 0 {
 		db = db.Where(queryStr, query.CursorId)
 	}
-	err = db.Preload("Author").Find(&articleList).Error
+	const published = 1 //only return published articles
+	err = db.Where("published = ? ", published).Preload("Author").Find(&articleList).Error
 	articleBaseInfo = utils.MapSlice(articleList, response.ArticleBaseInfoFormatter)
 	return
 }

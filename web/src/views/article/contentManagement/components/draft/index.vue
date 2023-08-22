@@ -38,7 +38,7 @@ export default defineComponent({
       fetchList()
     })
     const state = reactive({
-      keywords: 'as',
+      keywords: '',
       articleList: [],
       total: 0,
       myCollapse: null,
