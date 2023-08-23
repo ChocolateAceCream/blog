@@ -92,9 +92,38 @@ func (es *ArticleService) GetArticleSearchList(authorId uint, query request.Arti
 
 func (articleService *ArticleService) DeleteArticle(authorId uint, ids []int) (err error) {
 	//TODO: test delete associated role-article relations
-	articles := []dbTable.Article{}
-	if err = global.DB.Where("author_id = ? AND id in ?", authorId, ids).Delete(&articles).Error; err != nil {
-		return err
-	}
-	return nil
+	return global.DB.Transaction(func(tx *gorm.DB) error {
+		var articles []dbTable.Article
+		if err := tx.Preload("Comments.Replies").Where("author_id = ? AND id in ?", authorId, ids).Find(&articles).Error; err != nil {
+			return err
+		}
+
+		var replyIDs []uint
+		var commentIDs []uint
+		var articleIDs []uint
+		for _, article := range articles {
+			articleIDs = append(articleIDs, article.ID)
+			for _, comment := range article.Comments {
+				commentIDs = append(commentIDs, comment.ID)
+				for _, reply := range comment.Replies {
+					replyIDs = append(replyIDs, reply.ID)
+				}
+			}
+		}
+		// delete replies
+		if err := tx.Where("id IN (?)", replyIDs).Delete(&dbTable.Reply{}).Error; err != nil {
+			return err
+		}
+		// Delete comments
+		if err := tx.Where("id IN (?)", commentIDs).Delete(&dbTable.Comment{}).Error; err != nil {
+			return err
+		}
+
+		// Delete articles
+		if err := tx.Where("id IN (?)", articleIDs).Delete(&dbTable.Article{}).Error; err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
