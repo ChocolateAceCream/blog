@@ -74,7 +74,7 @@ export default defineComponent({
     const state = reactive({
       articleInfo: { ...props.articleInfo },
       onCardClick: (id) => {
-        router.push({ path: '/article/' + id })
+        router.push({ path: '/preview/' + id })
       },
       timestamp: computed(() => {
         return dayjs(state.articleInfo.updatedAt).fromNow()

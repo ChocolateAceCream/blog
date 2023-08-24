@@ -61,7 +61,8 @@ export default defineComponent({
       state.activeNames = []
     }
     const onEdit = (id) => {
-      router.push({ path: '/article/' + id })
+      console.log('-------router-------', router)
+      router.push({ path: '/preview/' + id })
     }
 
     const onDelete = (id) => {

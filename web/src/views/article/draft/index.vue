@@ -31,16 +31,19 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, onMounted } from 'vue'
+import { defineComponent, toRefs, reactive, onMounted, onUnmounted } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
 import PublishModal from './components/publishModal'
 import { postAddArticle, putEditArticle, getArticleFile } from '@/api/article'
-import { ElMessage } from 'element-plus'
 export default defineComponent({
   components: {
     PublishModal
   },
   setup(props, ctx) {
+    onUnmounted(() => {
+      console.log('-------onUnmounted---------------')
+      window.clearInterval(state.autoSave)
+    })
     onMounted(async() => {
       const store = useSessionStore()
       if (store.currentEditingArticle) {
@@ -55,16 +58,14 @@ export default defineComponent({
         state.articleInfo.authorId = store.userInfo.id
         addArticle()
       }
-      let content = ''
       state.autoSave = window.setInterval(() => {
         if (!state.onSaving) {
-          if (content !== state.content) {
+          if (state.savedContent !== state.articleInfo.content) {
             onSave()
-            content = state.content
+            state.savedContent = state.articleInfo.content
           }
         }
-      }, 20000)
-      console.log('----onMounted----', store.currentEditingArticle)
+      }, 10000)
     })
     const addArticle = async() => {
       const resp = await postAddArticle()
@@ -86,6 +87,7 @@ export default defineComponent({
       onSaving: false,
       autoSave: null,
       modalRef: null,
+      savedContent: '',
     })
     const onSave = async() => {
       console.log('----onSave----')
