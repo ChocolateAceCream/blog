@@ -14,3 +14,9 @@ type ReplyCursorListParam struct {
 	CursorListParam
 	CommentID uint `json:"commentId" form:"commentId" binding:"required"`
 }
+
+type LikeReplyPayload struct {
+	ReplyID uint  `json:"replyId" form:"replyId" binding:"required"`
+	Like    *bool `json:"like" form:"like" binding:"required"`
+	UserID  uint
+}

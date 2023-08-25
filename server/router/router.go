@@ -139,7 +139,7 @@ func RouteLoader(r *gin.Engine) {
 			reply.GET("/list", replyApi.GetReplyList)
 			reply.POST("/add", replyApi.AddReply)
 			reply.DELETE("/delete", replyApi.DeleteReply)
-			// reply.POST("/like", replyApi.LikeReply)
+			reply.POST("/like", replyApi.LikeReply)
 		}
 
 		oss := v1.Group("/oss")

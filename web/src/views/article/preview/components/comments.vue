@@ -83,7 +83,7 @@
 import { useRoute } from 'vue-router'
 import { defineComponent, toRefs, reactive, onMounted, inject } from 'vue'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import _ from 'lodash'
+import { throttle } from 'lodash-es'
 import { getCommentList, deleteComment, likeComment, postAddComment } from '@/api/comment'
 import { getReplyList, postAddReply } from '@/api/reply'
 import { ElMessage, ElMessageBox } from 'element-plus'
@@ -102,7 +102,7 @@ export default defineComponent({
     onMounted(() => {
       onFetchCommentList()
     })
-    const onLikeComment = _.throttle(async(comment) => {
+    const onLikeComment = throttle(async(comment) => {
       console.log('---onLikeComment-------')
       const payload = {
         commentId: comment.id,
@@ -114,7 +114,7 @@ export default defineComponent({
         comment.isLiked = !comment.isLiked
         comment.likesCount = comment.isLiked ? comment.likesCount + 1 : comment.likesCount - 1
       }
-    }, 1000)
+    }, 1000, { 'trailing': false })
     const state = reactive({
       commentInputRef: null,
       currentReplyingComment: {},
@@ -152,7 +152,7 @@ export default defineComponent({
       if (res.errorCode === 0) state.commentList = state.commentList.filter(item => item.id !== id)
     }
 
-    const onFetchCommentList = _.throttle(async() => {
+    const onFetchCommentList = throttle(async() => {
       const payload = {
         pageSize: state.pageSize,
         cursorId: state.commentList.slice(-1)[0]?.id || 0,
@@ -175,7 +175,7 @@ export default defineComponent({
           state.commentList = [...state.commentList, ...list]
         }
       }
-    }, 1000)
+    }, 2000)
 
     const onShowReplies = (comment) => {
       if (!comment.showReplies) {

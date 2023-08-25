@@ -115,33 +115,33 @@ func (b *ReplyApi) GetReplyList(c *gin.Context) {
 	}
 }
 
-// // @Tags Reply
-// // @Summary like reply
-// // @Description current user like reply or unlike reply
-// // @Accept json
-// // @Param data body request.LikeReplyPayload true "replyId, like "
-// // @Success 200 {object} response.Response{msg=string} "success"
-// // @Router /api/v1/reply/like [POST]
-// func (*ReplyApi) LikeReply(c *gin.Context) {
-// 	var payload request.LikeReplyPayload
+// @Tags Reply
+// @Summary like reply
+// @Description current user like reply or unlike reply
+// @Accept json
+// @Param data body request.LikeReplyPayload true "replyId, like "
+// @Success 200 {object} response.Response{msg=string} "success"
+// @Router /api/v1/reply/like [POST]
+func (*ReplyApi) LikeReply(c *gin.Context) {
+	var payload request.LikeReplyPayload
 
-// 	if err := c.ShouldBindJSON(&payload); err != nil {
-// 		global.LOGGER.Error("fail to bind like reply data", zap.Error(err))
-// 		response.FailWithMessage("fail to bind like reply data, "+err.Error(), c)
-// 		return
-// 	}
+	if err := c.ShouldBindJSON(&payload); err != nil {
+		global.LOGGER.Error("fail to bind like reply data", zap.Error(err))
+		response.FailWithMessage("fail to bind like reply data, "+err.Error(), c)
+		return
+	}
 
-// 	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
-// 	if err != nil {
-// 		global.LOGGER.Error("User not logged in", zap.Error(err))
-// 		response.FailWithUnauthorized("User not logged in", c)
-// 		return
-// 	}
-// 	payload.UserID = currentUser.ID
-// 	if err := replyService.LikeReply(payload); err != nil {
-// 		global.LOGGER.Error("failed", zap.Error(err))
-// 		response.FailWithMessage("operation failed", c)
-// 	} else {
-// 		response.OkWithMessage("success", c)
-// 	}
-// }
+	currentUser, err := utils.GetValueFromSession[dbTable.User](c, "currentUser")
+	if err != nil {
+		global.LOGGER.Error("User not logged in", zap.Error(err))
+		response.FailWithUnauthorized("User not logged in", c)
+		return
+	}
+	payload.UserID = currentUser.ID
+	if err := replyService.LikeReply(payload); err != nil {
+		global.LOGGER.Error("failed", zap.Error(err))
+		response.FailWithMessage("operation failed", c)
+	} else {
+		response.OkWithMessage("success", c)
+	}
+}

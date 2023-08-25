@@ -72,6 +72,7 @@ import { getReplyList, deleteReply, likeReply, postAddReply } from '@/api/reply'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import {cloneDeep} from 'lodash-es'
 import EmojiInput from './emojiInput.vue'
+import { throttle } from 'lodash-es'
 export default defineComponent({
   name: 'Replies',
   components: {
@@ -161,6 +162,19 @@ export default defineComponent({
       }
     }
 
+    const onLikeReply = throttle(async(reply) => {
+      const payload = {
+        replyId: reply.id,
+        like: !reply.isLiked,
+      }
+      const { data: res } = await likeReply(payload)
+      if (res.errorCode === 0) {
+        console.log('---success-------', res)
+        reply.isLiked = !reply.isLiked
+        reply.likesCount = reply.isLiked ? reply.likesCount + 1 : reply.likesCount - 1
+      }
+    }, 1000, { 'trailing': false })
+
     const fetchReplyList = async(comment) => {
       const payload = {
         pageSize: state.pageSize,
@@ -191,6 +205,7 @@ export default defineComponent({
       dayjs,
       onReplySubmit,
       onDeleteReply,
+      onLikeReply,
       ...toRefs(state)
     }
   }

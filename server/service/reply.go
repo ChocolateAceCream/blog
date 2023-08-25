@@ -86,20 +86,18 @@ func (es *ReplyService) GetReplyList(query request.ReplyCursorListParam, current
 	return
 }
 
-// func (*ReplyService) LikeReply(p request.LikeReplyPayload) error {
-// 	if *p.Like {
-// 		r := global.DB.Create(&dbTable.ReplyLiker{UserID: p.UserID, ReplyID: p.ReplyID})
-// 		fmt.Println(r.RowsAffected == 1)
-// 		if r.RowsAffected == 1 {
-// 			return global.DB.Model(&dbTable.Reply{}).Where("id = ?", p.ReplyID).UpdateColumn("likes_count", gorm.Expr("likes_count + ?", 1)).Error
-// 		}
-// 		return r.Error
-// 	} else {
-// 		r := global.DB.Where("user_id = ? and reply_id = ?", p.UserID, p.ReplyID).Delete(&dbTable.ReplyLiker{})
-// 		fmt.Println(r.RowsAffected == 1)
-// 		if r.RowsAffected == 1 {
-// 			return global.DB.Model(&dbTable.Reply{}).Where("id = ?", p.ReplyID).UpdateColumn("likes_count", gorm.Expr("likes_count - ?", 1)).Error
-// 		}
-// 		return r.Error
-// 	}
-// }
+func (*ReplyService) LikeReply(p request.LikeReplyPayload) error {
+	if *p.Like {
+		r := global.DB.Create(&dbTable.ReplyLiker{UserID: p.UserID, ReplyID: p.ReplyID})
+		if r.RowsAffected == 1 {
+			return global.DB.Model(&dbTable.Reply{}).Where("id = ?", p.ReplyID).UpdateColumn("likes_count", gorm.Expr("likes_count + ?", 1)).Error
+		}
+		return r.Error
+	} else {
+		r := global.DB.Where("user_id = ? and reply_id = ?", p.UserID, p.ReplyID).Delete(&dbTable.ReplyLiker{})
+		if r.RowsAffected == 1 {
+			return global.DB.Model(&dbTable.Reply{}).Where("id = ?", p.ReplyID).UpdateColumn("likes_count", gorm.Expr("likes_count - ?", 1)).Error
+		}
+		return r.Error
+	}
+}
