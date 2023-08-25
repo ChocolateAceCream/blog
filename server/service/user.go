@@ -126,8 +126,23 @@ func (userService *UserService) EditUser(u dbTable.User) error {
 	return global.DB.Model(&dbTable.User{}).Where("UUID = ? ", u.UUID).Updates(&u).Error
 }
 
+// TODO: since this api is not in use, should test later when using
 func (userService *UserService) DeleteUser(uuid string) error {
-	return global.DB.Where("UUID = ?", uuid).Delete(&dbTable.User{}).Error
+	var user dbTable.User
+	if err := global.DB.Preload("Roles").Where("UUID = ? ", uuid).First(&user).Error; err != nil {
+		return err
+	}
+
+	// Delete the user's role relations
+	if err := global.DB.Model(&user).Association("Roles").Clear(); err != nil {
+		return err
+	}
+
+	// Delete the user
+	if err := global.DB.Delete(&user).Error; err != nil {
+		return err
+	}
+	return nil
 }
 
 func (userService *UserService) ResetPassword(u dbTable.User, newPassword string, code string, uuid string) error {
