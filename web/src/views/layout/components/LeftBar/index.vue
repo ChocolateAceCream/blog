@@ -34,7 +34,8 @@
 import { defineComponent, toRefs, reactive, computed, getCurrentInstance } from 'vue'
 import { useRouter } from 'vue-router'
 import { navBarCollapsedHook } from '@/shared/hooks/index.js'
-import _ from 'lodash'
+import { findLast } from 'lodash-es'
+
 import MenuItem from './menuItem.vue'
 import { useRouterStore } from '@/stores/routerStore'
 export default defineComponent({
@@ -50,7 +51,7 @@ export default defineComponent({
 
     const state = reactive({
       currentMenuIndex: computed(() => {
-        const routeInMenu = _.findLast(
+        const routeInMenu = findLast(
           router.currentRoute.value.matched,
           (item) => item.meta.isMenu
         )

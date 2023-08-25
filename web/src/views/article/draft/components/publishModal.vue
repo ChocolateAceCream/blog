@@ -22,11 +22,11 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, inject } from 'vue'
+import { defineComponent, toRefs, reactive } from 'vue'
 import { ElMessage } from 'element-plus'
 import { putEditArticle } from '@/api/article'
 import { useSessionStore } from '@/stores/sessionStore'
-import _ from 'lodash'
+import { throttle } from 'lodash-es'
 import { useRouter } from 'vue-router'
 
 export default defineComponent({
@@ -79,7 +79,7 @@ export default defineComponent({
     }
     const modalState = reactive({
       modalRef: null,
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onModalConfirm: throttle(onSubmit, 2000)
     })
     const formState = reactive({
       formRef: null,

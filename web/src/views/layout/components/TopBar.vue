@@ -73,7 +73,6 @@ import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { logout } from '@/shared/hooks/index'
 import Breadcrumb from './Breadcrumb.vue'
-import _ from 'lodash'
 export default defineComponent({
   components: {
     Breadcrumb

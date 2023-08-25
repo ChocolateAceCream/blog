@@ -29,7 +29,8 @@ import { defineComponent, toRefs, reactive } from 'vue'
 import { getRoleMenuTree, assignRoleMenus } from '@/api/menu'
 import { ElMessage } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
-import _ from 'lodash'
+import { throttle, filter } from 'lodash-es'
+
 import ListToTree from '@/utils/tree'
 export default defineComponent({
   name: 'MenuModal',
@@ -63,7 +64,7 @@ export default defineComponent({
       if (res.errorCode === 0) {
         const { root, mapper } = ListToTree(res.data.menuList)
         state.treeData = root.children
-        const leafNodes = _.filter(res.data.roleMenus, (menu) => { return mapper[menu.id] === undefined })
+        const leafNodes = filter(res.data.roleMenus, (menu) => { return mapper[menu.id] === undefined })
         const temp = []
         leafNodes.forEach(menu => temp.push(menu.id))
         state.treeRef.setKeys(temp)
@@ -79,7 +80,7 @@ export default defineComponent({
       onModalClose() {
         modalState.modalRef.closeModal()
       },
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onModalConfirm: throttle(onSubmit, 2000)
     })
 
     return {

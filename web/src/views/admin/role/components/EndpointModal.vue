@@ -29,7 +29,8 @@ import { defineComponent, toRefs, reactive } from 'vue'
 import { getCasbinByRoleId, postUpdateCasbin } from '@/api/casbin'
 import { getEndpointList } from '@/api/endpoint'
 import { ElMessage } from 'element-plus'
-import _ from 'lodash'
+import { throttle, map, groupBy } from 'lodash-es'
+
 export default defineComponent({
   name: 'EndpointModal',
   setup(props, ctx) {
@@ -65,8 +66,8 @@ export default defineComponent({
       if (casbinRes.errorCode !== 0) {
         return
       }
-      const groups = _.groupBy(endpointRes.data.list, 'groupName')
-      state.treeData = _.map(groups, (arr, key) => {
+      const groups = groupBy(endpointRes.data.list, 'groupName')
+      state.treeData = map(groups, (arr, key) => {
         const node = {
           name: key,
           children: []
@@ -76,7 +77,7 @@ export default defineComponent({
         })
         return node
       })
-      state.selectedIdList = _.map(casbinRes.data, (val) => {
+      state.selectedIdList = map(casbinRes.data, (val) => {
         return val.path + ':' + val.method
       })
     }
@@ -90,7 +91,7 @@ export default defineComponent({
       onModalClose() {
         modalState.modalRef.closeModal()
       },
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onModalConfirm: throttle(onSubmit, 2000)
     })
 
     return {

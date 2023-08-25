@@ -78,7 +78,8 @@ import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { postAddMenu, getMenuList, deleteMenu, putEditMenu } from '@/api/menu'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
-import _ from 'lodash'
+import { throttle, cloneDeep, forIn } from 'lodash-es'
+
 import Icon from './icon.vue'
 export default defineComponent({
   components: {
@@ -103,7 +104,7 @@ export default defineComponent({
       },
       onEditMenu(row) {
         modalState.modalType = 'Edit'
-        formState.formData = _.cloneDeep(row)
+        formState.formData = cloneDeep(row)
         modalState.onModalOpen()
       },
       onDeleteMenu(row) {
@@ -213,7 +214,7 @@ export default defineComponent({
       try {
         await formState.formRef.validate()
         const payload = { meta: {} }
-        _.forIn(formState.formData, (val, key) => {
+        forIn(formState.formData, (val, key) => {
           if (['icon', 'title'].includes(key)) {
             payload.meta[key] = val
           } else {
@@ -252,7 +253,7 @@ export default defineComponent({
       onModalClose() {
         modalState.modalRef.closeModal()
       },
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onModalConfirm: throttle(onSubmit, 2000)
     })
 
     const validatePath = (rule, value, callback) => {

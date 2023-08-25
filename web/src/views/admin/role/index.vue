@@ -72,7 +72,8 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
 import MenuModal from './components/MenuModal'
 import EndpointModal from './components/EndpointModal'
-import _ from 'lodash'
+import { throttle, cloneDeep } from 'lodash-es'
+
 export default defineComponent({
   components: {
     MenuModal,
@@ -93,7 +94,7 @@ export default defineComponent({
       },
       onEditRole(row) {
         modalState.roleModalType = 'Edit'
-        formState.formData = _.cloneDeep(row)
+        formState.formData = cloneDeep(row)
         modalState.onRoleModalOpen()
       },
       onDeleteRole(row) {
@@ -211,7 +212,7 @@ export default defineComponent({
       onRoleModalClose() {
         modalState.roleModalRef.closeModal()
       },
-      onRoleModalConfirm: _.throttle(onSubmit, 2000),
+      onRoleModalConfirm: throttle(onSubmit, 2000),
       menuModalRef: null,
       onMenuModalOpen(roleId) {
         modalState.menuModalRef.onModalOpen(roleId)

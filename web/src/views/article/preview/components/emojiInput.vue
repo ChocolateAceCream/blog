@@ -51,7 +51,6 @@ import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
 import data from 'emoji-mart-vue-fast/data/all.json'
 import { insertAt } from '@/utils/stringFun.js'
 import 'emoji-mart-vue-fast/css/emoji-mart.css'
-import _ from 'lodash'
 export default defineComponent({
   name: 'EmojiInput',
   components: {

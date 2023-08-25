@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import { reactive, toRefs, defineComponent, computed} from 'vue'
 import { useRoute } from 'vue-router'
 import { useRouterStore } from '@/stores/routerStore'

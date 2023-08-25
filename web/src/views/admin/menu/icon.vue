@@ -38,7 +38,8 @@
 
 <script>
 import { defineComponent, toRefs, reactive, computed } from 'vue'
-import _ from 'lodash'
+import { map } from 'lodash-es'
+
 import iconJson from '@/assets/iconfont/iconfont.json'
 export default defineComponent({
   props: {
@@ -49,7 +50,7 @@ export default defineComponent({
   },
   emits: ['update:icon'],
   setup(props, ctx) {
-    const iconMapper = _.map(iconJson.glyphs, 'font_class')
+    const iconMapper = map(iconJson.glyphs, 'font_class')
     const state = reactive({
       tempIcon: computed({
         get: () => props.icon,

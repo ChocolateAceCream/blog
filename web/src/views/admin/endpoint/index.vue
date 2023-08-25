@@ -94,7 +94,8 @@
 import { defineComponent, toRefs, reactive, onMounted, computed } from 'vue'
 import { getEndpointList, putEditEndpoint, postAddEndpoint, deleteEndpoint } from '@/api/endpoint'
 import { ElMessage, ElMessageBox } from 'element-plus'
-import _ from 'lodash'
+import { throttle, cloneDeep, snakeCase, map } from 'lodash-es'
+
 import { useI18n } from 'vue-i18n'
 export default defineComponent({
   setup(props, ctx) {
@@ -138,7 +139,7 @@ export default defineComponent({
     })
 
     const handleSelectionChange = (val) => {
-      console.log('-------val-------', _.map(val, 'id'))
+      console.log('-------val-------', map(val, 'id'))
       formState.deleteIds = val
     }
     const tableState = reactive({
@@ -170,7 +171,7 @@ export default defineComponent({
       },
       onEdit(row) {
         modalState.modalType = 'Edit'
-        formState.formData = _.cloneDeep(row)
+        formState.formData = cloneDeep(row)
         modalState.onModalOpen()
       },
 
@@ -204,7 +205,7 @@ export default defineComponent({
             type: 'warning',
           }
         )
-        const { data: res } = await deleteEndpoint({ data: { id: _.map(formState.deleteIds, 'id') } })
+        const { data: res } = await deleteEndpoint({ data: { id: map(formState.deleteIds, 'id') } })
         if (res.errorCode === 0) {
           ElMessage({
             message: res.msg,
@@ -221,7 +222,7 @@ export default defineComponent({
 
     const sortChange = ({ prop, order }) => {
       tableState.sorting.desc = order === 'descending'
-      tableState.sorting.orderBy = _.snakeCase(prop)
+      tableState.sorting.orderBy = snakeCase(prop)
       fetchList()
     }
 
@@ -271,7 +272,7 @@ export default defineComponent({
       onModalClose() {
         modalState.modalRef.closeModal()
       },
-      onModalConfirm: _.throttle(onSubmit, 2000)
+      onModalConfirm: throttle(onSubmit, 2000)
     })
 
     return {
