@@ -1,6 +1,6 @@
 <script>
 import { ElConfigProvider } from 'element-plus'
-import { defineComponent, reactive, toRefs, inject, provide, nextTick } from 'vue'
+import { defineComponent, reactive, toRefs, inject, provide, nextTick, watch } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
 import { useSessionStore } from '@/stores/sessionStore'
@@ -19,19 +19,22 @@ export default defineComponent({
       'cn': 'zh-cn',
       'en': 'en'
     }
-    const {locale} = useI18n()
+    const { locale } = useI18n()
 
     const store = useSessionStore()
 
     const dayjs = inject('dayjs')
     dayjs.locale(dayjsLocaleMapper[store.userInfo.locale])
 
-    store.$subscribe(async(_, s) => {
-      state.locale = elementPlusLocaleMapper[s.userInfo.locale]
-      locale.value = s.userInfo.locale
-      dayjs.locale(dayjsLocaleMapper[s.userInfo.locale])
-      reload()
-    })
+    watch(
+      () => store.userInfo.locale,
+      (newValue, _) => {
+        state.locale = elementPlusLocaleMapper[newValue]
+        locale.value = newValue
+        dayjs.locale(dayjsLocaleMapper[newValue])
+        reload()
+      }
+    )
 
     const state = reactive({
       locale: zhCn,

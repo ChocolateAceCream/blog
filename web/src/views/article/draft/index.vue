@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, onMounted, onUnmounted } from 'vue'
+import { defineComponent, toRefs, reactive, onMounted, onBeforeUnmount } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
 import PublishModal from './components/publishModal'
 import { postAddArticle, putEditArticle, getArticleFile } from '@/api/article'
@@ -40,9 +40,10 @@ export default defineComponent({
     PublishModal
   },
   setup(props, ctx) {
-    onUnmounted(() => {
-      console.log('-------onUnmounted---------------')
+    onBeforeUnmount(() => {
+      const store = useSessionStore()
       window.clearInterval(state.autoSave)
+      store.currentEditingArticle = null
     })
     onMounted(async() => {
       const store = useSessionStore()
@@ -56,12 +57,12 @@ export default defineComponent({
         state.articleId = store.currentEditingArticle
       } else {
         state.articleInfo.authorId = store.userInfo.id
-        addArticle()
+        await addArticle()
       }
-      state.autoSave = window.setInterval(() => {
+      state.autoSave = window.setInterval(async() => {
         if (!state.onSaving) {
           if (state.savedContent !== state.articleInfo.content) {
-            onSave()
+            await onSave()
             state.savedContent = state.articleInfo.content
           }
         }
@@ -69,7 +70,6 @@ export default defineComponent({
     })
     const addArticle = async() => {
       const resp = await postAddArticle()
-      console.log('----res---', resp)
       const { data: res } = resp
       if (res.errorCode === 0) {
         const store = useSessionStore()

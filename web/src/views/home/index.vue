@@ -87,7 +87,9 @@ export default defineComponent({
       onFetchArticleList(payload)
     }
     const onAddArticle = () => {
-      router.push({ path: '/article/draft' })
+      router.push({
+        name: 'draft',
+      })
     }
     return {
       onAddArticle,

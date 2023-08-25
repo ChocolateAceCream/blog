@@ -44,6 +44,7 @@
 import { defineComponent, toRefs, reactive} from 'vue'
 import { formatTimeToStr } from '@/utils/date'
 import router from '@/router'
+import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   name: 'Collapse',
   props: {
@@ -62,7 +63,9 @@ export default defineComponent({
     }
     const onEdit = (id) => {
       console.log('-------router-------', router)
-      router.push({ path: '/preview/' + id })
+      const store = useSessionStore()
+      store.currentEditingArticle = id
+      router.push({ path: '/draft' })
     }
 
     const onDelete = (id) => {

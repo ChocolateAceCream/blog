@@ -18,7 +18,7 @@
     "md-editor-v3": "^4.0.4",
     "moment": "^2.29.4",
     "nprogress": "^0.2.0",
-    "pinia": "^2.0.25",
+    "pinia": "^2.1.6",
     "pinia-plugin-persist": "^1.0.0",
     "qs": "^6.11.0",
     "terser": "^5.17.1",

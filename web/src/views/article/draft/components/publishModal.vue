@@ -46,7 +46,6 @@ export default defineComponent({
   emits: ['onSubmit'],
   setup(props, ctx) {
     const router = useRouter()
-    console.log('----route-----', router)
 
     const onSubmit = async() => {
       console.log('----props---', props)
@@ -70,7 +69,7 @@ export default defineComponent({
           // TODO: jump to article preview page
 
           console.log('---articleInfo.id---', articleInfo.id)
-          await router.push({ path: `/article/${articleInfo.id}` })
+          await router.push({ path: `preview/${articleInfo.id}` })
           const store = useSessionStore()
           store.currentEditingArticle = null
         }

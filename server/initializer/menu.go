@@ -43,7 +43,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			Pid:       0,
 			Name:      "article",
 			Component: "views/article/preview/index.vue",
-			Path:      "/preview/:id",
+			Path:      "preview/:id",
 			Display:   2,
 			Meta: dbTable.Meta{
 				Icon:  "menu",
@@ -81,7 +81,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			ID:        6,
 			Pid:       0,
 			Name:      "creator",
-			Component: "views/article/index.vue",
+			Component: "views/article/foo.vue",
 			Path:      "/article",
 			Display:   1,
 			Meta: dbTable.Meta{
@@ -94,7 +94,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			Pid:       6,
 			Name:      "draft",
 			Component: "views/article/draft/index.vue",
-			Path:      "article/draft",
+			Path:      "draft",
 			Display:   1,
 			Meta: dbTable.Meta{
 				Icon:  "write",
