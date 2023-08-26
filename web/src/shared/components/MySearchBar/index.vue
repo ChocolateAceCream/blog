@@ -10,7 +10,7 @@ sample usage
   <el-input
     v-model="input"
     class="w-50 m-2"
-    placeholder="Please Input"
+    placeholder="Search"
     @change="onSearch"
   >
     <template #suffix>

@@ -14,8 +14,12 @@
     >
       <template #title>
         <div class="title-wrapper">
-          <span class="title">{{ item.title }}</span>
+          <span class="title">{{ item.title || 'Untitled' }}</span>
           <span class="date">{{ formatTimeToStr(item.updatedAt, 'yyyy-MM-dd hh:mm:ss') }}</span>
+          <template v-if="published">
+            <span class="split-line" />
+            <span class="info">Viewed · {{ item.viewedTimes }}</span>
+          </template>
         </div>
       </template>
       <div>{{ item.abstract }}</div>
@@ -43,7 +47,7 @@
 <script>
 import { defineComponent, toRefs, reactive} from 'vue'
 import { formatTimeToStr } from '@/utils/date'
-import router from '@/router'
+import { useRouter } from 'vue-router'
 import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   name: 'Collapse',
@@ -51,6 +55,9 @@ export default defineComponent({
     list: {
       type: Array,
       default: () => []
+    },
+    published: {
+      type: Boolean,
     }
   },
   emits: ['delete'],
@@ -61,11 +68,12 @@ export default defineComponent({
     const resetActiveNames = () => {
       state.activeNames = []
     }
+    const router = useRouter()
     const onEdit = (id) => {
       console.log('-------router-------', router)
       const store = useSessionStore()
       store.currentEditingArticle = id
-      router.push({ path: '/draft' })
+      router.push({ name: 'draft' })
     }
 
     const onDelete = (id) => {
@@ -84,16 +92,27 @@ export default defineComponent({
 <style lang='scss' scoped>
 .title-wrapper{
   position:absolute;
+  span{
+    margin-right:20px;
+  }
 
   .title {
     font-weight: bold;
     font-size: 16px;
     color: $blue;
-    margin-right:20px;
     // style="float:left;font-weight:bold;font-size:14px;color:#2C8DF4;"
   }
   .date {
     font-style: italic;
+  }
+  .split-line{
+    height: 14px;
+    width: 0;
+    border-left: 1px solid #e5e6eb;
+  }
+  .info{
+    font-size: 14px;
+    color: $lite-grey;
   }
 }
 </style>

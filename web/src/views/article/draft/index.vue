@@ -6,16 +6,19 @@
 !-->
 <template>
   <div class="button-wrapper">
+    <el-input
+      v-model="articleInfo.title"
+      class="title"
+      placeholder="Please input title here..."
+    />
     <el-button
       type="primary"
-      style="margin-bottom: 15px;"
       :loading="onSaving"
       :disabled="onSaving"
       @click="onSave"
     > Save</el-button>
     <el-button
       type="primary"
-      style="margin-bottom: 15px;"
       @click="onPublish"
     > Publish</el-button>
   </div>
@@ -82,6 +85,7 @@ export default defineComponent({
         content: '',
         articleId: null,
         authorId: null,
+        title: ''
       },
       editorRef: null,
       onSaving: false,
@@ -110,5 +114,24 @@ export default defineComponent({
 <style lang='scss' scoped>
 .button-wrapper{
   text-align: right;
+  display: flex;
+  margin-bottom: 20px;
+  align-items: center;
+  .title{
+    flex:1;
+    margin-right: 100px;
+    height:60px;
+    font-size:25px;
+    font-weight:500;
+    border: none;
+    outline: none;
+
+    :deep(.el-input__wrapper) {
+      box-shadow: 0 0 0 0px var(--el-input-border-color, var(--el-border-color)) inset;
+      .el-input__inner {
+        cursor: default !important;
+      }
+    }
+  }
 }
 </style>

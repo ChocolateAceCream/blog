@@ -14,6 +14,7 @@
   <Collapse
     ref="myCollapse"
     :list="articleList"
+    :published="false"
     @delete="onDelete"
   />
   <Pagination
@@ -26,7 +27,7 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, computed, onMounted } from 'vue'
+import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { getArticleSearchList, deleteArticle } from '@/api/article'
 import Collapse from '../shared/collapse.vue'
