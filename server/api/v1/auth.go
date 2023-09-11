@@ -27,7 +27,7 @@ type AuthApi struct{}
 func (a *AuthApi) GetCaptcha(c *gin.Context) {
 	config := global.CONFIG.Captcha
 	var driver base64Captcha.Driver
-	if config.DigitsOnly == true {
+	if config.DigitsOnly {
 		driver = base64Captcha.NewDriverDigit(config.Height, config.Width, config.Length, config.MaxSkew, config.DotCount)
 	} else {
 		driverString := base64Captcha.DriverString{

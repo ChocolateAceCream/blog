@@ -21,5 +21,5 @@ var (
 	REDIS  *redis.Client
 	FS     embed.FS
 	MQTT   mqtt.Client
-	WS     map[string]*websocket.Conn
+	WS     map[uint]*websocket.Conn
 )
