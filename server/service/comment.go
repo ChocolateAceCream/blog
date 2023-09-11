@@ -17,7 +17,11 @@ import (
 type CommentService struct{}
 
 func (*CommentService) LikeComment(p request.LikeCommentPayload) error {
-	library.PublishMqttMsg(strconv.FormatUint(uint64(p.UserID), 10), strconv.FormatUint(uint64(p.UserID), 10))
+	var comment dbTable.Comment
+	if err := global.DB.First(&comment, p.CommentID).Error; err != nil {
+		return err
+	}
+	library.PublishMqttMsg(fmt.Sprintf("notification%d", comment.AuthorID), strconv.FormatUint(uint64(comment.AuthorID), 10))
 	if *p.Like {
 		r := global.DB.Create(&dbTable.CommentLiker{UserID: p.UserID, CommentID: p.CommentID})
 		fmt.Println(r.RowsAffected == 1)
@@ -29,7 +33,8 @@ func (*CommentService) LikeComment(p request.LikeCommentPayload) error {
 		r := global.DB.Where("user_id = ? and comment_id = ?", p.UserID, p.CommentID).Delete(&dbTable.CommentLiker{})
 		fmt.Println(r.RowsAffected == 1)
 		if r.RowsAffected == 1 {
-			return global.DB.Model(&dbTable.Comment{}).Where("id = ?", p.CommentID).UpdateColumn("likes_count", gorm.Expr("likes_count - ?", 1)).Error
+			comment.LikesCount -= 1
+			return global.DB.Save(&comment).Error
 		}
 		return r.Error
 	}

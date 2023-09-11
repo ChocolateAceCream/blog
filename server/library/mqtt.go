@@ -11,23 +11,18 @@ func InitMqttClient() mqtt.Client {
 	config := global.CONFIG.Mqtt
 	url := fmt.Sprintf("tcp://%s:%s", config.Host, config.Port)
 	opts := mqtt.NewClientOptions().AddBroker(url)
-	opts.SetClientID("blog")
-	opts.SetUsername("superadmin")
-	opts.SetPassword("123qwe!@#QWE")
+	opts.SetClientID(config.ClientId)
+	opts.SetUsername(config.Username)
+	opts.SetPassword(config.Password)
 	client := mqtt.NewClient(opts)
 	return client
 }
 
-func PublishMqttMsg(topic string, msg string) {
+func PublishMqttMsg(topic string, msg interface{}) {
 	client := global.MQTT
-	fmt.Println("------stat published to topic----", client.IsConnected())
 	if !client.IsConnected() {
 		if token := client.Connect(); token.Wait() && token.Error() != nil {
-			fmt.Println("------token.Error()-----", token.Error())
 			panic(token.Error())
-		} else {
-			fmt.Println("------b4 published to topic----")
-
 		}
 	}
 	// Publish a message to a topic
@@ -56,6 +51,5 @@ func UnsubscribeMqttMsg(topic string) {
 	}
 	// Unsubscribe from a topic
 	token := client.Unsubscribe(topic)
-	fmt.Println("--UnsubscribeMqttMsg----")
 	token.Wait()
 }
