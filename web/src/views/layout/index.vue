@@ -15,7 +15,7 @@
 
 <script>
 import LeftBar from './components/LeftBar'
-import TopBar from './components/TopBar.vue'
+import TopBar from './components/TopBar/index.vue'
 // import TagsView from './TagsView.vue'
 import MainBody from './components/MainBody.vue'
 // import { getProfile } from '@/api/session'

@@ -38,6 +38,8 @@ func Init() *gin.Engine {
 	global.LOGGER = library.LoggerInit()
 	global.DB = utils.GormInit()
 	global.LOGGER.Info("Successful connected to DB")
+	global.MQTT = library.InitMqttClient()
+	global.WS = library.InitWS()
 	db.RegisterTables(global.DB)
 
 	utils.InitValidator()
@@ -55,7 +57,7 @@ func Init() *gin.Engine {
 // @version 1.0
 // @description Gin swagger
 
-// @contact.name Flynn Sun
+// @contact.name Di
 
 // @license.name Apache 2.0
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html

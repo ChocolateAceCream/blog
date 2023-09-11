@@ -44,6 +44,12 @@ export default defineConfig((params) => {
           target: ENV.VITE_APP_DEV_PROXY,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/backend/, '')
+        },
+        '/websocket': {
+          target: ENV.VITE_APP_DEV_PROXY,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/websocket/, ''),
+          ws: true,
         }
       },
     },

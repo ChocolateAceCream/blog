@@ -12,7 +12,6 @@
       :span="12"
       class="right-header"
     >
-
       <el-dropdown
         class="avatar-container right-menu-item"
         trigger="click"
@@ -20,7 +19,6 @@
         <SvgIcon
           icon-name="icon-blog-setting"
           color="#3498db"
-          class="top-bar-setting-icon"
           size="30px"
         />
         <template #dropdown>
@@ -47,7 +45,6 @@
           <SvgIcon
             icon-name="icon-blog-global"
             color="#3498db"
-            class="top-bar-setting-icon"
             size="30px"
           />
         </div>
@@ -64,6 +61,7 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <notification />
     </el-col>
   </el-row>
 </template>
@@ -72,14 +70,15 @@ import { reactive, toRefs, defineComponent, computed } from 'vue'
 import { ElMessageBox } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { logout } from '@/shared/hooks/index'
-import Breadcrumb from './Breadcrumb.vue'
+import Breadcrumb from './components/Breadcrumb.vue'
+import Notification from './components/Notification.vue'
 export default defineComponent({
   components: {
-    Breadcrumb
+    Breadcrumb, Notification
   },
   setup(props, ctx) {
     const store = useSessionStore()
-
+    console.log('------topbar reload----')
     const state = reactive({
       username: store.userInfo.username,
       async handleLogout() {
@@ -132,7 +131,7 @@ export default defineComponent({
     display: flex;
     flex-direction: row-reverse;
     text-align: right;
-    .top-bar-setting-icon {
+    i{
       cursor: pointer;
       margin-left:25px;
     }

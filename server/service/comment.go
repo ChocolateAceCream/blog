@@ -3,8 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
+	"strconv"
 
 	"github.com/ChocolateAceCream/blog/global"
+	"github.com/ChocolateAceCream/blog/library"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
@@ -15,6 +17,7 @@ import (
 type CommentService struct{}
 
 func (*CommentService) LikeComment(p request.LikeCommentPayload) error {
+	library.PublishMqttMsg(strconv.FormatUint(uint64(p.UserID), 10), strconv.FormatUint(uint64(p.UserID), 10))
 	if *p.Like {
 		r := global.DB.Create(&dbTable.CommentLiker{UserID: p.UserID, CommentID: p.CommentID})
 		fmt.Println(r.RowsAffected == 1)

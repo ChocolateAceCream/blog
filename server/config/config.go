@@ -13,4 +13,5 @@ type Server struct {
 	Init      Init      `mapstructure:"init" json:"init" yaml:"init"`
 	Local     Local     `mapstructure:"local" json:"local" yaml:"local"`
 	Minio     Minio     `mapstructure:"minio" json:"minio" yaml:"minio"`
+	Mqtt      Mqtt      `mapstructure:"mqtt" json:"mqtt" yaml:"mqtt"`
 }

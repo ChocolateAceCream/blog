@@ -38,6 +38,7 @@ func RouteLoader(r *gin.Engine) {
 	ossApi := apiV1.ApiGroupInstance.OssApi
 	commentApi := apiV1.ApiGroupInstance.CommentApi
 	replyApi := apiV1.ApiGroupInstance.ReplyApi
+	notificationApi := apiV1.ApiGroupInstance.NotificationApi
 	PublicGroup := r.Group("/api/public")
 	{
 		// health check
@@ -140,6 +141,11 @@ func RouteLoader(r *gin.Engine) {
 			reply.POST("/add", replyApi.AddReply)
 			reply.DELETE("/delete", replyApi.DeleteReply)
 			reply.POST("/like", replyApi.LikeReply)
+		}
+
+		notification := v1.Group("/notification")
+		{
+			notification.GET("/ws", notificationApi.WSHandler)
 		}
 
 		oss := v1.Group("/oss")
