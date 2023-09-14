@@ -15,6 +15,13 @@ import (
 type NotificationService struct{}
 
 func (ns *NotificationService) WSHandler(c *gin.Context, id uint) error {
+	headers := c.Request.Header
+
+	for key, values := range headers {
+		for _, value := range values {
+			fmt.Printf("%s: %s\n", key, value)
+		}
+	}
 	conn, err := websocket.Accept(c.Writer, c.Request, &websocket.AcceptOptions{
 		InsecureSkipVerify: true, // will not verify the server's certificate and will trust any certificate presented by the server.
 	})
