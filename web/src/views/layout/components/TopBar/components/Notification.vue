@@ -38,7 +38,7 @@ export default defineComponent({
       console.log('----------ws-------', ws)
       console.log(e)
     }
-    const url = `${import.meta.env.VITE_WEBSOCKET_PROXY}/api/v1/notification/ws`
+    const url = `ws://${import.meta.env.VITE_APP_HOST}:${import.meta.env.VITE_APP_PORT}/websocket/api/v1/notification/ws`
     console.log('--------url-----', url)
     const { status, data, close, open } = useWebsocket(url, {
       autoReconnect: true,

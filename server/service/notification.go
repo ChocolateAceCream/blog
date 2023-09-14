@@ -22,7 +22,6 @@ func (ns *NotificationService) WSHandler(c *gin.Context, id uint) error {
 	global.WS[id] = conn
 
 	if err != nil {
-		global.LOGGER.Error("fail to create WS", zap.Error(err))
 		return err
 	}
 
@@ -47,15 +46,21 @@ func (ns *NotificationService) WSHandler(c *gin.Context, id uint) error {
 
 	for {
 		// Read a message from the WebSocket connection
-		_, _, err := conn.Read(c)
+		messageType, message, err := conn.Read(c)
 		if err != nil {
 			// Check if the error is related to a closed connection
 			if websocket.CloseStatus(err) == websocket.StatusNormalClosure || websocket.CloseStatus(err) == websocket.StatusGoingAway {
 				// Handle the lost connection here
-				global.LOGGER.Error("WebSocket connection lost", zap.Error(err))
 				library.UnsubscribeMqttMsg(fmt.Sprintf("notification%d", id))
 				delete(global.WS, id)
 				fmt.Println(len(global.WS))
+				return err
+			}
+		}
+		// handle ping message from client and send back pong response
+		if messageType == websocket.MessageText && string(message) == "ping" {
+			if err := conn.Write(c, websocket.MessageText, []byte("pong")); err != nil {
+				// Handle error
 				return err
 			}
 		}

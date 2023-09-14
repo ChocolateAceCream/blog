@@ -24,13 +24,21 @@ export default function useWebsocket(url, options = defaultOptions) {
 
   const data = ref(null)
 
+  options = { ...defaultOptions, ...options }
+  const {
+    onConnected,
+    onDisconnected,
+    onError,
+    onMessage,
+    onFailed,
+  } = options
+
   // heartbeat feature
   if (options.heartbeat) {
     const isActive = ref(false) // heartbeat active status
-
     const message = DEFAULT_PING_MESSAGE
-    const interval = 1000
-    const pongTimeout = 1000
+    const interval = 60000 // time interval for heartbeat
+    const pongTimeout = 60000 // time to stop waiting pong response
 
     let _timer = null
 
@@ -63,14 +71,6 @@ export default function useWebsocket(url, options = defaultOptions) {
     }
   }
 
-  const {
-    onConnected,
-    onDisconnected,
-    onError,
-    onMessage,
-    onFailed,
-  } = options
-
   const _sendBuffer = () => {
     if (bufferedData.length && wsRef.value && status.value === 'OPEN') {
       for (const buffer of bufferedData) { wsRef.value.send(buffer) }
@@ -86,16 +86,17 @@ export default function useWebsocket(url, options = defaultOptions) {
   const send = (data, useBuffer = true) => {
     if (!wsRef.value || status.value !== 'OPEN') {
       if (useBuffer) { bufferedData.push(data) }
+      console.log('--!wsRef.value || status.value ')
       return false
     }
     _sendBuffer()
+    console.log('--wsRef.value----', wsRef.value)
     wsRef.value.send(data)
     return true
   }
 
   const _init = () => {
     if (explicitlyClosed) { return }
-    console.log('----url----', url)
     const ws = new WebSocket(url)
     wsRef.value = ws
     status.value = 'CONNECTING'

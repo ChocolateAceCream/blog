@@ -21,6 +21,5 @@ func (a *NotificationApi) WSHandler(c *gin.Context) {
 
 	if err := notificationService.WSHandler(c, currentUser.ID); err != nil {
 		global.LOGGER.Error("fail to handle websocket", zap.Error(err))
-		response.FailWithMessage("fail to handle websocket, "+err.Error(), c)
 	}
 }
