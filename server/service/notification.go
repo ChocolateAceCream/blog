@@ -57,13 +57,13 @@ func (ns *NotificationService) WSHandler(c *gin.Context, id uint) error {
 		if err != nil {
 			fmt.Println("-------1--err from socket---", err)
 			// Check if the error is related to a closed connection
-			if websocket.CloseStatus(err) == websocket.StatusNormalClosure || websocket.CloseStatus(err) == websocket.StatusGoingAway {
-				// Handle the lost connection here
-				fmt.Println("-------2--err from socket---", err)
-				library.UnsubscribeMqttMsg(fmt.Sprintf("notification%d", id))
-				delete(global.WS, id)
-				fmt.Println(len(global.WS))
-			}
+			// if websocket.CloseStatus(err) == websocket.StatusNormalClosure || websocket.CloseStatus(err) == websocket.StatusGoingAway {
+			// Handle the lost connection here
+			fmt.Println("-------2--err from socket---", err)
+			library.UnsubscribeMqttMsg(fmt.Sprintf("notification%d", id))
+			delete(global.WS, id)
+			fmt.Println(len(global.WS))
+			// }
 			return err
 		}
 		// handle ping message from client and send back pong response

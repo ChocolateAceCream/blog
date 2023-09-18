@@ -20,6 +20,7 @@ export const useSessionStore = defineStore({
       isNavBarCollapsed: false,
     },
     currentEditingArticle: null,
+    closeNotificationWebsocket: null,
   }),
   getters: {
     isAuthenticated: (state) => state.userInfo.isAuthenticated,

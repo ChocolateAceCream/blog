@@ -38,7 +38,7 @@ export default function useWebsocket(url, options = defaultOptions) {
     const isActive = ref(false) // heartbeat active status
     const message = DEFAULT_PING_MESSAGE
     const interval = 60000 // time interval for heartbeat
-    const pongTimeout = 60000 // time to stop waiting pong response
+    const pongTimeout = 10000 // time to stop waiting pong response
 
     let _timer = null
 
@@ -115,8 +115,9 @@ export default function useWebsocket(url, options = defaultOptions) {
 
       if (!explicitlyClosed && options.autoReconnect) {
         const retries = -1 // infinite retry reconnect
-        const delay = 10000
+        const delay = 60000
         retried += 1
+        console.log('---retries----')
         if (typeof retries === 'number' && (retries < 0 || retried < retries)) {
           setTimeout(_init, delay)
         } else {

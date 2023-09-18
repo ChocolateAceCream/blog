@@ -32,8 +32,10 @@
 <script>
 import { defineComponent, toRefs, reactive, watch } from 'vue'
 import useWebsocket from '@/utils/websocket.js'
+import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   setup(props, ctx) {
+    const sessionStore = useSessionStore()
     const onMessage = (ws, e) => {
       console.log('----------ws-------', ws)
       console.log(e)
@@ -44,6 +46,7 @@ export default defineComponent({
       autoReconnect: true,
       onMessage: onMessage
     })
+    sessionStore.closeNotificationWebsocket = close
     open()
     watch(status, val => {
       console.log('----status-----', status)

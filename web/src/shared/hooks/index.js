@@ -25,6 +25,7 @@ export const logout = () => {
   const routerStore = useRouterStore()
   routerStore.$reset()
   const sessionStore = useSessionStore()
+  sessionStore.closeNotificationWebsocket()
   sessionStore.$reset()
   console.log('jump to login', router)
 }
