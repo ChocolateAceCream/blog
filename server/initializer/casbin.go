@@ -51,7 +51,12 @@ func (ci *casbinInitializer) Initialize(ctx context.Context) (next context.Conte
 		{Ptype: "p", V1: "/api/v1/reply/like", V2: "POST"},
 		{Ptype: "p", V1: "/api/v1/reply/delete", V2: "DELETE"},
 		{Ptype: "p", V1: "/api/v1/reply/list", V2: "GET"},
+
 		{Ptype: "p", V1: "/api/v1/notification/ws", V2: "GET"},
+		{Ptype: "p", V1: "/api/v1/notification/read", V2: "PATCH"},
+		{Ptype: "p", V1: "/api/v1/notification/list", V2: "GET"},
+		{Ptype: "p", V1: "/api/v1/notification/unreadCount", V2: "GET"},
+		{Ptype: "p", V1: "/api/v1/notification/delete", V2: "DELETE"},
 	}
 	adminRules = append(adminRules, guestRules...)
 	superadminRules := []gormadapter.CasbinRule{

@@ -146,6 +146,10 @@ func RouteLoader(r *gin.Engine) {
 		notification := v1.Group("/notification")
 		{
 			notification.GET("/ws", notificationApi.WSHandler)
+			notification.GET("/list", notificationApi.GetNotificationList)
+			notification.GET("/unreadCount", notificationApi.GetUnreadCount)
+			notification.DELETE("/delete", notificationApi.DeleteNotification)
+			notification.PATCH("/read", notificationApi.ReadNotification)
 		}
 
 		oss := v1.Group("/oss")

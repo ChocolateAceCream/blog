@@ -5,13 +5,13 @@
 * @description notification dropdown menu
 !-->
 <template>
-  <el-dropdown
-    class="avatar-container right-menu-item"
-    trigger="click"
-  >
-    <div>
+  <router-link :to="{ name: 'notification' }">
+    <div
+      class="avatar-container right-menu-item"
+      trigger="click"
+    >
       <el-badge
-        :value="200"
+        :value="notificationCount"
         :max="99"
         class="item"
       >
@@ -23,35 +23,17 @@
         />
       </el-badge>
     </div>
-    <template #dropdown>
-      <el-dropdown-menu />
-    </template>
-  </el-dropdown>
+  </router-link>
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, watch } from 'vue'
-import useWebsocket from '@/utils/websocket.js'
+import { defineComponent, toRefs, reactive, computed } from 'vue'
 import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   setup(props, ctx) {
     const sessionStore = useSessionStore()
-    const onMessage = (ws, e) => {
-      console.log('----------ws-------', ws)
-      console.log(e)
-    }
-    const url = `${import.meta.env.VITE_WEBSOCKET_PROXY}/websocket/api/v1/notification/ws`
-    console.log('--------url-----', url)
-    const { status, data, close, open } = useWebsocket(url, {
-      autoReconnect: true,
-      onMessage: onMessage
-    })
-    sessionStore.closeNotificationWebsocket = close
-    open()
-    watch(status, val => {
-      console.log('----status-----', status)
-    })
     const state = reactive({
+      notificationCount: computed(() => sessionStore.newNotificationCount)
     })
     return {
       ...toRefs(state)

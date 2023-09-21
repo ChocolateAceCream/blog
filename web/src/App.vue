@@ -22,10 +22,11 @@ export default defineComponent({
     const { locale } = useI18n()
 
     const store = useSessionStore()
-
+    if (store.userInfo.isAuthenticated) {
+      store.setNotificationWebsocket()
+    }
     const dayjs = inject('dayjs')
     dayjs.locale(dayjsLocaleMapper[store.userInfo.locale])
-
     watch(
       () => store.userInfo.locale,
       (newValue, _) => {

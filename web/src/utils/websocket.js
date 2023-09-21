@@ -37,7 +37,7 @@ export default function useWebsocket(url, options = defaultOptions) {
   if (options.heartbeat) {
     const isActive = ref(false) // heartbeat active status
     const message = DEFAULT_PING_MESSAGE
-    const interval = 60000 // time interval for heartbeat
+    const interval = 5000 // time interval for heartbeat
     const pongTimeout = 10000 // time to stop waiting pong response
 
     let _timer = null
@@ -86,11 +86,9 @@ export default function useWebsocket(url, options = defaultOptions) {
   const send = (data, useBuffer = true) => {
     if (!wsRef.value || status.value !== 'OPEN') {
       if (useBuffer) { bufferedData.push(data) }
-      console.log('--!wsRef.value || status.value ')
       return false
     }
     _sendBuffer()
-    console.log('--wsRef.value----', wsRef.value)
     wsRef.value.send(data)
     return true
   }
@@ -109,15 +107,16 @@ export default function useWebsocket(url, options = defaultOptions) {
     }
 
     ws.onclose = (ev) => {
+      console.log('---ws.onclose----')
       status.value = 'CLOSED'
       wsRef.value = undefined
       onDisconnected?.(ws, ev)
 
       if (!explicitlyClosed && options.autoReconnect) {
-        const retries = -1 // infinite retry reconnect
+        console.log('---start retry...----')
+        const retries = 5 // infinite retry reconnect
         const delay = 60000
         retried += 1
-        console.log('---retries----')
         if (typeof retries === 'number' && (retries < 0 || retried < retries)) {
           setTimeout(_init, delay)
         } else {

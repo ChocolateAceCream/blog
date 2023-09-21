@@ -1,12 +1,11 @@
 package service
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
-	"strconv"
 
 	"github.com/ChocolateAceCream/blog/global"
-	"github.com/ChocolateAceCream/blog/library"
 	"github.com/ChocolateAceCream/blog/model/dbTable"
 	"github.com/ChocolateAceCream/blog/model/request"
 	"github.com/ChocolateAceCream/blog/model/response"
@@ -16,19 +15,39 @@ import (
 
 type CommentService struct{}
 
+var NotificationServiceInstance = new(NotificationService)
+
 func (*CommentService) LikeComment(p request.LikeCommentPayload) error {
 	var comment dbTable.Comment
 	if err := global.DB.First(&comment, p.CommentID).Error; err != nil {
 		return err
 	}
-	library.PublishMqttMsg(fmt.Sprintf("notification%d", comment.AuthorID), strconv.FormatUint(uint64(comment.AuthorID), 10))
 	if *p.Like {
 		r := global.DB.Create(&dbTable.CommentLiker{UserID: p.UserID, CommentID: p.CommentID})
-		fmt.Println(r.RowsAffected == 1)
+		if r.Error != nil {
+			return r.Error
+		}
+
+		// comment likes success, send out notification to notify comment author
+		content := map[string]interface{}{
+			"articleId": comment.ArticleID,
+		}
+		jsonStr, _ := json.Marshal(content)
+		const UNREAD = 2
+		const LIKE_COMMENT = 1
+		payload := dbTable.Notification{
+			Status:      UNREAD,
+			Type:        LIKE_COMMENT,
+			InitiatorID: p.UserID,
+			RecipientID: comment.AuthorID,
+			Content:     string(jsonStr),
+		}
+		NotificationServiceInstance.AddNotification(payload)
+
 		if r.RowsAffected == 1 {
 			return global.DB.Model(&dbTable.Comment{}).Where("id = ?", p.CommentID).UpdateColumn("likes_count", gorm.Expr("likes_count + ?", 1)).Error
 		}
-		return r.Error
+		return nil
 	} else {
 		r := global.DB.Where("user_id = ? and comment_id = ?", p.UserID, p.CommentID).Delete(&dbTable.CommentLiker{})
 		fmt.Println(r.RowsAffected == 1)

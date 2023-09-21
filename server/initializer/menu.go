@@ -43,7 +43,7 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 			Pid:       0,
 			Name:      "article",
 			Component: "views/article/preview/index.vue",
-			Path:      "preview/:id",
+			Path:      "/preview/:id",
 			Display:   2,
 			Meta: dbTable.Meta{
 				Icon:  "menu",
@@ -52,6 +52,18 @@ func (ri *menuInitializer) Initialize(ctx context.Context) (next context.Context
 		},
 	}
 	adminMenus := []dbTable.Menu{
+		{
+			ID:        10,
+			Pid:       0,
+			Name:      "notification",
+			Component: "views/notification/index.vue",
+			Path:      "/notification",
+			Display:   2,
+			Meta: dbTable.Meta{
+				Icon:  "notification",
+				Title: "Notification",
+			},
+		},
 		{
 			ID:        2,
 			Pid:       0,

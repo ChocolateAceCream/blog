@@ -97,6 +97,7 @@ export default defineComponent({
               console.log('------login success---', res.data)
               const sStore = useSessionStore()
               sStore.setUserInfo(res.data.user)
+              sStore.setNotificationWebsocket()
               const routerStore = useRouterStore()
               await routerStore.setAsyncRouter()
               router.push({ name: 'home' })

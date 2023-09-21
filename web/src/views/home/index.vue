@@ -39,7 +39,7 @@
 
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
-import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { getArticleList } from '@/api/article'
 import Card from './components/card'
 import router from '@/router'
@@ -48,16 +48,8 @@ export default defineComponent({
     Card,
   },
   setup(props, ctx) {
-    onMounted(() => {
-      const payload = {
-        pageSize: state.pageSize,
-        cursorId: state.cursorId,
-        desc: state.desc
-      }
-      onFetchArticleList(payload)
-    })
     const onFetchArticleList = async(payload) => {
-      const { data: res } = await getArticleList({ params: payload })
+      const { data: res } = await getArticleList({ params: state.payload })
       if (res.errorCode === 0) {
         const { list } = res.data
         if (list.length === 0) {
@@ -71,20 +63,18 @@ export default defineComponent({
         }
       }
     }
+    onMounted(onFetchArticleList)
     const state = reactive({
-      cursorId: 0,
       articleList: [],
-      pageSize: 10,
-      desc: false, // default article order by create time
+      payload: {
+        cursorId: 0,
+        pageSize: 10,
+        desc: false, // default article order by create time
+      }
     })
     const onLoad = () => {
-      const [last] = state.articleList.slice(-1)
-      const payload = {
-        pageSize: state.pageSize,
-        cursorId: last.id,
-        desc: state.desc
-      }
-      onFetchArticleList(payload)
+      state.payload.cursorId = state.articleList.slice(-1)[0]?.id
+      onFetchArticleList()
     }
     const onAddArticle = () => {
       router.push({

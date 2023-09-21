@@ -68,8 +68,6 @@ const formatRouterTree = (data) => {
   return r
 }
 
-
-
 export const useRouterStore = defineStore({
   id: 'useRouterStore',
   state: () => ({

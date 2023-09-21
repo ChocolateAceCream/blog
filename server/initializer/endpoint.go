@@ -69,6 +69,10 @@ func (ei *endpointInitializer) Initialize(ctx context.Context) (next context.Con
 		{Method: "POST", Path: "/api/v1/reply/like", GroupName: "Reply", Description: "like reply", Name: "like reply"},
 
 		{Method: "GET", Path: "/api/v1/notification/ws", GroupName: "Notification", Description: "Notification ws", Name: "websocket"},
+		{Method: "PATCH", Path: "/api/v1/notification/read", GroupName: "Notification", Description: "Change notification status", Name: "websocket"},
+		{Method: "GET", Path: "/api/v1/notification/list", GroupName: "Notification", Description: "Get notification list", Name: "websocket"},
+		{Method: "GET", Path: "/api/v1/notification/unreadCount", GroupName: "Notification", Description: "Get unread message count", Name: "websocket"},
+		{Method: "DELETE", Path: "/api/v1/notification/delete", GroupName: "Notification", Description: "Delete notification", Name: "websocket"},
 	}
 	if err = db.Create(&entities).Error; err != nil {
 		return ctx, fmt.Errorf("fail to init endpoint data, err: %w", err)

@@ -17,5 +17,5 @@ type AddCommentPayload struct {
 type LikeCommentPayload struct {
 	CommentID uint  `json:"commentId" form:"commentId" binding:"required"`
 	Like      *bool `json:"like" form:"like" binding:"required"`
-	UserID    uint
+	UserID    uint  // who likes comment
 }
