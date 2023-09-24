@@ -80,7 +80,7 @@ export default defineComponent({
       console.log('---onEdit---')
       const store = useSessionStore()
       store.currentEditingArticle = parseInt(route.params.id)
-      router.push({ path: '/article/draft' })
+      router.push({ path: '/draft' })
     }
     return {
       onEdit,
