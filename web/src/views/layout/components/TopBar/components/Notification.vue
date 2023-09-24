@@ -11,6 +11,7 @@
       trigger="click"
     >
       <el-badge
+        :hidden="notificationCount === 0"
         :value="notificationCount"
         :max="99"
         class="item"
