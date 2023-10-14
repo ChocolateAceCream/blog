@@ -12,7 +12,6 @@
   >unread only</el-checkbox>
   <div
     v-infinite-scroll="onLoad"
-    :infinite-scroll-immediate="false"
     class="card-wrapper"
   >
     <el-space
@@ -83,8 +82,10 @@ export default defineComponent({
     }
 
     const onLoad = () => {
-      state.payload.cursorId = state.notificationList.slice(-1)[0]?.id
-      fetchList()
+      if (state.notificationList.length > 0) {
+        state.payload.cursorId = state.notificationList.slice(-1)[0]?.id
+        fetchList()
+      }
     }
 
     const handleCheckboxChange = () => {
