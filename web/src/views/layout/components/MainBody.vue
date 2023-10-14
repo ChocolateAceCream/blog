@@ -9,7 +9,8 @@
     >
       <el-scrollbar height="100%">
         <!-- 避免了组件复用，子路由间来回切换时，页面都会重新加载. -->
-        <router-view :key="path" />
+        <!-- <router-view :key="path" /> -->
+        <router-view />
       </el-scrollbar>
     </el-card>
   </div>

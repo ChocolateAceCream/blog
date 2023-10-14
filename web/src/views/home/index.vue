@@ -69,7 +69,7 @@ export default defineComponent({
       payload: {
         cursorId: 0,
         pageSize: 10,
-        desc: false, // default article order by create time
+        desc: true, // list recent posted article first
       }
     })
     const onLoad = () => {

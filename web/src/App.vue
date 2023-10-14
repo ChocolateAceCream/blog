@@ -64,7 +64,6 @@ export default defineComponent({
   >
     <router-view
       v-if="isRouterAlive"
-      :key="$route.fullPath"
     />
   </el-config-provider>
 

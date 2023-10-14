@@ -1,10 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { routeMiddleware } from './middleware'
 import { auth } from './auth'
-import Layout from '@/views/layout'
+// import Layout from '@/views/layout'
 import { ElMessage } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { useRouterStore } from '@/stores/routerStore'
+export const Layout = () => import('@/views/layout')
 const routes = [
   {
     // path: '/', name: 'baseRoute', component: Layout, meta: { title: '主页', requireAuth: true },
