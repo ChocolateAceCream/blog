@@ -16,7 +16,9 @@ const routes = [
 
   },
   {
-    path: '/404', name: '404', component: () => import('@/views/error/index.vue'), meta: { title: '404', requireAuth: false },
+    path: '/:pathMatch(.*)*', component: () => import('@/views/error/index.vue'), meta: { title: '404', requireAuth: false },
+    // path: '/:pathMatch(.*)*', name: '404', component: () => import('@/views/error/index.vue'), meta: { title: '404', requireAuth: false },
+    // dont include name: '404', otherwise refresh page will end up in 404 page
   },
   auth,
 ]
@@ -28,36 +30,36 @@ const router = createRouter({
 })
 
 let flag = 0
-router.beforeEach(async(to, from) => {
+router.beforeEach(async(to, from, next) => {
+  async function init() {
+    const routerStore = useRouterStore()
+    await routerStore.setAsyncRouter()
+    flag = 1
+  }
   const isAuthenticated = useSessionStore().isAuthenticated
   if (isAuthenticated) {
-    if (from.name == null) {
-      if (flag === 0) {
-        const routerStore = useRouterStore()
-        await routerStore.setAsyncRouter()
-        flag++
-        return { ...to, replace: true }
-      }
-      if (to.matched.length) {
-        return true
-      } else {
-        router.push('/404')
-      }
+    if (to.path === '/auth/login') {
+      next({path: '/'})
+    }
+    if (flag) {
+      next()
     } else {
+      await init()
+      next({...to, replace: true})
     }
   } else {
     if (to.meta.requireAuth && to.matched.length > 0 || (to.matched.length === 0)) {
       ElMessage({
-        message: 'Please Login Again',
+        message: 'Please Login',
         type: 'error',
         duration: 5 * 1000
       })
-
-      return {
+      next({
         path: '/auth/login',
         query: { redirect: to.fullPath },
-      }
+      })
     }
+    next()
   }
 })
 

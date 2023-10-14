@@ -73,6 +73,9 @@ export default defineComponent({
         }
       } catch (err) {
         console.log('-----form validation err-', err)
+        if (err.msg === 'Fail to get article info') {
+          router.push({ path: '/home' })
+        }
       }
     }
 

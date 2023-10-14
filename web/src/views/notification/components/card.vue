@@ -72,7 +72,7 @@ export default defineComponent({
         notification.status = 'read'
         useSessionStore().updateNotificationCount()
         if (notification.type === 'likeComment') {
-          router.push({ path: '/preview/' + 1 })
+          router.push({ path: '/preview/' + notification.content.articleId })
         }
       }
     }
