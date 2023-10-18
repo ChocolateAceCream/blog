@@ -12,6 +12,8 @@ import Icons from 'unplugin-icons/vite'
 import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
 
+
+import externalGlobals from 'rollup-plugin-external-globals'
 import { visualizer } from 'rollup-plugin-visualizer'
 function pathResolve() {
   return resolve(__dirname, './', ...arguments)
@@ -84,7 +86,16 @@ export default defineConfig((params) => {
               moment: ['moment'],
               'lodash-es': ['lodash-es'],
             }
-          }
+          },
+          external: ['dayjs'],
+          plugins: [
+            externalGlobals({
+              dayjs: 'dayjs',
+              'dayjs/plugin/relativeTime': 'dayjs_plugin_relativeTime',
+              'dayjs/locale/zh-cn': 'dayjs_locale_zh_cn',
+              'emoji-mart-vue-fast': 'EmojiMart'
+            })
+          ]
         }
       }
     },

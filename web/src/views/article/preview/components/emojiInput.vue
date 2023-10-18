@@ -46,11 +46,11 @@
 </template>
 
 <script>
-import { defineComponent, toRefs, reactive, nextTick } from 'vue'
+import { defineComponent, toRefs, reactive, nextTick, onMounted } from 'vue'
 import { Picker, EmojiIndex } from 'emoji-mart-vue-fast/src'
-import data from 'emoji-mart-vue-fast/data/all.json'
+// import data from 'emoji-mart-vue-fast/data/all.json'
 import { insertAt } from '@/utils/stringFun.js'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
+// import 'emoji-mart-vue-fast/css/emoji-mart.css'
 export default defineComponent({
   name: 'EmojiInput',
   components: {
@@ -62,8 +62,18 @@ export default defineComponent({
       inputRef: null,
       input: '',
       showEmojiPicker: false,
+      emojiIndex: null,
     })
-    const emojiIndex = new EmojiIndex(data)
+    onMounted(async() => {
+      try {
+        const response = await fetch('https://unpkg.com/emoji-mart-vue-fast@15.0.0/data/all.json')
+        const data = await response.json()
+        console.log('data', data)
+        state.emojiIndex = new EmojiIndex(data)
+      } catch (error) {
+        console.log('----fetch emoji data err--', error)
+      }
+    })
     const addEmoji = async(emoji) => {
       const e = state.inputRef.ref
       state.input = insertAt(state.input, emoji.native, e.selectionStart, e.selectionEnd)
@@ -88,7 +98,6 @@ export default defineComponent({
       onSubmit,
       reset,
       toggleEmojiPicker,
-      emojiIndex,
       ...toRefs(state)
     }
   }

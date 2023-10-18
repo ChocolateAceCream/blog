@@ -82,7 +82,7 @@
 <script>
 import { useRoute } from 'vue-router'
 import { defineComponent, toRefs, reactive, onMounted, inject } from 'vue'
-import 'emoji-mart-vue-fast/css/emoji-mart.css'
+// import 'emoji-mart-vue-fast/css/emoji-mart.css'
 import { throttle } from 'lodash-es'
 import { getCommentList, deleteComment, likeComment, postAddComment } from '@/api/comment'
 import { getReplyList, postAddReply } from '@/api/reply'

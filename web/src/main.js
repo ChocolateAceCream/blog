@@ -6,8 +6,8 @@ import router from './router'
 import sharedComponents from '@/shared'
 import moment from 'moment'
 import { setI18n } from './locales'
-// import dayjs from 'dayjs'
-// import relativeTime from 'dayjs/plugin/relativeTime'
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 
 import './assets/styles/element-variables.scss'
 import './assets/styles/application.scss'
@@ -16,7 +16,7 @@ import './assets/iconfont/iconfont.css'
 
 
 const app = createApp(App)
-// dayjs.extend(relativeTime)
+dayjs.extend(relativeTime)
 app.provide('dayjs', dayjs)
 
 // piania persistent
