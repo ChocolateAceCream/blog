@@ -5,7 +5,7 @@ import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'
 import { useSessionStore } from '@/stores/sessionStore'
 import { useI18n } from 'vue-i18n'
-import 'dayjs/locale/zh-cn'
+// import 'dayjs/locale/zh-cn'
 export default defineComponent({
   components: {
     ElConfigProvider,

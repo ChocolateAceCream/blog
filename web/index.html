@@ -15,6 +15,11 @@
 <body>
   <div id="app"></div>
   <script type="module" src="./src/main.js"></script>
+  <script src="https://unpkg.com/dayjs@1.8.21/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js"></script>
+  <script src="https://unpkg.com/dayjs@1.8.21/locale/zh-cn.js"></script>
+  <script>dayjs.extend(window.dayjs_plugin_relativeTime)</script>
+  <script>dayjs.locale('zh-cn')</script>
 </body>
 
 </html>
