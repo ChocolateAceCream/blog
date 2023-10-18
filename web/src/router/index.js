@@ -49,7 +49,9 @@ router.beforeEach(async(to, from, next) => {
       next({...to, replace: true})
     }
   } else {
-    if (to.meta.requireAuth && to.matched.length > 0 || (to.matched.length === 0)) {
+    console.log("from.'", from)
+    console.log("to.'", to)
+    if (to.meta.requireAuth && to.matched.length > 0 || (to.matched.length > 0 && to.matched[0].meta.title === '404')) {
       ElMessage({
         message: 'Please Login',
         type: 'error',
