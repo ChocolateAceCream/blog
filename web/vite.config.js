@@ -87,7 +87,7 @@ export default defineConfig((params) => {
               'lodash-es': ['lodash-es'],
             }
           },
-          external: ['dayjs'],
+          external: ['dayjs', 'dayjs/plugin/relativeTime', 'dayjs/locale/zh-cn', 'emoji-mart-vue-fast'],
           plugins: [
             externalGlobals({
               dayjs: 'dayjs',
