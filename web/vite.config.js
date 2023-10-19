@@ -83,7 +83,7 @@ export default defineConfig((params) => {
         rollupOptions: {
           output: {
             manualChunks: {
-              moment: ['moment'],
+              // moment: ['moment'],
               'lodash-es': ['lodash-es'],
             }
           },
