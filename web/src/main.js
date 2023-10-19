@@ -4,7 +4,7 @@ import piniaPluginPersist from 'pinia-plugin-persist'
 import App from './App.vue'
 import router from './router'
 import sharedComponents from '@/shared'
-import moment from 'moment'
+// import moment from 'moment'
 import { setI18n } from './locales'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
@@ -32,7 +32,7 @@ app.use(i18nConfig)
 app.use(sharedComponents)
 
 
-app.config.globalProperties.$moment = moment
+// app.config.globalProperties.$moment = moment
 app.use(router)
 
 app.mount('#app')
