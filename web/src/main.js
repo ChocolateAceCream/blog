@@ -11,7 +11,9 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 
 import './assets/styles/element-variables.scss'
 import './assets/styles/application.scss'
-import './assets/iconfont/iconfont.css'
+
+// import iconfont from index.html using cdn
+// import './assets/iconfont/iconfont.css'
 
 // import ElementPlus from 'element-plus'
 
@@ -19,7 +21,7 @@ const app = createApp(App)
 dayjs.extend(relativeTime)
 app.provide('dayjs', dayjs)
 
-app.use(ElementPlus)
+// app.use(ElementPlus)
 // piania persistent
 const store = createPinia()
 store.use(piniaPluginPersist)

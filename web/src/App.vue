@@ -1,5 +1,5 @@
 <script>
-// import { ElConfigProvider } from 'element-plus'
+import { ElConfigProvider } from 'element-plus'
 import { defineComponent, reactive, toRefs, inject, provide, nextTick, watch } from 'vue'
 import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 import en from 'element-plus/lib/locale/lang/en'

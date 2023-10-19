@@ -128,7 +128,9 @@ export default defineConfig((params) => {
         brotliSize: true,
       }),
       AutoImport({
-        // resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver({
+          importStyle: false,
+        })],
       }),
       [Banner(`
   #####                                                           #                   #####
@@ -151,7 +153,9 @@ export default defineConfig((params) => {
       }),
       Components({
         resolvers: [
-          // ElementPlusResolver(),
+          ElementPlusResolver({
+            importStyle: false,
+          }),
           IconsResolver({
             alias: {
               svg: 'icon',
