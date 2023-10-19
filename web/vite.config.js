@@ -15,10 +15,15 @@ import IconsResolver from 'unplugin-icons/resolver'
 
 import externalGlobals from 'rollup-plugin-external-globals'
 import { visualizer } from 'rollup-plugin-visualizer'
+import importToCDN from 'vite-plugin-cdn-import'
+
 function pathResolve() {
   return resolve(__dirname, './', ...arguments)
   // return resolve(__dirname, '.', ...arguments)
 }
+
+
+console.log('---importToCDN----', importToCDN)
 
 // https://vitejs.dev/config/
 export default defineConfig((params) => {
@@ -75,38 +80,42 @@ export default defineConfig((params) => {
           drop_debugger: true,
         }
       },
-      target: 'es2015',
+      // target: 'es2015',
       manifest: false,
       sourcemap: false,
       outDir: 'dist',
       build: {
         rollupOptions: {
-          output: {
-            manualChunks: {
-              // moment: ['moment'],
-              'lodash-es': ['lodash-es'],
-            }
-          },
-          external: [
-            'dayjs',
-            'dayjs/plugin/relativeTime',
-            'dayjs/locale/zh-cn',
-            'emoji-mart-vue-fast',
-            'element-plus',
-            'element-plus/lib/locale/lang/zh-cn',
-            'element-plus/lib/locale/lang/en',
-          ],
-          plugins: [
-            externalGlobals({
-              dayjs: 'dayjs',
-              'dayjs/plugin/relativeTime': 'dayjs_plugin_relativeTime',
-              'dayjs/locale/zh-cn': 'dayjs_locale_zh_cn',
-              'emoji-mart-vue-fast': 'EmojiMart',
-              'element-plus': 'ElementPlus',
-              'element-plus/lib/locale/lang/zh-cn': 'ElementPlusLocaleZhCn',
-              'element-plus/lib/locale/lang/en': 'ElementPlusLocaleEn',
-            })
-          ]
+          // output: {
+          //   manualChunks: {
+          //     // moment: ['moment'],
+          //     'lodash-es': ['lodash-es'],
+          //     'md-editor-v3': ['md-editor-v3'],
+          //     'dayjs': 'dayjs',
+          //   },
+          // },
+          // external: [
+          //   'dayjs',
+          //   'dayjs/plugin/relativeTime',
+          //   'dayjs/locale/zh-cn',
+          //   'emoji-mart-vue-fast',
+          //   'element-plus',
+          //   'element-plus/lib/locale/lang/zh-cn',
+          //   'element-plus/lib/locale/lang/en',
+          //   'md-editor-v3',
+          // ],
+          // plugins: [
+          //   externalGlobals({
+          //     'dayjs': 'dayjs',
+          //     'dayjs/plugin/relativeTime': 'dayjs_plugin_relativeTime',
+          //     'dayjs/locale/zh-cn': 'dayjs_locale_zh_cn',
+          //     'emoji-mart-vue-fast': 'EmojiMart',
+          //     'element-plus': 'ElementPlus',
+          //     'element-plus/lib/locale/lang/zh-cn': 'ElementPlusLocaleZhCn',
+          //     'element-plus/lib/locale/lang/en': 'ElementPlusLocaleEn',
+          //     'md-editor-v3': 'MdEditorV3',
+          //   })
+          // ]
         }
       }
     },
@@ -127,6 +136,20 @@ export default defineConfig((params) => {
         gzipSize: true,
         brotliSize: true,
       }),
+
+
+      importToCDN.Plugin({
+        modules: [
+          {
+            name: 'md-editor-v3',
+            var: 'MdEditorV3',
+            path: 'https://unpkg.com/md-editor-v3@4.0.4/lib/umd/index.js'
+          },
+        ],
+      }),
+
+
+
       AutoImport({
         resolvers: [ElementPlusResolver({
           importStyle: false,

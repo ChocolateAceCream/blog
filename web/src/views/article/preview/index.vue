@@ -34,11 +34,10 @@ import { useRoute } from 'vue-router'
 import router from '@/router'
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { getArticleFile } from '@/api/article'
-//import { ElMessage } from 'element-plus'
 import { MdPreview } from 'md-editor-v3'
 import { formatTimeToStr } from '@/utils/date'
 import { useSessionStore } from '@/stores/sessionStore'
-import 'md-editor-v3/lib/preview.css'
+// import 'md-editor-v3/lib/preview.css'
 import Comments from './components/comments.vue'
 export default defineComponent({
   components: { MdPreview, Comments },

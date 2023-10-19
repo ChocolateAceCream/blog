@@ -44,7 +44,7 @@
 import { defineComponent, toRefs, reactive, computed } from 'vue'
 import { MdEditor } from 'md-editor-v3'
 import { toolbarConfig } from './toolbarConfig.js'
-import 'md-editor-v3/lib/style.css'
+// import 'md-editor-v3/lib/style.css'
 import { useSessionStore } from '@/stores/sessionStore'
 import { postUploadFile } from '@/api/oss'
 export default defineComponent({
