@@ -13,12 +13,13 @@ import './assets/styles/element-variables.scss'
 import './assets/styles/application.scss'
 import './assets/iconfont/iconfont.css'
 
-
+// import ElementPlus from 'element-plus'
 
 const app = createApp(App)
 dayjs.extend(relativeTime)
 app.provide('dayjs', dayjs)
 
+app.use(ElementPlus)
 // piania persistent
 const store = createPinia()
 store.use(piniaPluginPersist)

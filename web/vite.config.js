@@ -91,14 +91,20 @@ export default defineConfig((params) => {
             'dayjs',
             'dayjs/plugin/relativeTime',
             'dayjs/locale/zh-cn',
-            'emoji-mart-vue-fast'
+            'emoji-mart-vue-fast',
+            'element-plus',
+            'element-plus/lib/locale/lang/zh-cn',
+            'element-plus/lib/locale/lang/en',
           ],
           plugins: [
             externalGlobals({
               dayjs: 'dayjs',
               'dayjs/plugin/relativeTime': 'dayjs_plugin_relativeTime',
               'dayjs/locale/zh-cn': 'dayjs_locale_zh_cn',
-              'emoji-mart-vue-fast': 'EmojiMart'
+              'emoji-mart-vue-fast': 'EmojiMart',
+              'element-plus': 'ElementPlus',
+              'element-plus/lib/locale/lang/zh-cn': 'ElementPlusLocaleZhCn',
+              'element-plus/lib/locale/lang/en': 'ElementPlusLocaleEn',
             })
           ]
         }
@@ -122,7 +128,7 @@ export default defineConfig((params) => {
         brotliSize: true,
       }),
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        // resolvers: [ElementPlusResolver()],
       }),
       [Banner(`
   #####                                                           #                   #####
@@ -145,7 +151,7 @@ export default defineConfig((params) => {
       }),
       Components({
         resolvers: [
-          ElementPlusResolver(),
+          // ElementPlusResolver(),
           IconsResolver({
             alias: {
               svg: 'icon',

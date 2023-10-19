@@ -27,7 +27,7 @@
 <script>
 import { defineComponent, toRefs, reactive } from 'vue'
 import { getRoleMenuTree, assignRoleMenus } from '@/api/menu'
-import { ElMessage } from 'element-plus'
+//import { ElMessage } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
 import { throttle, filter } from 'lodash-es'
 

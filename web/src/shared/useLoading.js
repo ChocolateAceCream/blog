@@ -1,5 +1,5 @@
 import { ref } from 'vue'
-import { ElLoading } from 'element-plus'
+//import { ElLoading } from 'element-plus'
 
 export default function useLoading(options = {}, name) {
   const loadingTarget = ref(null)

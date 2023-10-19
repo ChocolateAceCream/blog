@@ -93,7 +93,7 @@ import { useRouter } from 'vue-router'
 import {validatePassword, validateEmail} from '@/utils/validate'
 import { postRegister, postSendEmailCode } from '@/api/auth'
 import useLoading from '@/shared/useLoading'
-import { ElMessage } from 'element-plus'
+//import { ElMessage } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 export default defineComponent({
   setup(props, ctx) {
