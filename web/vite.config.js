@@ -13,7 +13,6 @@ import { FileSystemIconLoader } from 'unplugin-icons/loaders'
 import IconsResolver from 'unplugin-icons/resolver'
 
 
-import externalGlobals from 'rollup-plugin-external-globals'
 import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN from 'vite-plugin-cdn-import'
 
@@ -21,9 +20,6 @@ function pathResolve() {
   return resolve(__dirname, './', ...arguments)
   // return resolve(__dirname, '.', ...arguments)
 }
-
-
-console.log('---importToCDN----', importToCDN)
 
 // https://vitejs.dev/config/
 export default defineConfig((params) => {
@@ -80,42 +76,20 @@ export default defineConfig((params) => {
           drop_debugger: true,
         }
       },
-      // target: 'es2015',
+      target: 'es2015',
       manifest: false,
       sourcemap: false,
       outDir: 'dist',
       build: {
         rollupOptions: {
-          // output: {
-          //   manualChunks: {
-          //     // moment: ['moment'],
-          //     'lodash-es': ['lodash-es'],
-          //     'md-editor-v3': ['md-editor-v3'],
-          //     'dayjs': 'dayjs',
-          //   },
-          // },
-          // external: [
-          //   'dayjs',
-          //   'dayjs/plugin/relativeTime',
-          //   'dayjs/locale/zh-cn',
-          //   'emoji-mart-vue-fast',
-          //   'element-plus',
-          //   'element-plus/lib/locale/lang/zh-cn',
-          //   'element-plus/lib/locale/lang/en',
-          //   'md-editor-v3',
-          // ],
-          // plugins: [
-          //   externalGlobals({
-          //     'dayjs': 'dayjs',
-          //     'dayjs/plugin/relativeTime': 'dayjs_plugin_relativeTime',
-          //     'dayjs/locale/zh-cn': 'dayjs_locale_zh_cn',
-          //     'emoji-mart-vue-fast': 'EmojiMart',
-          //     'element-plus': 'ElementPlus',
-          //     'element-plus/lib/locale/lang/zh-cn': 'ElementPlusLocaleZhCn',
-          //     'element-plus/lib/locale/lang/en': 'ElementPlusLocaleEn',
-          //     'md-editor-v3': 'MdEditorV3',
-          //   })
-          // ]
+          output: {
+            manualChunks: {
+              // moment: ['moment'],
+              'lodash-es': ['lodash-es'],
+              'md-editor-v3': ['md-editor-v3'],
+              'dayjs': 'dayjs',
+            },
+          },
         }
       }
     },
@@ -141,9 +115,54 @@ export default defineConfig((params) => {
       importToCDN.Plugin({
         modules: [
           {
+            name: 'vue',
+            var: 'Vue',
+            path: `https://unpkg.com/vue@3.2.41/dist/vue.global.js`,
+          },
+          {
+            name: 'vue-router',
+            var: 'VueRouter',
+            path: `https://unpkg.com/vue-router@4.1.6`,
+          },
+          {
             name: 'md-editor-v3',
             var: 'MdEditorV3',
             path: 'https://unpkg.com/md-editor-v3@4.0.4/lib/umd/index.js'
+          },
+          {
+            name: 'element-plus/lib/locale/lang/en',
+            var: 'ElementPlusLocaleEn',
+            path: 'https://unpkg.com/element-plus@2.3.14/dist/locale/en.js'
+          },
+          {
+            name: 'element-plus/lib/locale/lang/zh-cn',
+            var: 'ElementPlusLocaleZhCn',
+            path: 'https://unpkg.com/element-plus@2.3.14/dist/locale/zh-cn'
+          },
+          {
+            name: 'element-plus',
+            var: 'ElementPlus',
+            path: 'https://unpkg.com/element-plus@2.3.14/dist/index.full.min.js'
+          },
+          {
+            name: 'emoji-mart-vue-fast',
+            var: 'EmojiMart',
+            path: 'https://cdn.jsdelivr.net/npm/emoji-mart-vue-fast@15.0.0/dist/emoji-mart.min.js'
+          },
+          {
+            name: 'dayjs/locale/zh-cn',
+            var: 'dayjs_locale_zh_cn',
+            path: 'https://unpkg.com/dayjs@1.8.21/locale/zh-cn.js'
+          },
+          {
+            name: 'dayjs/plugin/relativeTime',
+            var: 'dayjs_plugin_relativeTime',
+            path: 'https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js'
+          },
+          {
+            name: 'dayjs',
+            var: 'dayjs',
+            path: 'https://unpkg.com/dayjs@1.8.21/dayjs.min.js'
           },
         ],
       }),
