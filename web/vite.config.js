@@ -16,10 +16,20 @@ import IconsResolver from 'unplugin-icons/resolver'
 import { visualizer } from 'rollup-plugin-visualizer'
 import importToCDN from 'vite-plugin-cdn-import'
 
+import externalGlobals from 'rollup-plugin-external-globals'
+
 function pathResolve() {
   return resolve(__dirname, './', ...arguments)
   // return resolve(__dirname, '.', ...arguments)
 }
+
+const externalGlobalsObj = {
+  vue: 'Vue',
+  'vue-demi': 'VueDemi',
+  'vue-router': 'VueRouter',
+  'element-plus': 'ElementPlus',
+}
+
 
 // https://vitejs.dev/config/
 export default defineConfig((params) => {
@@ -117,7 +127,12 @@ export default defineConfig((params) => {
           {
             name: 'vue',
             var: 'Vue',
-            path: `https://unpkg.com/vue@3.2.41/dist/vue.global.js`,
+            path: `https://unpkg.com/vue@3.3.0/dist/vue.global.prod.js`,
+          },
+          {
+            name: 'vue-demi',
+            var: 'VueDemi',
+            path: `https://cdn.jsdelivr.net/npm/vue-demi@0.12.5`,
           },
           {
             name: 'vue-router',
@@ -150,6 +165,11 @@ export default defineConfig((params) => {
             path: 'https://cdn.jsdelivr.net/npm/emoji-mart-vue-fast@15.0.0/dist/emoji-mart.min.js'
           },
           {
+            name: 'dayjs',
+            var: 'dayjs',
+            path: 'https://unpkg.com/dayjs@1.8.21/dayjs.min.js'
+          },
+          {
             name: 'dayjs/locale/zh-cn',
             var: 'dayjs_locale_zh_cn',
             path: 'https://unpkg.com/dayjs@1.8.21/locale/zh-cn.js'
@@ -158,11 +178,6 @@ export default defineConfig((params) => {
             name: 'dayjs/plugin/relativeTime',
             var: 'dayjs_plugin_relativeTime',
             path: 'https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js'
-          },
-          {
-            name: 'dayjs',
-            var: 'dayjs',
-            path: 'https://unpkg.com/dayjs@1.8.21/dayjs.min.js'
           },
         ],
       }),
@@ -173,7 +188,13 @@ export default defineConfig((params) => {
         resolvers: [ElementPlusResolver({
           importStyle: false,
         })],
+        imports: ['vue', 'vue-router']
       }),
+      {
+        ...externalGlobals(externalGlobalsObj),
+        enforce: 'post',
+        apply: 'build',
+      },
       [Banner(`
   #####                                                           #                   #####
 #     # #    #  ####   ####   ####  #        ##   ##### ######   # #    ####  ###### #     # #####  ######   ##   #    #

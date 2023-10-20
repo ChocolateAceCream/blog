@@ -15,13 +15,13 @@ import './assets/styles/application.scss'
 // import iconfont from index.html using cdn
 // import './assets/iconfont/iconfont.css'
 
-// import ElementPlus from 'element-plus'
+import ElementPlus from 'element-plus'
 
 const app = createApp(App)
 dayjs.extend(relativeTime)
 app.provide('dayjs', dayjs)
 
-// app.use(ElementPlus)
+app.use(ElementPlus)
 // piania persistent
 const store = createPinia()
 store.use(piniaPluginPersist)
