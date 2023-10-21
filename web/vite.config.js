@@ -134,7 +134,8 @@ export default defineConfig((params) => {
           {
             name: 'vue-demi',
             var: 'VueDemi',
-            path: `https://cdn.jsdelivr.net/npm/vue-demi@0.12.5`,
+            // path: `https://cdn.jsdelivr.net/npm/vue-demi@0.12.5`,
+            path: `https://unpkg.com/browse/vue-demi@0.12.5/lib/index.iife.js`,
           },
           {
             name: 'vue-router',
@@ -144,7 +145,8 @@ export default defineConfig((params) => {
           {
             name: 'md-editor-v3',
             var: 'MdEditorV3',
-            path: 'https://unpkg.com/md-editor-v3@4.0.4/lib/umd/index.js'
+            path: 'https://unpkg.com/md-editor-v3@4.0.4/lib/umd/index.js',
+            css: 'https://unpkg.com/md-editor-v3@4.0.4/lib/style.css'
           },
           {
             name: 'element-plus/lib/locale/lang/en',
@@ -159,12 +161,18 @@ export default defineConfig((params) => {
           {
             name: 'element-plus',
             var: 'ElementPlus',
-            path: 'https://unpkg.com/element-plus@2.3.14/dist/index.full.min.js'
+            path: 'https://unpkg.com/element-plus@2.3.14/dist/index.full.min.js',
+            css: [
+              'https://unpkg.com/element-plus@2.3.14/dist/index.css',
+              'https://unpkg.com/element-plus@2.3.14/theme-chalk/',
+            ],
           },
           {
             name: 'emoji-mart-vue-fast',
             var: 'EmojiMart',
-            path: 'https://cdn.jsdelivr.net/npm/emoji-mart-vue-fast@15.0.0/dist/emoji-mart.min.js'
+            path: 'https://unpkg.com/browse/emoji-mart-vue-fast@15.0.0/dist/emoji-mart.js',
+            css: 'https://unpkg.com/emoji-mart-vue-fast@15.0.0/css/emoji-mart.css'
+            // path: 'https://cdn.jsdelivr.net/npm/emoji-mart-vue-fast@15.0.0/dist/emoji-mart.min.js'
           },
           {
             name: 'dayjs',
