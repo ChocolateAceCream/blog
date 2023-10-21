@@ -67,7 +67,7 @@ import { useRouter } from 'vue-router'
 import { validatePassword } from '@/utils/validate'
 import { useSessionStore } from '@/stores/sessionStore'
 import { useRouterStore } from '@/stores/routerStore'
-import { throttle } from 'lodash'
+import { throttle } from 'lodash-es'
 import useLoading from '@/shared/useLoading'
 import { postLogin } from '@/api/auth'
 

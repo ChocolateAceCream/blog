@@ -24,10 +24,12 @@ function pathResolve() {
 }
 
 const externalGlobalsObj = {
-  vue: 'Vue',
+  // vue: 'Vue',
   'vue-demi': 'VueDemi',
-  'vue-router': 'VueRouter',
-  'element-plus': 'ElementPlus',
+  // 'vue-router': 'VueRouter',
+  // 'element-plus': 'ElementPlus',
+  // 'lodash-es': 'lodash-es',
+  // 'vue-i18n': 'VueI18n',
 }
 
 
@@ -178,6 +180,11 @@ export default defineConfig((params) => {
             name: 'dayjs/plugin/relativeTime',
             var: 'dayjs_plugin_relativeTime',
             path: 'https://unpkg.com/dayjs@1.8.21/plugin/relativeTime.js'
+          },
+          {
+            name: 'vue-i18n',
+            var: 'VueI18n',
+            path: 'https://unpkg.com/vue-i18n@9.2.2/dist/vue-i18n.global.prod.js'
           },
         ],
       }),
