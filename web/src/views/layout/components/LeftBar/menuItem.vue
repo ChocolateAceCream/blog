@@ -7,7 +7,7 @@
 <script>
 import { defineComponent, toRefs, reactive, computed, h } from 'vue'
 import SvgIcon from '@/shared/components/SvgIcon'
-//import { ElMenuItem, ElSubMenu } from 'element-plus'
+import { ElMenuItem, ElSubMenu } from 'element-plus'
 export default defineComponent({
   name: 'MenuItem',
   props: {
