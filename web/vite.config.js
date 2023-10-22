@@ -27,7 +27,7 @@ const externalGlobalsObj = {
   // vue: 'Vue',
   'vue-demi': 'VueDemi',
   // 'vue-router': 'VueRouter',
-  // 'element-plus': 'ElementPlus',
+  'element-plus': 'ElementPlus',
   // 'lodash-es': 'lodash-es',
   // 'vue-i18n': 'VueI18n',
 }
@@ -134,8 +134,7 @@ export default defineConfig((params) => {
           {
             name: 'vue-demi',
             var: 'VueDemi',
-            // path: `https://cdn.jsdelivr.net/npm/vue-demi@0.12.5`,
-            path: `https://unpkg.com/browse/vue-demi@0.12.5/lib/index.iife.js`,
+            path: `https://unpkg.com/vue-demi@0.12.5/lib/index.iife.js`,
           },
           {
             name: 'vue-router',

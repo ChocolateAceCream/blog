@@ -68,7 +68,7 @@
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { postAddRole, getRoleList, deleteRole, putEditRole } from '@/api/role'
-//import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
 import MenuModal from './components/MenuModal'
 import EndpointModal from './components/EndpointModal'

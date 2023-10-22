@@ -76,7 +76,7 @@
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
 import { postAddMenu, getMenuList, deleteMenu, putEditMenu } from '@/api/menu'
-//import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { useRouterStore } from '@/stores/routerStore'
 import { throttle, cloneDeep, forIn } from 'lodash-es'
 

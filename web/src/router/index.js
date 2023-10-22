@@ -2,7 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { routeMiddleware } from './middleware'
 import { auth } from './auth'
 // import Layout from '@/views/layout'
-//import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { useSessionStore } from '@/stores/sessionStore'
 import { useRouterStore } from '@/stores/routerStore'
 export const Layout = () => import('@/views/layout')

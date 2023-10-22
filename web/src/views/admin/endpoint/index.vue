@@ -93,7 +93,7 @@
 <script>
 import { defineComponent, toRefs, reactive, onMounted, computed } from 'vue'
 import { getEndpointList, putEditEndpoint, postAddEndpoint, deleteEndpoint } from '@/api/endpoint'
-//import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { throttle, cloneDeep, snakeCase, map } from 'lodash-es'
 
 import { useI18n } from 'vue-i18n'

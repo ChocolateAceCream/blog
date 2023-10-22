@@ -28,7 +28,7 @@
 
 <script>
 import { defineComponent, toRefs, reactive, onMounted } from 'vue'
-//import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { getArticleSearchList, deleteArticle } from '@/api/article'
 import Collapse from '../shared/collapse.vue'
 export default defineComponent({

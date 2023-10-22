@@ -36,7 +36,7 @@
 <script>
 import { defineComponent, toRefs, reactive, onMounted, inject } from 'vue'
 import { getNotificationList, deleteNotification} from '@/api/notification'
-//import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import Card from './components/card'
 export default defineComponent({
   components: {

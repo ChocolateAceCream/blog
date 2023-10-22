@@ -28,7 +28,7 @@
 import { defineComponent, toRefs, reactive } from 'vue'
 import { getCasbinByRoleId, postUpdateCasbin } from '@/api/casbin'
 import { getEndpointList } from '@/api/endpoint'
-//import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { throttle, map, groupBy } from 'lodash-es'
 
 export default defineComponent({

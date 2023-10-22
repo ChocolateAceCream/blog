@@ -1,4 +1,4 @@
-// import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { defineStore, acceptHMRUpdate } from 'pinia'
 import { getCurrentUserMenu } from '@/api/menu'
 import router from '@/router'

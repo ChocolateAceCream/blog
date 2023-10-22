@@ -69,7 +69,7 @@
 <script>
 import { defineComponent, toRefs, reactive, inject } from 'vue'
 import { getReplyList, deleteReply, likeReply, postAddReply } from '@/api/reply'
-//import { ElMessage, ElMessageBox } from 'element-plus'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import {cloneDeep} from 'lodash-es'
 import EmojiInput from './emojiInput.vue'
 import { throttle } from 'lodash-es'

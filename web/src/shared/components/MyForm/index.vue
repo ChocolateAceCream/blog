@@ -6,7 +6,7 @@
 !-->
 <script>
 import { defineComponent, toRefs, reactive, h, render, ref, unref } from 'vue'
-//import { ElForm, ElFormItem } from 'element-plus'
+import { ElForm, ElFormItem } from 'element-plus'
 import {mapper } from './mapper'
 export default defineComponent({
   props: {

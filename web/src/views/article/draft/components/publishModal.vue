@@ -23,7 +23,7 @@
 
 <script>
 import { defineComponent, toRefs, reactive } from 'vue'
-//import { ElMessage } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { putEditArticle } from '@/api/article'
 import { useSessionStore } from '@/stores/sessionStore'
 import { throttle } from 'lodash-es'
