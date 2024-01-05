@@ -17,6 +17,7 @@
         trigger="click"
       >
         <SvgIcon
+          class="setting-icon"
           icon-name="icon-blog-setting"
           color="#3498db"
           size="30px"
@@ -120,24 +121,38 @@ export default defineComponent({
   align-items: center;
   height: 100%;
 }
-  .content {
-    display: inline-block;
-    @include mobile-device {
-      display: none;
-    }
+.content {
+  display: inline-block;
+  @include mobile-device {
+    display: none;
+  }
+}
+
+.right-header {
+  display: flex;
+  flex-direction: row-reverse;
+  text-align: right;
+  i{
+    cursor: pointer;
+    margin-left:25px;
   }
 
-  .right-header {
-    display: flex;
-    flex-direction: row-reverse;
-    text-align: right;
-    i{
-      cursor: pointer;
-      margin-left:25px;
+  .setting-icon:hover {
+      animation: logo-spin infinite 20s linear;
+      transition: transform 0.5s;
     }
   }
-  .left-header{
-    display: flex;
-    align-items: center;
+.left-header{
+  display: flex;
+  align-items: center;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
   }
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>
