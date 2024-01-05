@@ -92,6 +92,10 @@ export default defineComponent({
   display: flex;
   align-items: center;
   // justify-content: center;
+
+  &:hover{
+    filter: drop-shadow(0 0 2em #61dafbaa);
+  }
   .title-text{
     display: inline-block;
     font-weight: 600;
