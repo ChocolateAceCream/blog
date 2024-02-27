@@ -61,7 +61,6 @@ jobs:
         run: |
           scp server:/home/ubuntu/docker/blog/server/config.yml ./server/
           scp server:/home/ubuntu/docker/blog/web/.env ./web/
-
       - name: build frontend images
         run: |
           cd ./web
@@ -79,4 +78,4 @@ jobs:
 
       - name: deploy
         run: |
-          ssh -T server "docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} && /home/ubuntu/deploy.sh"
+          ssh -T server "sudo docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} && /home/ubuntu/deploy.sh"
