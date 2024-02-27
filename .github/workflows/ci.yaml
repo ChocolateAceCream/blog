@@ -18,9 +18,9 @@ jobs:
         go-version: [1.18]  # usage: ${{ matrix.go-version }}
     env:
     # env defined here can be shared by all steps inside same job. If env defined inside a step, then that variable only available inside that step
-      HOST: ${{ secrets.HOST}} # usage: $Host
-      USER: ${{ secrets.USER}}
-      KEY: ${{ secrets.SSH_PRIVATE_KEY}}
+      HOST: ${{ secrets.D1_HOST}} # usage: $Host
+      USER: ${{ secrets.D1_USER}}
+      KEY: ${{ secrets.D1_SSH_PRIVATE_KEY}}
     steps:
       -
         name: docker login
@@ -41,7 +41,7 @@ jobs:
             StrictHostKeyChecking no
           END
           ssh-keyscan github.com >> ~/.ssh/known_hosts
-          scp server:/root/test.md ./
+          scp server:/home/ubuntu/test.md ./
           cat ./test.md
           # ssh -T server
 
@@ -59,8 +59,8 @@ jobs:
           go-version: ${{ matrix.go-version }}
       - name: scp config files
         run: |
-          scp server:/root/docker/blog/server/config.yml ./server/
-          scp server:/root/docker/blog/web/.env ./web/
+          scp server:/home/ubuntu/docker/blog/server/config.yml ./server/
+          scp server:/home/ubuntu/docker/blog/web/.env ./web/
 
       - name: build frontend images
         run: |
@@ -79,4 +79,4 @@ jobs:
 
       - name: deploy
         run: |
-          ssh -T server "docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} && /root/deploy.sh"
+          ssh -T server "docker login -u ${{ secrets.DOCKERHUB_USER }} -p ${{ secrets.DOCKERHUB_ACCESS_TOKEN }} && /home/ubuntu/deploy.sh"
